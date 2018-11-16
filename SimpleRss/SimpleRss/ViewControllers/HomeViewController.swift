@@ -41,7 +41,7 @@ class HomeViewController: UIViewController
 
 internal class TopicsDelegate: NSObject, UITableViewDelegate
 {
-    var _context: HomeViewController?
+    weak var _context: HomeViewController?
     
     init(context: HomeViewController?) {
         _context = context
@@ -53,7 +53,7 @@ internal class TopicsDelegate: NSObject, UITableViewDelegate
 
 internal class TopicsSource: NSObject, UITableViewDataSource
 {
-    var _context: HomeViewController?
+    weak var _context: HomeViewController?
     
     init(context: HomeViewController?) {
         _context = context

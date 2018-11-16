@@ -57,13 +57,5 @@ internal class FeedSource: NSObject, UITableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
-    func reusableCell() -> UITableViewCell {
-        let reuseIdentifier = "Cell"
-        //if let cell = _context?.tableView?.dequeueReusableCell(withIdentifier: reuseIdentifier) { return cell }
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: reuseIdentifier)
-        cell.accessoryType = .disclosureIndicator
-        return cell
-    }
 }
 

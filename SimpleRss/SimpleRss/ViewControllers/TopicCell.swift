@@ -10,5 +10,5 @@ import UIKit
 
 class TopicCell : UITableViewCell{
     
-    @IBOutlet weak var NameLabel: UILabel!
+    @IBOutlet var NameLabel: UILabel!
 }
