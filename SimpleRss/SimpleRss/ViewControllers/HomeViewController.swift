@@ -14,9 +14,9 @@ class HomeViewController: UIViewController
     var dataSource: TopicsSource?
     var tableDelegate: TopicsDelegate?
     
-    let topics: [Topic] = [Topic(id: 0, title: "IT", url: "http"),
-                                 Topic(id: 1, title: "Economics", url: "http"),
-                                 Topic(id: 2, title: "Politics", url: "http")]
+    let topics: [Topic] = [Topic(id: 0, title: "IT", url: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg"),
+                                 Topic(id: 1, title: "Economics", url: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg"),
+                                 Topic(id: 2, title: "Politics", url: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +71,16 @@ internal class TopicsSource: NSObject, UITableViewDataSource
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TopicViewCell")! as! TopicViewCell
         cell.TitleLabel?.text = self.context?.topics[indexPath.row].title
-       // let op = cell.PreviewImage
+        
+        let url = URL(string: (self.context?.topics[indexPath.row].url)!)
+        
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url!)
+            DispatchQueue.main.async {
+                cell.PreviewImageView.image = UIImage(data: data!)
+            }
+        }
+            
         return cell
     }
     
