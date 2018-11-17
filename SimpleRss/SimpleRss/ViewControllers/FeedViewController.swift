@@ -29,8 +29,10 @@ class FeedViewController: UIViewController {
     }
 }
 
-internal class FeedSource: NSObject, UITableViewDataSource
+internal class FeedSource//: NSObject, UITableViewDataSource
 {
+   
+    
     var _context: FeedViewController?
     
     init(context: FeedViewController?) {
@@ -43,14 +45,6 @@ internal class FeedSource: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return 3
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell = reusableCell() //tableView.dequeueReusableCell(withIdentifier: "Cell")
-        
-        cell.textLabel?.text = String(indexPath.row)
-        
-        return cell
     }
     
     

@@ -14,6 +14,10 @@ class HomeViewController: UIViewController
     var dataSource: TopicsSource?
     var tableDelegate: TopicsDelegate?
     
+    let topics: [Topic] = [Topic(id: 0, title: "IT", url: "http"),
+                                 Topic(id: 1, title: "Economics", url: "http"),
+                                 Topic(id: 2, title: "Politics", url: "http")]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,9 +27,9 @@ class HomeViewController: UIViewController
         tableView?.dataSource = dataSource
         tableView?.delegate = tableDelegate
         
-        let nib = UINib(nibName: "TopicCell", bundle: nil)
+        let nib = UINib(nibName: "TopicViewCell", bundle: nil)
         
-        tableView?.register(nib, forCellReuseIdentifier: "TopicCell")
+        tableView?.register(nib, forCellReuseIdentifier: "TopicViewCell")
         tableView?.estimatedRowHeight = 50
         tableView?.rowHeight = UITableView.automaticDimension
         
@@ -41,32 +45,33 @@ class HomeViewController: UIViewController
 
 internal class TopicsDelegate: NSObject, UITableViewDelegate
 {
-    weak var _context: HomeViewController?
+    weak var context: HomeViewController?
     
     init(context: HomeViewController?) {
-        _context = context
+        self.context = context
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        _context?.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
+        context?.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
     }
 }
 
 internal class TopicsSource: NSObject, UITableViewDataSource
 {
-    weak var _context: HomeViewController?
+    weak var context: HomeViewController?
     
     init(context: HomeViewController?) {
-        _context = context
+        self.context = context
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return 3
+        return (context?.topics.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TopicCell")! as! TopicCell
-        cell.NameLabel?.text = String(indexPath.row)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TopicViewCell")! as! TopicViewCell
+        cell.TitleLabel?.text = self.context?.topics[indexPath.row].title
+       // let op = cell.PreviewImage
         return cell
     }
     
