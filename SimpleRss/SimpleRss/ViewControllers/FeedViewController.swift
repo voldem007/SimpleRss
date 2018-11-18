@@ -13,6 +13,10 @@ class FeedViewController: UIViewController {
     
     var name: String!
     
+    var tableView: UITableView?
+    var dataSource: FeedSource?
+   // var tableDelegate: TopicsDelegate?
+    
     init(name: Int){
         super.init(nibName: nil, bundle: nil)
         self.name = String(name)
@@ -25,28 +29,54 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView = UITableView(frame: self.view.bounds)
+        
+        dataSource = FeedSource(context: self)
+        tableView?.dataSource = dataSource
+        tableView?.register(FeedViewCell.self, forCellReuseIdentifier: "FeedViewCell")
+        tableView?.estimatedRowHeight = 50
+        tableView?.rowHeight = UITableView.automaticDimension
+        
+        self.view.addSubview(tableView!)
+        tableView?.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         self.title = name;
     }
 }
 
-internal class FeedSource//: NSObject, UITableViewDataSource
+internal class FeedSource: NSObject, UITableViewDataSource
 {
-   
-    
-    var _context: FeedViewController?
+    var context: FeedViewController?
     
     init(context: FeedViewController?) {
-        _context = context
+        self.context = context
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       // _context?.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedViewCell")! as! FeedViewCell
+        
+        cell.titleLabel.text = "Title"
+        let url = URL(string: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
+        
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url!)
+            DispatchQueue.main.async {
+                cell.imageView?.image = UIImage(data: data!)
+            }
+        }
+        
+        cell.dateLabel.text = "10/10/2010"
+        cell.descriptionLabel.text = "asdasdasdasdasdasdasdasdasdasd"
+        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return 3
     }
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
