@@ -14,10 +14,7 @@ class FeedViewController: UIViewController {
     let feedCellIdentifier = "FeedViewCell"
     
     var name: String!
-    
-    var tableView: UITableView?
-    var dataSource: FeedSource?
-   // var tableDelegate: TopicsDelegate?
+    weak var tableView: UITableView?
     
     init(name: Int){
         super.init(nibName: nil, bundle: nil)
@@ -31,16 +28,20 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView = UITableView(frame: self.view.bounds)
+        let tableView = UITableView(frame: self.view.bounds)
         
-        dataSource = FeedSource(context: self)
-        tableView?.dataSource = dataSource
-        tableView?.register(FeedViewCell.self, forCellReuseIdentifier: feedCellIdentifier)
-        tableView?.estimatedRowHeight = 50
-        tableView?.rowHeight = UITableView.automaticDimension
+        tableView.dataSource = self
+        tableView.delegate = self
         
-        self.view.addSubview(tableView!)
-        tableView?.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        let nib = UINib(nibName: feedCellIdentifier, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: feedCellIdentifier)
+
+        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        
+        self.view.addSubview(tableView)
+        self.tableView = tableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,18 +51,12 @@ class FeedViewController: UIViewController {
     }
 }
 
-internal class FeedSource: NSObject, UITableViewDataSource
+extension FeedViewController: UITableViewDataSource
 {
-    var context: FeedViewController?
-    
-    init(context: FeedViewController?) {
-        self.context = context
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: (self.context?.feedCellIdentifier)!)! as! FeedViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.feedCellIdentifier) as! FeedViewCell
         
-        cell.titleLabel.text = "Title"
+        cell.TitleLabel.text = "Title"
         let url = URL(string: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
         
         DispatchQueue.global().async {
@@ -70,9 +65,7 @@ internal class FeedSource: NSObject, UITableViewDataSource
                 cell.imageView?.image = UIImage(data: data!)
             }
         }
-        
-        cell.dateLabel.text = "10/10/2010"
-        cell.descriptionLabel.text = "asdasdasdasdasdasdasdasdasdasd"
+     
         return cell
     }
     
@@ -82,6 +75,13 @@ internal class FeedSource: NSObject, UITableViewDataSource
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+}
+
+extension FeedViewController: UITableViewDelegate
+{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        self.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
     }
 }
 

@@ -10,9 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController
 {
-    var tableView: UITableView?
-    var dataSource: TopicsSource?
-    var tableDelegate: TopicsDelegate?
+    weak var tableView: UITableView!
     
     let topicCellIdentifier = "TopicViewCell"
     
@@ -23,21 +21,21 @@ class HomeViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView = UITableView(frame: self.view.bounds)
-        dataSource = TopicsSource(context: self)
-        tableDelegate = TopicsDelegate(context: self)
-        tableView?.dataSource = dataSource
-        tableView?.delegate = tableDelegate
+        let tableView = UITableView(frame: self.view.bounds)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
         
         let nib = UINib(nibName: topicCellIdentifier, bundle: nil)
         
-        tableView?.register(nib, forCellReuseIdentifier: topicCellIdentifier)
-        tableView?.estimatedRowHeight = 50
-        tableView?.rowHeight = UITableView.automaticDimension
-        tableView?.separatorStyle = UITableViewCell.SeparatorStyle.none
+        tableView.register(nib, forCellReuseIdentifier: topicCellIdentifier)
+        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
-        self.view.addSubview(tableView!)
-        tableView?.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        self.view.addSubview(tableView)
+        self.tableView = tableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,36 +44,25 @@ class HomeViewController: UIViewController
     }
 }
 
-internal class TopicsDelegate: NSObject, UITableViewDelegate
+extension HomeViewController: UITableViewDelegate
 {
-    weak var context: HomeViewController?
-    
-    init(context: HomeViewController?) {
-        self.context = context
-    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        context?.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
+        self.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
     }
 }
 
-internal class TopicsSource: NSObject, UITableViewDataSource
+extension HomeViewController: UITableViewDataSource
 {
-    weak var context: HomeViewController?
-    
-    init(context: HomeViewController?) {
-        self.context = context
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return (context?.topics.count)!
+        return self.topics.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: (self.context?.topicCellIdentifier)!)! as! TopicViewCell
-        cell.TitleLabel?.text = self.context?.topics[indexPath.row].title
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.topicCellIdentifier) as! TopicViewCell
+        cell.TitleLabel?.text = self.topics[indexPath.row].title
         
-        let url = URL(string: (self.context?.topics[indexPath.row].url)!)
+        let url = URL(string: self.topics[indexPath.row].url)
         
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url!)
