@@ -55,14 +55,9 @@ extension FeedViewController: UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: self.feedCellIdentifier) as! FeedViewCell
         
         cell.TitleLabel.text = "Title"
-        let url = URL(string: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
+        cell.PreviewImageView?.downloaded(from: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
+        
         cell.DescriptionLabel.text = "ssdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdadasdasdasdasd"
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.PreviewImageView?.image = UIImage(data: data!)
-            }
-        }
      
         return cell
     }
@@ -86,6 +81,18 @@ extension FeedViewController: UITableViewDelegate
         
         tableView.beginUpdates()
         tableView.endUpdates()
+    }
+}
+
+extension UIImageView {
+    func downloaded(from link: String) {
+        DispatchQueue.global().async {
+            guard let url = URL(string: link) else { return }
+            guard let data = try? Data(contentsOf: url) else { return }
+            DispatchQueue.main.async {
+                self.image = UIImage(data: data)
+            }
+        }
     }
 }
 

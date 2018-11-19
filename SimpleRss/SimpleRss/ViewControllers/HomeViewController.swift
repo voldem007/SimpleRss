@@ -62,14 +62,7 @@ extension HomeViewController: UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: self.topicCellIdentifier) as! TopicViewCell
         cell.TitleLabel?.text = self.topics[indexPath.row].title
         
-        let url = URL(string: self.topics[indexPath.row].url)
-        
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.PreviewImageView.image = UIImage(data: data!)
-            }
-        }
+        cell.PreviewImageView?.downloaded(from: self.topics[indexPath.row].url)
             
         return cell
     }
