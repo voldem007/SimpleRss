@@ -10,8 +10,6 @@ import UIKit
 
 class HomeViewController: UIViewController
 {
-    weak var tableView: UITableView!
-    
     let topicCellIdentifier = "TopicViewCell"
     
     let topics: [Topic] = [Topic(id: 0, title: "IT", url: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg"),
@@ -34,19 +32,22 @@ class HomeViewController: UIViewController
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
         self.view.addSubview(tableView)
-        self.tableView = tableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = "rss"
     }
+    
+    private func navigateToFeed(id: Int){
+        navigationController?.pushViewController(FeedViewController(name: id), animated: true)
+    }
 }
 
 extension HomeViewController: UITableViewDelegate
 {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        self.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
+        navigateToFeed(id: indexPath.row)
     }
 }
 

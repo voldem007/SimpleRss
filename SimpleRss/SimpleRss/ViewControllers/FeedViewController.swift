@@ -14,7 +14,6 @@ class FeedViewController: UIViewController {
     let feedCellIdentifier = "FeedViewCell"
     
     var name: String!
-    weak var tableView: UITableView?
     
     init(name: Int){
         super.init(nibName: nil, bundle: nil)
@@ -36,11 +35,11 @@ class FeedViewController: UIViewController {
         let nib = UINib(nibName: feedCellIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: feedCellIdentifier)
 
+        tableView.estimatedRowHeight = 300
         tableView.rowHeight = UITableView.automaticDimension
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         self.view.addSubview(tableView)
-        self.tableView = tableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,11 +56,11 @@ extension FeedViewController: UITableViewDataSource
         
         cell.TitleLabel.text = "Title"
         let url = URL(string: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
-        
+        cell.DescriptionLabel.text = "ssdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdadasdasdasdasd"
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url!)
             DispatchQueue.main.async {
-                cell.imageView?.image = UIImage(data: data!)
+                cell.PreviewImageView?.image = UIImage(data: data!)
             }
         }
      
@@ -80,7 +79,13 @@ extension FeedViewController: UITableViewDataSource
 extension FeedViewController: UITableViewDelegate
 {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        self.navigationController?.pushViewController(FeedViewController(name: indexPath.row), animated: true)
+        
+        let cell = tableView.cellForRow(at: indexPath) as! FeedViewCell
+        
+        cell.DescriptionLabel.numberOfLines = cell.DescriptionLabel.numberOfLines == 0 ? 1 : 0;
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 }
 

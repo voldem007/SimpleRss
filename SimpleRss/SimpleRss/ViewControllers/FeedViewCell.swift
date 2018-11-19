@@ -10,5 +10,7 @@ import UIKit
 
 class FeedViewCell: UITableViewCell {
     
+    @IBOutlet weak var PreviewImageView: UIImageView!
     @IBOutlet weak var TitleLabel: UILabel!
+    @IBOutlet weak var DescriptionLabel: UILabel!
 }
