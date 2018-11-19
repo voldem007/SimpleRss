@@ -11,6 +11,8 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
+    let feedCellIdentifier = "FeedViewCell"
+    
     var name: String!
     
     var tableView: UITableView?
@@ -33,7 +35,7 @@ class FeedViewController: UIViewController {
         
         dataSource = FeedSource(context: self)
         tableView?.dataSource = dataSource
-        tableView?.register(FeedViewCell.self, forCellReuseIdentifier: "FeedViewCell")
+        tableView?.register(FeedViewCell.self, forCellReuseIdentifier: feedCellIdentifier)
         tableView?.estimatedRowHeight = 50
         tableView?.rowHeight = UITableView.automaticDimension
         
@@ -57,7 +59,7 @@ internal class FeedSource: NSObject, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedViewCell")! as! FeedViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: (self.context?.feedCellIdentifier)!)! as! FeedViewCell
         
         cell.titleLabel.text = "Title"
         let url = URL(string: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
