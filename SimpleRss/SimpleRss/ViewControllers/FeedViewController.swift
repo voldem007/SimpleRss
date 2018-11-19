@@ -36,7 +36,6 @@ class FeedViewController: UIViewController {
         let nib = UINib(nibName: feedCellIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: feedCellIdentifier)
 
-        tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableView.automaticDimension
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         

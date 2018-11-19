@@ -29,7 +29,6 @@ class HomeViewController: UIViewController
         let nib = UINib(nibName: topicCellIdentifier, bundle: nil)
         
         tableView.register(nib, forCellReuseIdentifier: topicCellIdentifier)
-        tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
