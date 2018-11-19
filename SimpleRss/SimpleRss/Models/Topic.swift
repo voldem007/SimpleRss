@@ -12,10 +12,4 @@ public struct Topic{
     let id: Int
     let title: String
     let url: String
-    
-    init(id: Int, title: String, url: String) {
-        self.id = id
-        self.title = title
-        self.url = url
-    }
 }
