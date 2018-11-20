@@ -11,13 +11,8 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
-    let feedCellIdentifier = "FeedViewCell"
-    
-    var name: String!
-    
-    init(name: Int){
+    init(){
         super.init(nibName: nil, bundle: nil)
-        self.name = String(name)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,10 +27,9 @@ class FeedViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        let nib = UINib(nibName: feedCellIdentifier, bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: feedCellIdentifier)
+        let nib = UINib(nibName: FeedViewCell.cellIdentifier(), bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: FeedViewCell.cellIdentifier())
 
-        tableView.estimatedRowHeight = 300
         tableView.rowHeight = UITableView.automaticDimension
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
@@ -45,14 +39,14 @@ class FeedViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.title = name;
+        self.title = "feed";
     }
 }
 
 extension FeedViewController: UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.feedCellIdentifier) as! FeedViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as! FeedViewCell
         
         cell.TitleLabel.text = "Title"
         cell.PreviewImageView?.downloaded(from: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")

@@ -14,3 +14,9 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var TitleLabel: UILabel!
     @IBOutlet weak var DescriptionLabel: UILabel!
 }
+
+extension FeedViewCell{
+    static func cellIdentifier() -> String {
+        return String(describing: self)
+    }
+}
