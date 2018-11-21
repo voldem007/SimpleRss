@@ -11,8 +11,14 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
-    init(){
+    var feedList = [Feed]()
+    var url: String!
+    
+    weak var tableView: UITableView!
+    
+    init(url: String!) {
         super.init(nibName: nil, bundle: nil)
+        self.url = url
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,7 +39,23 @@ class FeedViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        self.view.addSubview(tableView)
+        view.addSubview(tableView)
+        self.tableView = tableView;
+        
+        fetchXMLData()
+    }
+    
+    func fetchXMLData() {
+        XMLParserService().fetchXMLData(for: url) { (feedList, error) in
+            
+            if error == nil {
+                self.feedList = feedList!
+                self.tableView.reloadData()
+            }
+            else {
+                print(error?.localizedDescription ?? "Error")
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,16 +70,16 @@ extension FeedViewController: UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
-        cell.TitleLabel.text = "Title"
-        cell.PreviewImageView?.downloaded(from: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
-        
-        cell.DescriptionLabel.text = "ssdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdadasdasdasdasd"
+        let feed = feedList[indexPath.row]
+        cell.TitleLabel.text = feed.title
+        cell.PreviewImageView?.downloaded(from: feed.picUrl)
+        cell.DescriptionLabel.text = feed.description
      
         return cell
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return 3
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return feedList.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,7 +90,7 @@ extension FeedViewController: UITableViewDataSource
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
-        let cell = tableView.cellForRow(at: indexPath) as! FeedViewCell
+        guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
         
         cell.DescriptionLabel.numberOfLines = cell.DescriptionLabel.numberOfLines == 0 ? 1 : 0;
         

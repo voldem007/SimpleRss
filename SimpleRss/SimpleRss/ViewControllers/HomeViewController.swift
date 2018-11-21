@@ -10,9 +10,9 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    let topics: [Topic] = [Topic(title: "IT", url: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg"),
-                                 Topic(title: "Economics", url: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg"),
-                                 Topic(title: "Politics", url: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")]
+    let topics: [Topic] = [Topic(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
+                           Topic(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
+                                 Topic(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://news.tut.by/rss/politics.rss")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,15 +37,15 @@ class HomeViewController: UIViewController {
         title = "rss"
     }
     
-    private func navigateToFeed(id: Int) {
-        navigationController?.pushViewController(FeedViewController(), animated: true)
+    private func navigateToFeed(feedUrl: String) {
+        navigationController?.pushViewController(FeedViewController(url: feedUrl), animated: true)
     }
 }
 
 extension HomeViewController: UITableViewDelegate
 {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        navigateToFeed(id: indexPath.row)
+        navigateToFeed(feedUrl: topics[indexPath.row].feedUrl)
     }
 }
 
@@ -56,12 +56,10 @@ extension HomeViewController: UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TopicViewCell.cellIdentifier()) as? TopicViewCell else { return UITableViewCell() }
         
         cell.TitleLabel?.text = topics[indexPath.row].title
-        
-        cell.PreviewImageView?.downloaded(from: topics[indexPath.row].url)
+        cell.PreviewImageView?.downloaded(from: topics[indexPath.row].picUrl)
             
         return cell
     }

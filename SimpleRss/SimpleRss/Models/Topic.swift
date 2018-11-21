@@ -10,5 +10,6 @@ import Foundation
 
 public struct Topic{
     let title: String
-    let url: String
+    let picUrl: String
+    let feedUrl: String
 }
