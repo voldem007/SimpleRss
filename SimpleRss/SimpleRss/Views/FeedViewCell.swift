@@ -13,10 +13,8 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var PreviewImageView: UIImageView!
     @IBOutlet weak var TitleLabel: UILabel!
     @IBOutlet weak var DescriptionLabel: UILabel!
-}
-
-extension FeedViewCell{
-    static func cellIdentifier() -> String {
-        return String(describing: self)
+    
+    override func prepareForReuse() {
+        PreviewImageView.image = nil
     }
 }

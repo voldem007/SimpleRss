@@ -13,7 +13,7 @@ class TopicViewCell: UITableViewCell {
     @IBOutlet weak var TitleLabel: UILabel!
 }
 
-extension TopicViewCell{
+extension UITableViewCell{
     static func cellIdentifier() -> String {
         return String(describing: self)
     }

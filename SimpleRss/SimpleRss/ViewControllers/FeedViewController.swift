@@ -22,7 +22,7 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tableView = UITableView(frame: self.view.bounds)
+        let tableView = UITableView(frame: view.bounds)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -46,7 +46,7 @@ class FeedViewController: UIViewController {
 extension FeedViewController: UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as! FeedViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
         cell.TitleLabel.text = "Title"
         cell.PreviewImageView?.downloaded(from: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")
@@ -65,8 +65,7 @@ extension FeedViewController: UITableViewDataSource
     }
 }
 
-extension FeedViewController: UITableViewDelegate
-{
+extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
         let cell = tableView.cellForRow(at: indexPath) as! FeedViewCell

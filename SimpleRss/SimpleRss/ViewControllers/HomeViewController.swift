@@ -8,8 +8,8 @@
 
 import UIKit
 
-class HomeViewController: UIViewController
-{
+class HomeViewController: UIViewController {
+    
     let topics: [Topic] = [Topic(title: "IT", url: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg"),
                                  Topic(title: "Economics", url: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg"),
                                  Topic(title: "Politics", url: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")]
@@ -17,7 +17,7 @@ class HomeViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tableView = UITableView(frame: self.view.bounds)
+        let tableView = UITableView(frame: view.bounds)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -29,15 +29,15 @@ class HomeViewController: UIViewController
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
-        self.view.addSubview(tableView)
+        view.addSubview(tableView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.title = "rss"
+        title = "rss"
     }
     
-    private func navigateToFeed(id: Int){
+    private func navigateToFeed(id: Int) {
         navigationController?.pushViewController(FeedViewController(), animated: true)
     }
 }
@@ -51,16 +51,17 @@ extension HomeViewController: UITableViewDelegate
 
 extension HomeViewController: UITableViewDataSource
 {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return self.topics.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return topics.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: TopicViewCell.cellIdentifier()) as! TopicViewCell
-        cell.TitleLabel?.text = self.topics[indexPath.row].title
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TopicViewCell.cellIdentifier()) as? TopicViewCell else { return UITableViewCell() }
         
-        cell.PreviewImageView?.downloaded(from: self.topics[indexPath.row].url)
+        cell.TitleLabel?.text = topics[indexPath.row].title
+        
+        cell.PreviewImageView?.downloaded(from: topics[indexPath.row].url)
             
         return cell
     }
