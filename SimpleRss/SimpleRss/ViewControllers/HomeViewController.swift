@@ -10,9 +10,9 @@ import UIKit
 
 class HomeViewController: UIViewController
 {
-    let topics: [Topic] = [Topic(id: 0, title: "IT", url: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg"),
-                                 Topic(id: 1, title: "Economics", url: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg"),
-                                 Topic(id: 2, title: "Politics", url: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")]
+    let topics: [Topic] = [Topic(title: "IT", url: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg"),
+                                 Topic(title: "Economics", url: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg"),
+                                 Topic(title: "Politics", url: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg")]
 
     override func viewDidLoad() {
         super.viewDidLoad()

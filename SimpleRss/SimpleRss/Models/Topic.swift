@@ -9,7 +9,6 @@
 import Foundation
 
 public struct Topic{
-    let id: Int
     let title: String
     let url: String
 }
