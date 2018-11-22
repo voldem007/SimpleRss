@@ -12,9 +12,3 @@ class TopicViewCell: UITableViewCell {
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
 }
-
-extension UITableViewCell{
-    static func cellIdentifier() -> String {
-        return String(describing: self)
-    }
-}

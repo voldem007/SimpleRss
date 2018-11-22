@@ -13,6 +13,7 @@
 		213BC6EA219C61F200E7694B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 213BC6E8219C61F200E7694B /* LaunchScreen.storyboard */; };
 		213D3F7921A5A8DD00E2E937 /* XMLParserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7821A5A8DD00E2E937 /* XMLParserService.swift */; };
 		213D3F7B21A6088600E2E937 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7A21A6088600E2E937 /* Feed.swift */; };
+		213D3F7F21A6F97500E2E937 /* CellViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */; };
 		21575144219C6DD70066D7D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21575142219C6DD70066D7D0 /* Main.storyboard */; };
 		21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21575147219CC2A20066D7D0 /* FeedViewController.swift */; };
 		21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF870321A32EBB00C00970 /* FeedViewCell.swift */; };
@@ -31,6 +32,7 @@
 		213BC6EB219C61F200E7694B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		213D3F7821A5A8DD00E2E937 /* XMLParserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLParserService.swift; sourceTree = "<group>"; };
 		213D3F7A21A6088600E2E937 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
+		213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewExtensions.swift; sourceTree = "<group>"; };
 		21575143219C6DD70066D7D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21575147219CC2A20066D7D0 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		21AF870321A32EBB00C00970 /* FeedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCell.swift; sourceTree = "<group>"; };
@@ -91,6 +93,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		213D3F7D21A6F94100E2E937 /* ViewExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */,
+			);
+			path = ViewExtensions;
+			sourceTree = "<group>";
+		};
 		21575145219C6F240066D7D0 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +113,7 @@
 		21AF870721A3576000C00970 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				213D3F7D21A6F94100E2E937 /* ViewExtensions */,
 				21EEFC2321A0A06100A97F33 /* TopicViewCell.swift */,
 				21EEFC2421A0A06100A97F33 /* TopicViewCell.xib */,
 				21AF870321A32EBB00C00970 /* FeedViewCell.swift */,
@@ -193,6 +204,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				213D3F7F21A6F97500E2E937 /* CellViewExtensions.swift in Sources */,
 				21EEFC2521A0A06100A97F33 /* TopicViewCell.swift in Sources */,
 				213D3F7B21A6088600E2E937 /* Feed.swift in Sources */,
 				213BC6E2219C61F000E7694B /* HomeViewController.swift in Sources */,
