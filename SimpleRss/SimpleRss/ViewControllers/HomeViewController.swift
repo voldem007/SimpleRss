@@ -42,15 +42,13 @@ class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController: UITableViewDelegate
-{
+extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         navigateToFeed(feedUrl: topics[indexPath.row].feedUrl)
     }
 }
 
-extension HomeViewController: UITableViewDataSource
-{
+extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return topics.count
     }

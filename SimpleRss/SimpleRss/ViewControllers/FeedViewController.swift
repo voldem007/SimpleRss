@@ -47,7 +47,6 @@ class FeedViewController: UIViewController {
     
     func fetchXMLData() {
         XMLParserService().fetchXMLData(for: url) { (feedList, error) in
-            
             if error == nil {
                 self.feedList = feedList!
                 self.tableView.reloadData()
@@ -65,8 +64,7 @@ class FeedViewController: UIViewController {
     }
 }
 
-extension FeedViewController: UITableViewDataSource
-{
+extension FeedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
