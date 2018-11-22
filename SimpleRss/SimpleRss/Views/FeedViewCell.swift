@@ -10,11 +10,11 @@ import UIKit
 
 class FeedViewCell: UITableViewCell {
     
-    @IBOutlet weak var PreviewImageView: UIImageView!
-    @IBOutlet weak var TitleLabel: UILabel!
-    @IBOutlet weak var DescriptionLabel: UILabel!
+    @IBOutlet weak var previewImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
     
     override func prepareForReuse() {
-        PreviewImageView.image = nil
+        previewImageView.image = nil
     }
 }

@@ -9,8 +9,8 @@
 import UIKit
 
 class TopicViewCell: UITableViewCell {
-    @IBOutlet weak var PreviewImageView: UIImageView!
-    @IBOutlet weak var TitleLabel: UILabel!
+    @IBOutlet weak var previewImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
 }
 
 extension UITableViewCell{

@@ -60,9 +60,9 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="DescriptionLabel" destination="P1v-17-dDx" id="yy8-K8-daS"/>
-                <outlet property="PreviewImageView" destination="TEp-cM-Yka" id="eZb-Hd-cdy"/>
-                <outlet property="TitleLabel" destination="uwn-V5-dbH" id="h3p-rL-Rt1"/>
+                <outlet property="descriptionLabel" destination="P1v-17-dDx" id="yy8-K8-daS"/>
+                <outlet property="previewImageView" destination="TEp-cM-Yka" id="eZb-Hd-cdy"/>
+                <outlet property="titleLabel" destination="uwn-V5-dbH" id="h3p-rL-Rt1"/>
             </connections>
             <point key="canvasLocation" x="52.799999999999997" y="145.72713643178412"/>
         </tableViewCell>

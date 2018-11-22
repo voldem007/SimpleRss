@@ -55,8 +55,8 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="PreviewImageView" destination="q57-cK-zZe" id="cLm-bp-KZs"/>
-                <outlet property="TitleLabel" destination="r2Z-Qk-Qc0" id="yOI-1V-WYg"/>
+                <outlet property="previewImageView" destination="q57-cK-zZe" id="cLm-bp-KZs"/>
+                <outlet property="titleLabel" destination="r2Z-Qk-Qc0" id="yOI-1V-WYg"/>
             </connections>
             <point key="canvasLocation" x="137.59999999999999" y="207.79610194902551"/>
         </tableViewCell>
