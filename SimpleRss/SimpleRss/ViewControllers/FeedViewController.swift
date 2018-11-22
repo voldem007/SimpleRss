@@ -12,7 +12,7 @@ import UIKit
 class FeedViewController: UIViewController {
     
     var feedList = [Feed]()
-    var url: String!
+    var url: String?
     
     weak var tableView: UITableView!
     
