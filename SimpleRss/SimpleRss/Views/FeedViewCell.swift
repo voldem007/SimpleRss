@@ -13,8 +13,17 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var pubDateLabel: UILabel!
     
     override func prepareForReuse() {
         previewImageView.image = nil
+        descriptionLabel.lineBreakMode = .byTruncatingTail
+        descriptionLabel.numberOfLines = 1
     }
+    
+    func expanding(isExpanded: Bool) {
+        descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
+        descriptionLabel.lineBreakMode = isExpanded ? .byTruncatingTail : .byWordWrapping
+    }
+    
 }

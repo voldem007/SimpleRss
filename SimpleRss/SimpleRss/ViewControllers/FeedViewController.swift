@@ -69,9 +69,12 @@ extension FeedViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
         let feed = feedList[indexPath.row]
+        
         cell.titleLabel.text = feed.title
         cell.previewImageView.downloaded(from: feed.picUrl)
         cell.descriptionLabel.text = feed.description
+        cell.pubDateLabel.text = feed.pubDate
+        cell.expanding(isExpanded: feed.isExpanded)
      
         return cell
     }
@@ -90,7 +93,9 @@ extension FeedViewController: UITableViewDelegate {
         
         guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
         
-        cell.descriptionLabel.numberOfLines = cell.descriptionLabel.numberOfLines == 0 ? 1 : 0;
+        feedList[indexPath.row].isExpanded = !feedList[indexPath.row].isExpanded
+        let isExpanded = feedList[indexPath.row].isExpanded
+        cell.expanding(isExpanded: isExpanded)
         
         tableView.beginUpdates()
         tableView.endUpdates()
