@@ -23,7 +23,7 @@ class FeedViewCell: UITableViewCell {
     
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
-        descriptionLabel.lineBreakMode = isExpanded ? .byTruncatingTail : .byWordWrapping
+        descriptionLabel.lineBreakMode = isExpanded ? .byCharWrapping : .byTruncatingTail
     }
     
 }

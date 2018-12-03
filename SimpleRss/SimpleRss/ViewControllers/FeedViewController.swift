@@ -11,7 +11,7 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
-    var feedList = [Feed]()
+    var feedList = [FeedViewModel]()
     var url: String?
     
     weak var tableView: UITableView!
@@ -48,7 +48,7 @@ class FeedViewController: UIViewController {
     func fetchXMLData() {
         XMLParserService().fetchXMLData(for: url) { (feedList, error) in
             if error == nil {
-                self.feedList = feedList!
+                self.feedList = feedList
                 self.tableView.reloadData()
             }
             else {
