@@ -16,7 +16,7 @@ class FeedViewController: UIViewController {
     
     weak var tableView: UITableView!
     
-    init(url: String!) {
+    init(url: String) {
         super.init(nibName: nil, bundle: nil)
         self.url = url
     }
@@ -46,14 +46,10 @@ class FeedViewController: UIViewController {
     }
     
     func fetchXMLData() {
-        XMLParserService().fetchXMLData(for: url) { (feedList, error) in
-            if error == nil {
-                self.feedList = feedList.map { feed in FeedViewModel(feed) }
-                self.tableView.reloadData()
-            }
-            else {
-                print(error?.localizedDescription ?? "Error")
-            }
+        guard let url = url else { return }
+        XMLParserService().fetchXMLData(for: url) { feedList in
+            self.feedList = feedList.map { feed in FeedViewModel(feed) }
+            self.tableView.reloadData()
         }
     }
     
@@ -93,9 +89,9 @@ extension FeedViewController: UITableViewDelegate {
         
         guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
         
-        feedList[indexPath.row].isExpanded = !feedList[indexPath.row].isExpanded
-        let isExpanded = feedList[indexPath.row].isExpanded
-        cell.expanding(isExpanded: isExpanded)
+        let feed = feedList[indexPath.row]
+        feed.toggle()
+        cell.expanding(isExpanded: feed.isExpanded)
         
         tableView.beginUpdates()
         tableView.endUpdates()

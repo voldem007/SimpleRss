@@ -10,14 +10,19 @@ import Foundation
 
 class FeedViewModel {
     private var feedModel: Feed
+    private var expanded: Bool = false
+    
+    var isExpanded: Bool { return expanded }
+    var title: String { return feedModel.title }
+    var pubDate: String { return feedModel.pubDate }
+    var picUrl: String { return feedModel.picUrl }
+    var description: String { return feedModel.description }
     
     init(_ feedModel: Feed) {
         self.feedModel = feedModel
     }
     
-    var isExpanded: Bool = false
-    var title: String { get { return feedModel.title } }
-    var pubDate: String { return feedModel.pubDate }
-    var picUrl: String { return feedModel.picUrl }
-    var description: String { return feedModel.description }
+    func toggle() {
+        expanded = !expanded
+    }
 }
