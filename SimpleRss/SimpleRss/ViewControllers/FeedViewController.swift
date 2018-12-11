@@ -91,7 +91,7 @@ extension FeedViewController: UITableViewDelegate {
         
         let feed = feedList[indexPath.row]
         feed.toggle()
-        cell.expanding(isExpanded: feed.isExpanded)
+        cell.isExpanded = feed.isExpanded
         
         tableView.beginUpdates()
         tableView.endUpdates()

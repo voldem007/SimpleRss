@@ -15,10 +15,15 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var pubDateLabel: UILabel!
     
+    var isExpanded: Bool = false {
+        didSet {
+            expanding(isExpanded: isExpanded)
+        }
+    }
+    
     override func prepareForReuse() {
         previewImageView.image = nil
-        descriptionLabel.lineBreakMode = .byTruncatingTail
-        descriptionLabel.numberOfLines = 1
+        expanding(isExpanded: false)
     }
     
     func expanding(isExpanded: Bool) {
