@@ -11,12 +11,12 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
-    var feedList = [Feed]()
+    var feedList = [FeedViewModel]()
     var url: String?
     
     weak var tableView: UITableView!
     
-    init(url: String!) {
+    init(url: String) {
         super.init(nibName: nil, bundle: nil)
         self.url = url
     }
@@ -46,14 +46,10 @@ class FeedViewController: UIViewController {
     }
     
     func fetchXMLData() {
-        XMLParserService().fetchXMLData(for: url) { (feedList, error) in
-            if error == nil {
-                self.feedList = feedList!
-                self.tableView.reloadData()
-            }
-            else {
-                print(error?.localizedDescription ?? "Error")
-            }
+        guard let url = url else { return }
+        XMLParserService.fetchXMLData(for: url) { feedList in
+            self.feedList = feedList.map { feed in FeedViewModel(feed) }
+            self.tableView.reloadData()
         }
     }
     
@@ -69,9 +65,12 @@ extension FeedViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
         let feed = feedList[indexPath.row]
+        
         cell.titleLabel.text = feed.title
         cell.previewImageView.downloaded(from: feed.picUrl)
         cell.descriptionLabel.text = feed.description
+        cell.pubDateLabel.text = feed.pubDate
+        cell.expanding(isExpanded: feed.isExpanded)
      
         return cell
     }
@@ -90,7 +89,9 @@ extension FeedViewController: UITableViewDelegate {
         
         guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
         
-        cell.descriptionLabel.numberOfLines = cell.descriptionLabel.numberOfLines == 0 ? 1 : 0;
+        let feed = feedList[indexPath.row]
+        feed.toggle()
+        cell.isExpanded = feed.isExpanded
         
         tableView.beginUpdates()
         tableView.endUpdates()
