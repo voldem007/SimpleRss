@@ -11,12 +11,13 @@
 		213BC6E2219C61F000E7694B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213BC6E1219C61F000E7694B /* HomeViewController.swift */; };
 		213BC6E7219C61F200E7694B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 213BC6E6219C61F200E7694B /* Assets.xcassets */; };
 		213BC6EA219C61F200E7694B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 213BC6E8219C61F200E7694B /* LaunchScreen.storyboard */; };
-		213D3F7921A5A8DD00E2E937 /* XMLParserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7821A5A8DD00E2E937 /* XMLParserService.swift */; };
+		213D3F7921A5A8DD00E2E937 /* RssParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7821A5A8DD00E2E937 /* RssParser.swift */; };
 		213D3F7B21A6088600E2E937 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7A21A6088600E2E937 /* Feed.swift */; };
 		213D3F7F21A6F97500E2E937 /* CellViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */; };
 		21575144219C6DD70066D7D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21575142219C6DD70066D7D0 /* Main.storyboard */; };
 		21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21575147219CC2A20066D7D0 /* FeedViewController.swift */; };
 		215FBABB21B523560092785B /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215FBABA21B523560092785B /* FeedViewModel.swift */; };
+		2199666921C1A0BF00FE7AAD /* RssService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199666821C1A0BF00FE7AAD /* RssService.swift */; };
 		21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF870321A32EBB00C00970 /* FeedViewCell.swift */; };
 		21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21AF870421A32EBB00C00970 /* FeedViewCell.xib */; };
 		21EEFC1D21A0825100A97F33 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEFC1C21A0825100A97F33 /* Topic.swift */; };
@@ -31,12 +32,13 @@
 		213BC6E6219C61F200E7694B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		213BC6E9219C61F200E7694B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		213BC6EB219C61F200E7694B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		213D3F7821A5A8DD00E2E937 /* XMLParserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLParserService.swift; sourceTree = "<group>"; };
+		213D3F7821A5A8DD00E2E937 /* RssParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssParser.swift; sourceTree = "<group>"; };
 		213D3F7A21A6088600E2E937 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewExtensions.swift; sourceTree = "<group>"; };
 		21575143219C6DD70066D7D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21575147219CC2A20066D7D0 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		215FBABA21B523560092785B /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
+		2199666821C1A0BF00FE7AAD /* RssService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssService.swift; sourceTree = "<group>"; };
 		21AF870321A32EBB00C00970 /* FeedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCell.swift; sourceTree = "<group>"; };
 		21AF870421A32EBB00C00970 /* FeedViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedViewCell.xib; sourceTree = "<group>"; };
 		21EEFC1C21A0825100A97F33 /* Topic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
@@ -90,7 +92,8 @@
 		213D3F7721A5A8BF00E2E937 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				213D3F7821A5A8DD00E2E937 /* XMLParserService.swift */,
+				213D3F7821A5A8DD00E2E937 /* RssParser.swift */,
+				2199666821C1A0BF00FE7AAD /* RssService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -224,7 +227,8 @@
 				21EEFC1D21A0825100A97F33 /* Topic.swift in Sources */,
 				21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */,
 				213BC6E0219C61F000E7694B /* AppDelegate.swift in Sources */,
-				213D3F7921A5A8DD00E2E937 /* XMLParserService.swift in Sources */,
+				2199666921C1A0BF00FE7AAD /* RssService.swift in Sources */,
+				213D3F7921A5A8DD00E2E937 /* RssParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

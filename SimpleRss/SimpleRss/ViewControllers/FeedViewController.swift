@@ -47,7 +47,8 @@ class FeedViewController: UIViewController {
     
     func fetchXMLData() {
         guard let url = url else { return }
-        XMLParserService.fetchXMLData(for: url) { feedList in
+        RssService().getFeed(for: url) { (feedList, error) in
+            guard let feedList = feedList else { return }
             self.feedList = feedList.map { feed in FeedViewModel(feed) }
             self.tableView.reloadData()
         }
