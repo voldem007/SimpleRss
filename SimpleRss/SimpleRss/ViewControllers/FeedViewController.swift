@@ -68,7 +68,7 @@ extension FeedViewController: UITableViewDataSource {
         let feed = feedList[indexPath.row]
         
         cell.titleLabel.text = feed.title
-        cell.previewImageView.downloaded(from: feed.picUrl)
+        cell.imageUrl = URL(string: feed.picUrl ?? "")
         cell.descriptionLabel.text = feed.description
         cell.pubDateLabel.text = feed.pubDate
         cell.expanding(isExpanded: feed.isExpanded)
@@ -98,16 +98,3 @@ extension FeedViewController: UITableViewDelegate {
         tableView.endUpdates()
     }
 }
-
-extension UIImageView {
-    func downloaded(from link: String) {
-        DispatchQueue.global().async {
-            guard let url = URL(string: link) else { return }
-            guard let data = try? Data(contentsOf: url) else { return }
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data)
-            }
-        }
-    }
-}
-

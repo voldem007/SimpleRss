@@ -12,7 +12,7 @@ class RssParser: NSObject {
     var attributeValue = ""
     var attributeDict: [String : String]?
     var prevElementName = ""
-    var wasClosed = true
+    var wasTagClosed = true
     var rssDictionary = [(String, Any)]()
     var error: Error? = nil
     
@@ -40,12 +40,12 @@ extension RssParser: XMLParserDelegate {
             self.attributeDict = attributeDict
         }
         
-        if(!wasClosed) {
+        if(!wasTagClosed) {
             rssDictionary.append((prevElementName, ""))
         }
         
         prevElementName = elementName
-        wasClosed = false
+        wasTagClosed = false
     }
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         attributeValue.append(string)
@@ -55,7 +55,7 @@ extension RssParser: XMLParserDelegate {
         rssDictionary.append((elementName, attributeDict ?? attributeValue))
         attributeValue = ""
         attributeDict = nil
-        wasClosed = true
+        wasTagClosed = true
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
