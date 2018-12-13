@@ -9,10 +9,15 @@
 import Foundation
 
 class RssParser: NSObject {
+    private struct Constants {
+        static let errorMessage = "Error while parsing"
+        static let errorCode = 400
+    }
+    
     var attributeValue = ""
     var attributeDict: [String : String]?
     var prevElementName = ""
-    var wasTagClosed = true
+    var wasElementClosed = true
     var rssDictionary = [(String, Any)]()
     var error: Error? = nil
     
@@ -28,7 +33,7 @@ class RssParser: NSObject {
             }
         }
         else {
-            let newError = NSError(domain:"", code: 400, userInfo: [NSLocalizedDescriptionKey: "Error while parsing"])
+            let newError = NSError(domain:"", code: Constants.errorCode, userInfo: [NSLocalizedDescriptionKey: Constants.errorMessage])
             completionHandler(nil, newError)
         }
     }
@@ -40,12 +45,12 @@ extension RssParser: XMLParserDelegate {
             self.attributeDict = attributeDict
         }
         
-        if(!wasTagClosed) {
+        if(!wasElementClosed) {
             rssDictionary.append((prevElementName, ""))
         }
         
         prevElementName = elementName
-        wasTagClosed = false
+        wasElementClosed = false
     }
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         attributeValue.append(string)
@@ -55,7 +60,7 @@ extension RssParser: XMLParserDelegate {
         rssDictionary.append((elementName, attributeDict ?? attributeValue))
         attributeValue = ""
         attributeDict = nil
-        wasTagClosed = true
+        wasElementClosed = true
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {

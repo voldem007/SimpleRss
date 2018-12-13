@@ -11,6 +11,6 @@ import Foundation
 struct Feed {
     var title: String?
     var pubDate: String?
-    var picUrl: String?
+    var picLink: String?
     var description: String?
 }

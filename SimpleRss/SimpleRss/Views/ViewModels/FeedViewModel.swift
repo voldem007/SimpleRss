@@ -15,7 +15,7 @@ class FeedViewModel {
     var isExpanded: Bool { return expanded }
     var title: String? { return feedModel.title }
     var pubDate: String? { return feedModel.pubDate }
-    var picUrl: String? { return feedModel.picUrl }
+    var picUrl: String? { return feedModel.picLink }
     var description: String? { return feedModel.description }
     
     init(_ feedModel: Feed) {
