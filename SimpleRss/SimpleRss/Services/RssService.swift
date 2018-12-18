@@ -9,71 +9,73 @@
 import Foundation
 
 class RssService: NSObject {
-    private struct Constants {
+    private struct TagConstants {
+        static let item = "item"
+        static let link = "url"
+        static let title = "title"
+        static let pubDate = "pubDate"
+        static let description = "description"
+        static let mediaDict = "media:content"
+        static let close = "/>"
+        static let brOpen = "<br"
+    }
+    
+    private struct ErrorConstants {
         static let errorMessage = "Error while parsing"
-        static let itemTag = "item"
-        static let linkTag = "url"
-        static let titleTag = "title"
-        static let pubDateTag = "pubDate"
-        static let descriptionTag = "description"
-        static let mediaDictTag = "media:content"
-        static let closeTag = "/>"
-        static let brOpenTag = "<br"
         static let noHandlerText = "No handler for "
     }
     
     var feedList = [Feed]()
     var feed: Feed?
+    var error: Error?
     
-    func getFeed(for link: String?, withCallback completionHandler: @escaping (_ result: [Feed]?, _ error: Error?) -> Void) {
-        guard let link = link, let url = URL(string: link) else { return }
+    func getFeed(for link: String?) -> ([Feed]?, Error?) {
+        guard let link = link, let url = URL(string: link) else { return (nil, nil) }
         let parser = RssParser()
-        parser.parse(url) { [weak self] (result, error) in
-            result?.map({ (key, value) in
+        parser.parse(url) { (result, error) in
+            self.error = error
+            result?.forEach({ (key, value) in
                 switch key {
-                case Constants.itemTag:
-                    createOrAppendFeed()
-                case Constants.titleTag:
-                    self?.feed?.title = parseAndTrim(value)
-                case Constants.pubDateTag:
-                    self?.feed?.pubDate = parseAndTrim(value)
-                case Constants.mediaDictTag:
-                    self?.feed?.picLink = parsePicLink(value)
-                case Constants.descriptionTag:
-                    self?.feed?.description = parseDescriptionTag(value)
+                case TagConstants.item:
+                    self.createOrAppendFeed()
+                case TagConstants.title:
+                    self.feed?.title = self.parseAndTrim(value)
+                case TagConstants.pubDate:
+                    self.feed?.pubDate = self.parseAndTrim(value)
+                case TagConstants.mediaDict:
+                    self.feed?.picLink = self.parsePicLink(value)
+                case TagConstants.description:
+                    self.feed?.description = self.parseDescriptionTag(value)
                 default:
-                    print(Constants.noHandlerText + key)
+                    print(ErrorConstants.noHandlerText + key)
                 }
             })
-            
-            completionHandler(self?.feedList, error)
         }
-        
-        func parseDescriptionTag(_ value: Any) -> String {
-            guard let description = value as? String else { return "" }
-            guard let beginRange = description.range(of: Constants.closeTag) else { return "" }
-            guard let endRange = description.range(of: Constants.brOpenTag) else { return "" }
-            return String(description[beginRange.upperBound..<endRange.lowerBound])
+        return (feedList, error)
+    }
+    
+    private func parseDescriptionTag(_ value: Any) -> String? {
+        guard let description = value as? String, let beginRange = description.range(of: TagConstants.close), let endRange = description.range(of: TagConstants.brOpen) else { return nil }
+        return String(description[beginRange.upperBound..<endRange.lowerBound])
+    }
+    
+    private func createOrAppendFeed() {
+        if let _ = feed {
+            self.feedList.append(feed!)
+            feed = nil
         }
-        
-        func createOrAppendFeed() {
-            if let _ = feed {
-                self.feedList.append(feed!)
-                feed = nil
-            }
-            else {
-                feed = Feed()
-            }
+        else {
+            feed = Feed()
         }
-        
-        func parseAndTrim(_ value: Any) -> String {
-            guard let value = value as? String else { return "" }
-            return value.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-        
-        func parsePicLink(_ value: Any) -> String {
-            guard let mediaDict = value as? [String : String] else { return "" }
-            return mediaDict[Constants.linkTag] ?? ""
-        }
+    }
+    
+    private func parseAndTrim(_ value: Any) -> String? {
+        guard let value = value as? String else { return nil }
+        return value.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    private func parsePicLink(_ value: Any) -> String? {
+        guard let mediaDict = value as? [String : String] else { return nil }
+        return mediaDict[TagConstants.link]
     }
 }

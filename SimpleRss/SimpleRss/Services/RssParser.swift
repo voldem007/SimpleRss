@@ -22,9 +22,9 @@ class RssParser: NSObject {
     var error: Error? = nil
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
-        let parser = XMLParser(contentsOf: url)
-        parser?.delegate = self
-        if let _ = parser?.parse() {
+        guard let parser = XMLParser(contentsOf: url) else { return }
+        parser.delegate = self
+        if parser.parse() {
             if error != nil {
                 completionHandler(nil, error)
             }

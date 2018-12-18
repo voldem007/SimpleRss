@@ -47,11 +47,10 @@ class FeedViewController: UIViewController {
     
     func fetchXMLData() {
         guard let url = url else { return }
-        RssService().getFeed(for: url) { (feedList, error) in
-            guard let feedList = feedList else { return }
-            self.feedList = feedList.map { feed in FeedViewModel(feed) }
-            self.tableView.reloadData()
-        }
+        let (result, _) = RssService().getFeed(for: url)
+        guard let feedList = result else { return }
+        self.feedList = feedList.map { feed in FeedViewModel(feed) }
+        self.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
