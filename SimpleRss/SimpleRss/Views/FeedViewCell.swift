@@ -41,9 +41,10 @@ class FeedViewCell: UITableViewCell {
     func updateImage() {
         DispatchQueue.global().async {
             guard let url = self.imageUrl, let data = try? Data(contentsOf: url) else { return }
+            let image = UIImage(data: data)
             DispatchQueue.main.async {
                 if self.imageUrl == url {
-                    self.previewImageView.image = UIImage(data: data)
+                    self.previewImageView.image = image
                 }
             }
         }

@@ -12,8 +12,9 @@ extension UIImageView {
     func downloaded(from link: String) {
         DispatchQueue.global().async {
             guard let url = URL(string: link), let data = try? Data(contentsOf: url) else { return }
+            let image = UIImage(data: data)
             DispatchQueue.main.async {
-                self.image = UIImage(data: data)
+                self.image = image
             }
         }
     }
