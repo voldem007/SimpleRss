@@ -47,10 +47,11 @@ class FeedViewController: UIViewController {
     
     func fetchXMLData() {
         guard let url = url else { return }
-        let (result, _) = RssService().getFeed(for: url)
-        guard let feedList = result else { return }
-        self.feedList = feedList.map { feed in FeedViewModel(feed) }
-        self.tableView.reloadData()
+        RssService().getFeed(for: url) { [self] (result, error) in
+            guard let feedList = result else { return }
+            self.feedList = feedList.map { feed in FeedViewModel(feed) }
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +68,9 @@ extension FeedViewController: UITableViewDataSource {
         let feed = feedList[indexPath.row]
         
         cell.titleLabel.text = feed.title
-        cell.imageUrl = URL(string: feed.picUrl ?? "")
+        if let url = feed.picUrl {
+            cell.imageUrl = URL(string: url)
+        }
         cell.descriptionLabel.text = feed.description
         cell.pubDateLabel.text = feed.pubDate
         cell.expanding(isExpanded: feed.isExpanded)

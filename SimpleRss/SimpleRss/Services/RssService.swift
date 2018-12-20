@@ -27,13 +27,11 @@ class RssService: NSObject {
     
     var feedList = [Feed]()
     var feed: Feed?
-    var error: Error?
     
-    func getFeed(for link: String?) -> ([Feed]?, Error?) {
-        guard let link = link, let url = URL(string: link) else { return (nil, nil) }
+    func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [Feed]?, _ error: Error?) -> Void) {
+        guard let link = link, let url = URL(string: link) else { return }
         let parser = RssParser()
-        parser.parse(url) { (result, error) in
-            self.error = error
+        parser.parse(url) { [self] (result, error) in
             result?.forEach({ (key, value) in
                 switch key {
                 case TagConstants.item:
@@ -50,8 +48,8 @@ class RssService: NSObject {
                     print(ErrorConstants.noHandlerText + key)
                 }
             })
+            completionHandler (self.feedList, error)
         }
-        return (feedList, error)
     }
     
     private func parseDescriptionTag(_ value: Any) -> String? {
