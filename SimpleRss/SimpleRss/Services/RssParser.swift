@@ -20,21 +20,29 @@ class RssParser: NSObject {
     var wasElementClosed = true
     var rssDictionary = [(String, Any)]()
     var error: Error? = nil
+    var parser: XMLParser?
+    var isSuccess: Bool?
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
-        guard let parser = XMLParser(contentsOf: url) else { return }
-        parser.delegate = self
-        if parser.parse() {
-            if error != nil {
-                completionHandler(nil, error)
+        parser = XMLParser(contentsOf: url)
+        parser?.delegate = self
+        
+        DispatchQueue.global().async {
+            self.isSuccess = self.parser?.parse()
+            DispatchQueue.main.async {
+                if let _ = self.isSuccess {
+                    if self.error != nil {
+                        completionHandler(nil, self.error)
+                    }
+                    else {
+                        completionHandler(self.rssDictionary, nil)
+                    }
+                }
+                else {
+                    let newError = NSError(domain:"", code: Constants.errorCode, userInfo: [NSLocalizedDescriptionKey: Constants.errorMessage])
+                    completionHandler(nil, newError)
+                }
             }
-            else {
-                completionHandler(rssDictionary, nil)
-            }
-        }
-        else {
-            let newError = NSError(domain:"", code: Constants.errorCode, userInfo: [NSLocalizedDescriptionKey: Constants.errorMessage])
-            completionHandler(nil, newError)
         }
     }
 }
