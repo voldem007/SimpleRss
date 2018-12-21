@@ -24,10 +24,14 @@ class RssParser: NSObject {
     var isSuccess: Bool?
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
-        parser = XMLParser(contentsOf: url)
-        parser?.delegate = self
-        
-        DispatchQueue.global().async {
+        URLSession.shared.dataTask(with: url) { [self] (data, response, error) in
+            if error != nil {
+                completionHandler(nil, error)
+            }
+            
+            guard let `data` = data else { return }
+            self.parser = XMLParser(data: data)
+            self.parser?.delegate = self
             self.isSuccess = self.parser?.parse()
             DispatchQueue.main.async {
                 if let _ = self.isSuccess {
@@ -43,7 +47,7 @@ class RssParser: NSObject {
                     completionHandler(nil, newError)
                 }
             }
-        }
+        }.resume()
     }
 }
 
