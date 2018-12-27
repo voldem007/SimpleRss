@@ -17,7 +17,7 @@ class RssParser: NSObject {
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let strongSelf = self else { completionHandler(nil, error)
+            guard let self = self else { completionHandler(nil, error)
                 return
             }
             if error != nil {
@@ -25,14 +25,14 @@ class RssParser: NSObject {
                 return
             }
             
-            guard let `data` = data else { completionHandler(nil, nil)
+            guard let data = data else { completionHandler(nil, nil)
                 return }
             
             let parser = XMLParser(data: data)
-            parser.delegate = strongSelf
+            parser.delegate = self
             
             parser.parse()
-            completionHandler(strongSelf.rssDictionary, parser.parserError)
+            completionHandler(self.rssDictionary, parser.parserError)
         }.resume()
     }
 }

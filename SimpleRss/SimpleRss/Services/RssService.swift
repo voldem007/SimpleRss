@@ -32,25 +32,25 @@ class RssService: NSObject {
     func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [Feed]?, _ error: Error?) -> Void) {
         guard let link = link, let url = URL(string: link) else { return }
         parser.parse(url) { [weak self] (result, error) in
-            guard let strongSelf = self else { completionHandler(nil, nil)
+            guard let self = self else { completionHandler(nil, nil)
                 return }
             result?.forEach({ (key, value) in
                 switch key {
                 case TagConstants.item:
-                    strongSelf.createOrAppendFeed()
+                    self.createOrAppendFeed()
                 case TagConstants.title:
-                    strongSelf.feed?.title = strongSelf.parseAndTrim(value)
+                    self.feed?.title = self.parseAndTrim(value)
                 case TagConstants.pubDate:
-                    strongSelf.feed?.pubDate = strongSelf.parseAndTrim(value)
+                    self.feed?.pubDate = self.parseAndTrim(value)
                 case TagConstants.mediaDict:
-                    strongSelf.feed?.picLink = strongSelf.parsePicLink(value)
+                    self.feed?.picLink = self.parsePicLink(value)
                 case TagConstants.description:
-                    strongSelf.feed?.description = strongSelf.parseDescriptionTag(value)
+                    self.feed?.description = self.parseDescriptionTag(value)
                 default:
                     print(ErrorConstants.noHandlerText + key)
                 }
             })
-            completionHandler (strongSelf.feedList, error)
+            completionHandler (self.feedList, error)
         }
     }
     

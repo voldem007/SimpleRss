@@ -49,10 +49,10 @@ class FeedViewController: UIViewController {
     func fetchXMLData() {
         guard let url = url else { return }
         service.getFeed(for: url) { [weak self] (result, error) in
-            guard let strongSelf = self, let feedList = result else { return }
+            guard let self = self, let feedList = result else { return }
+            self.feedList = feedList.map { feed in FeedViewModel(feed) }
             DispatchQueue.main.async {
-                strongSelf.feedList = feedList.map { feed in FeedViewModel(feed) }
-                strongSelf.tableView.reloadData()
+                self.tableView.reloadData()
             }
         }
     }
