@@ -25,22 +25,25 @@ class RssParser: NSObject {
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let `self` = self else { return }
+            guard let strongSelf = self else { completionHandler(nil, nil)
+                return
+            }
             if error != nil {
                 completionHandler(nil, error)
             }
             
-            guard let `data` = data else { return }
-            self.parser = XMLParser(data: data)
-            self.parser?.delegate = self
-            self.isSuccess = self.parser?.parse()
+            guard let `data` = data else { completionHandler(nil, strongSelf.error)
+                return }
+            strongSelf.parser = XMLParser(data: data)
+            strongSelf.parser?.delegate = strongSelf
+            strongSelf.isSuccess = strongSelf.parser?.parse()
             DispatchQueue.main.async {
-                if let _ = self.isSuccess {
-                    if self.error != nil {
-                        completionHandler(nil, self.error)
+                if let _ = strongSelf.isSuccess {
+                    if strongSelf.error != nil {
+                        completionHandler(nil, strongSelf.error)
                     }
                     else {
-                        completionHandler(self.rssDictionary, nil)
+                        completionHandler(strongSelf.rssDictionary, nil)
                     }
                 }
                 else {

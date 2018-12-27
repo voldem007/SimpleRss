@@ -50,10 +50,10 @@ class FeedViewController: UIViewController {
         guard let url = url else { return }
         service = RssService()
         service?.getFeed(for: url) { [weak self] (result, error) in
-            guard let `self` = self else { return }
+            guard let strongSelf = self else { return }
             guard let feedList = result else { return }
-            self.feedList = feedList.map { feed in FeedViewModel(feed) }
-            self.tableView.reloadData()
+            strongSelf.feedList = feedList.map { feed in FeedViewModel(feed) }
+            strongSelf.tableView.reloadData()
         }
     }
     
