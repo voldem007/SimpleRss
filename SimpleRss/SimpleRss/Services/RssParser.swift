@@ -19,9 +19,7 @@ class RssParser: NSObject {
     var prevElementName = ""
     var wasElementClosed = true
     var rssDictionary = [(String, Any)]()
-    var error: Error? = nil
-    var parser: XMLParser?
-    var isSuccess: Bool?
+    var error: Error?
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
@@ -30,26 +28,28 @@ class RssParser: NSObject {
             }
             if error != nil {
                 completionHandler(nil, error)
+                return
             }
             
-            guard let `data` = data else { completionHandler(nil, strongSelf.error)
+            guard let `data` = data else { completionHandler(nil, nil)
                 return }
-            strongSelf.parser = XMLParser(data: data)
-            strongSelf.parser?.delegate = strongSelf
-            strongSelf.isSuccess = strongSelf.parser?.parse()
-            DispatchQueue.main.async {
-                if let _ = strongSelf.isSuccess {
-                    if strongSelf.error != nil {
-                        completionHandler(nil, strongSelf.error)
-                    }
-                    else {
-                        completionHandler(strongSelf.rssDictionary, nil)
-                    }
+            
+            guard let parser = try XMLParser(data: data) else {
+                completionHandler(nil, error)
+                return
+            }
+            parser.delegate = strongSelf
+            if parser.parse() {
+                if strongSelf.error != nil {
+                    completionHandler(nil, strongSelf.error)
                 }
                 else {
-                    let newError = NSError(domain:"", code: Constants.errorCode, userInfo: [NSLocalizedDescriptionKey: Constants.errorMessage])
-                    completionHandler(nil, newError)
+                    completionHandler(strongSelf.rssDictionary, nil)
                 }
+            }
+            else {
+                let newError = NSError(domain:"", code: Constants.errorCode, userInfo: [NSLocalizedDescriptionKey: Constants.errorMessage])
+                completionHandler(nil, newError)
             }
         }.resume()
     }

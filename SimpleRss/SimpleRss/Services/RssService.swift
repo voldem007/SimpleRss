@@ -27,12 +27,11 @@ class RssService: NSObject {
     
     var feedList = [Feed]()
     var feed: Feed?
-    var parser: RssParser?
+    lazy var parser: RssParser = RssParser()
     
     func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [Feed]?, _ error: Error?) -> Void) {
         guard let link = link, let url = URL(string: link) else { return }
-        parser = RssParser()
-        parser?.parse(url) { [weak self] (result, error) in
+        parser.parse(url) { [weak self] (result, error) in
             guard let strongSelf = self else { completionHandler(nil, nil)
                 return }
             result?.forEach({ (key, value) in

@@ -13,7 +13,7 @@ class FeedViewController: UIViewController {
     
     var feedList = [FeedViewModel]()
     var url: String?
-    var service: RssService?
+    lazy var service: RssService = RssService()
     
     weak var tableView: UITableView!
     
@@ -48,12 +48,12 @@ class FeedViewController: UIViewController {
     
     func fetchXMLData() {
         guard let url = url else { return }
-        service = RssService()
-        service?.getFeed(for: url) { [weak self] (result, error) in
-            guard let strongSelf = self else { return }
-            guard let feedList = result else { return }
-            strongSelf.feedList = feedList.map { feed in FeedViewModel(feed) }
-            strongSelf.tableView.reloadData()
+        service.getFeed(for: url) { [weak self] (result, error) in
+            guard let strongSelf = self, let feedList = result else { return }
+            DispatchQueue.main.async {
+                strongSelf.feedList = feedList.map { feed in FeedViewModel(feed) }
+                strongSelf.tableView.reloadData()
+            }
         }
     }
     
