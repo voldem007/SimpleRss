@@ -15,6 +15,13 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var pubDateLabel: UILabel!
     
+    var imageUrl: URL? {
+        didSet {
+            previewImageView.image = nil
+            updateImage()
+        }
+    }
+    
     var isExpanded: Bool = false {
         didSet {
             expanding(isExpanded: isExpanded)
@@ -28,7 +35,18 @@ class FeedViewCell: UITableViewCell {
     
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
-        descriptionLabel.lineBreakMode = isExpanded ? .byCharWrapping : .byTruncatingTail
+        descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
     }
     
+    func updateImage() {
+        DispatchQueue.global().async {
+            guard let url = self.imageUrl, let data = try? Data(contentsOf: url) else { return }
+            let image = UIImage(data: data)
+            DispatchQueue.main.async {
+                if self.imageUrl == url {
+                    self.previewImageView.image = image
+                }
+            }
+        }
+    }
 }

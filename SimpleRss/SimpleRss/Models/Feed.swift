@@ -9,8 +9,8 @@
 import Foundation
 
 struct Feed {
-    let title: String
-    let pubDate: String
-    let picUrl: String
-    let description: String
+    var title: String?
+    var pubDate: String?
+    var picLink: String?
+    var description: String?
 }

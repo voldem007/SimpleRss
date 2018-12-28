@@ -13,6 +13,7 @@ class FeedViewController: UIViewController {
     
     var feedList = [FeedViewModel]()
     var url: String?
+    lazy var service: RssService = RssService()
     
     weak var tableView: UITableView!
     
@@ -47,9 +48,12 @@ class FeedViewController: UIViewController {
     
     func fetchXMLData() {
         guard let url = url else { return }
-        XMLParserService.fetchXMLData(for: url) { feedList in
+        service.getFeed(for: url) { [weak self] (result, error) in
+            guard let self = self, let feedList = result else { return }
             self.feedList = feedList.map { feed in FeedViewModel(feed) }
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -67,7 +71,9 @@ extension FeedViewController: UITableViewDataSource {
         let feed = feedList[indexPath.row]
         
         cell.titleLabel.text = feed.title
-        cell.previewImageView.downloaded(from: feed.picUrl)
+        if let url = feed.picUrl {
+            cell.imageUrl = URL(string: url)
+        }
         cell.descriptionLabel.text = feed.description
         cell.pubDateLabel.text = feed.pubDate
         cell.expanding(isExpanded: feed.isExpanded)
@@ -97,16 +103,3 @@ extension FeedViewController: UITableViewDelegate {
         tableView.endUpdates()
     }
 }
-
-extension UIImageView {
-    func downloaded(from link: String) {
-        DispatchQueue.global().async {
-            guard let url = URL(string: link) else { return }
-            guard let data = try? Data(contentsOf: url) else { return }
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data)
-            }
-        }
-    }
-}
-
