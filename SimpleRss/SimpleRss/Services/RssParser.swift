@@ -12,10 +12,9 @@ class RssParser: NSObject {
     var attributeValue = ""
     var attributeDict: [String : String]?
     var prevElementName = ""
-    var rootTag: String?
     var wasElementClosed = true
     lazy var rssDictionary = [(String, Any)]()
-    var completionHandler:(([(String, Any)]?, Error?) -> Void)?
+    var completionHandler:(([(String, Any)]?, Error?) -> Void)!
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
         self.completionHandler = completionHandler
@@ -40,8 +39,6 @@ class RssParser: NSObject {
 
 extension RssParser: XMLParserDelegate {
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        rootTag = rootTag ?? elementName
-        
         if !attributeDict.isEmpty {
             self.attributeDict = attributeDict
         }
@@ -62,9 +59,9 @@ extension RssParser: XMLParserDelegate {
         attributeValue = ""
         attributeDict = nil
         wasElementClosed = true
-        if(elementName == rootTag) {
-            guard let completionHandler = completionHandler else { return }
-            completionHandler(rssDictionary, nil)
-        }
+    }
+    
+    func parserDidEndDocument(_ parser: XMLParser) {
+        completionHandler(rssDictionary, parser.parserError)
     }
 }
