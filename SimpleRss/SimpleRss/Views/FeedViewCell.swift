@@ -38,15 +38,38 @@ class FeedViewCell: UITableViewCell {
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
     }
     
+    var downloadOperation: DownloadImageOperation?
+    var getOperation: GetImageOperation?
+    let operationQueue = OperationQueue()
+
     func updateImage() {
-        DispatchQueue.global().async {
-            guard let url = self.imageUrl, let data = try? Data(contentsOf: url) else { return }
-            let image = UIImage(data: data)
-            DispatchQueue.main.async {
-                if self.imageUrl == url {
+        getOperation?.cancel()
+        downloadOperation?.cancel()
+
+        guard let path = imageUrl?.lastPathComponent else { return }
+        getOperation = GetImageOperation(path)
+        getOperation?.completionBlock = {
+            if let image = self.getOperation?.result {
+                OperationQueue.main.addOperation {
                     self.previewImageView.image = image
                 }
             }
+            else {
+                self.operationQueue.maxConcurrentOperationCount = 5
+                guard let url = self.imageUrl else { return }
+                self.downloadOperation = DownloadImageOperation(url)
+                self.downloadOperation?.completionBlock = {
+                    OperationQueue.main.addOperation {
+                        self.previewImageView.image = self.downloadOperation?.result
+                    }
+                    guard let path = self.downloadOperation?.url.lastPathComponent else { return }
+                    guard let image = self.downloadOperation?.result else { return }
+                    let saveOperation = SaveImageOperation(path, image)
+                    ImageCache.shared().queue.addOperation(saveOperation)
+                }
+                self.operationQueue.addOperation(self.downloadOperation!)
+            }
         }
+        ImageCache.shared().queue.addOperation(getOperation!)
     }
 }

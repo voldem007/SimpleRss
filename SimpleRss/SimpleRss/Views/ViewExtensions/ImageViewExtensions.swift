@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import Foundation
 
 extension UIImageView {
     func downloaded(from link: String) {
-        DispatchQueue.global().async {
-            guard let url = URL(string: link), let data = try? Data(contentsOf: url) else { return }
-            let image = UIImage(data: data)
-            DispatchQueue.main.async {
-                self.image = image
+        let operationQueue = OperationQueue()
+        guard let url = URL(string: link) else { return }
+        let operation = DownloadImageOperation(url)
+        operation.completionBlock = {
+            OperationQueue.main.addOperation {
+                self.image = operation.result
             }
         }
+        operationQueue.addOperation(operation)
     }
 }
