@@ -15,10 +15,28 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var pubDateLabel: UILabel!
     
+    weak var downloadOperation: DownloadImageOperation?
+    weak var getOperation: GetImageOperation?
+    
     var imageUrl: URL? {
         didSet {
             previewImageView.image = nil
-            updateImage()
+            
+            getOperation?.cancel()
+            downloadOperation?.cancel()
+            
+            let getOp = GetImageOperation((imageUrl?.lastPathComponent)!)
+            getOperation = getOp
+            
+            let downloadOp = DownloadImageOperation(imageUrl!)
+            downloadOperation = downloadOp
+
+            retrieveImage(downloadOp, getOp) { [weak self] image in
+                OperationQueue.main.addOperation { [weak self] in
+                    guard let self = self else { return }
+                    self.previewImageView.image = image
+                }
+            }
         }
     }
     
@@ -36,42 +54,5 @@ class FeedViewCell: UITableViewCell {
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
-    }
-    
-    weak var downloadOperation: DownloadImageOperation?
-    weak var getOperation: GetImageOperation?
-
-    func updateImage() {
-        getOperation?.cancel()
-        downloadOperation?.cancel()
-
-        guard let path = imageUrl?.lastPathComponent else { return }
-        let getImageOperation = GetImageOperation(path)
-        getOperation = getImageOperation
-        getImageOperation.completionBlock = { [weak self] in
-            guard let self = self else { return }
-            if let image = self.getOperation?.result {
-                OperationQueue.main.addOperation {
-                    self.previewImageView.image = image
-                }
-            }
-            else {
-                guard let url = self.imageUrl else { return }
-                let downloadOperation = DownloadImageOperation(url)
-                self.downloadOperation = downloadOperation
-                downloadOperation.completionBlock = { [weak self] in
-                    guard let self = self else { return }
-                    OperationQueue.main.addOperation {
-                        self.previewImageView.image = self.downloadOperation?.result
-                    }
-                    guard let path = self.downloadOperation?.url.lastPathComponent else { return }
-                    guard let image = self.downloadOperation?.result else { return }
-                    let saveOperation = SaveImageOperation(path, image)
-                    ImageCache.shared().queue.addOperation(saveOperation)
-                }
-                Download.shared().queue.addOperation(downloadOperation)
-            }
-        }
-        ImageCache.shared().queue.addOperation(getImageOperation)
     }
 }

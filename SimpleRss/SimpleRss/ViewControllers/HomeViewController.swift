@@ -56,9 +56,11 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TopicViewCell.cellIdentifier()) as? TopicViewCell else { return UITableViewCell() }
         
-        cell.titleLabel.text = topics[indexPath.row].title
-        cell.previewImageView.downloaded(from: topics[indexPath.row].picUrl)
-            
+        let topic = topics[indexPath.row]
+        
+        cell.titleLabel.text = topic.title
+        cell.imageUrl = URL(string: topic.picUrl)
+        
         return cell
     }
     
