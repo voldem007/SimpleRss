@@ -38,27 +38,29 @@ class FeedViewCell: UITableViewCell {
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
     }
     
-    var downloadOperation: DownloadImageOperation?
-    var getOperation: GetImageOperation?
-    let operationQueue = OperationQueue()
+    weak var downloadOperation: DownloadImageOperation?
+    weak var getOperation: GetImageOperation?
 
     func updateImage() {
         getOperation?.cancel()
         downloadOperation?.cancel()
 
         guard let path = imageUrl?.lastPathComponent else { return }
-        getOperation = GetImageOperation(path)
-        getOperation?.completionBlock = {
+        let getImageOperation = GetImageOperation(path)
+        getOperation = getImageOperation
+        getImageOperation.completionBlock = { [weak self] in
+            guard let self = self else { return }
             if let image = self.getOperation?.result {
                 OperationQueue.main.addOperation {
                     self.previewImageView.image = image
                 }
             }
             else {
-                self.operationQueue.maxConcurrentOperationCount = 5
                 guard let url = self.imageUrl else { return }
-                self.downloadOperation = DownloadImageOperation(url)
-                self.downloadOperation?.completionBlock = {
+                let downloadOperation = DownloadImageOperation(url)
+                self.downloadOperation = downloadOperation
+                downloadOperation.completionBlock = { [weak self] in
+                    guard let self = self else { return }
                     OperationQueue.main.addOperation {
                         self.previewImageView.image = self.downloadOperation?.result
                     }
@@ -67,9 +69,9 @@ class FeedViewCell: UITableViewCell {
                     let saveOperation = SaveImageOperation(path, image)
                     ImageCache.shared().queue.addOperation(saveOperation)
                 }
-                self.operationQueue.addOperation(self.downloadOperation!)
+                Download.shared().queue.addOperation(downloadOperation)
             }
         }
-        ImageCache.shared().queue.addOperation(getOperation!)
+        ImageCache.shared().queue.addOperation(getImageOperation)
     }
 }

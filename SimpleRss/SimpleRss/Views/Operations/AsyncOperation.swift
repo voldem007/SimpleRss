@@ -17,6 +17,11 @@ open class AsyncOperation: Operation {
         }
     }
     
+    override public init() {
+        state = .ready
+        super.init()
+    }
+    
     public var state = State.ready{
         willSet {
             willChangeValue(forKey: newValue.keyPath)
@@ -60,7 +65,9 @@ extension AsyncOperation {
     override open func cancel() {
         super.cancel()
         
-        state = .finished
+        if state == .executing {
+            state = .finished
+        }
     }
 }
 

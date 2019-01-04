@@ -18,6 +18,11 @@ final class DownloadImageOperation : AsyncOperation {
     }
     
     override func start() {
+        if isCancelled {
+            state = .finished
+            return
+        }
+        
         super.start()
         
         let image = imageLoad(imageUrl: url)
@@ -26,13 +31,12 @@ final class DownloadImageOperation : AsyncOperation {
             state = .finished
             return
         }
-        self.result = image
-        self.state = .finished
+        result = image
+        state = .finished
     }
     
     private func imageLoad(imageUrl: URL) -> UIImage? {
-        let data = try? Data(contentsOf: imageUrl)
-        guard let data1 = data else { return nil }
-        return UIImage(data: data1)
+        guard let data = try? Data(contentsOf: imageUrl) else { return nil }
+        return UIImage(data: data)
     }
 }

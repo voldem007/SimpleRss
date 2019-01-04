@@ -26,22 +26,13 @@ final class GetImageOperation: AsyncOperation {
             state = .finished
             return
         }
-        self.result = image
-        self.state = .finished
+        result = image
+        state = .finished
     }
     
     func loadImageFromDiskWith(fileName: String) -> UIImage? {
-        let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
-        
-        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
-        let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
-        
-        if let dirPath = paths.first {
-            let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
-            let image = UIImage(contentsOfFile: imageUrl.path)
-            return image
-        }
-        
-        return nil
+        let imagesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("Images") //ImageCache.shared().imagesDirectory
+        let imageUrl = imagesDirectory.appendingPathComponent(fileName)
+        return UIImage(contentsOfFile: imageUrl.path)
     }
 }

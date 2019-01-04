@@ -27,31 +27,17 @@ final class SaveImageOperation: AsyncOperation {
             state = .finished
             return
         }
-        self.state = .finished
+        state = .finished
     }
     
     func saveImage(imageName: String, image: UIImage) {
-        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let imagesDirectory = ImageCache.shared().imagesDirectory
         
-        let fileName = imageName
-        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        let fileURL = imagesDirectory.appendingPathComponent(imageName)
         guard let data = image.jpegData(compressionQuality: 1) else { return }
         
-        //Checks if file exists, removes it if so.
-        if FileManager.default.fileExists(atPath: fileURL.path) {
-            do {
-                try FileManager.default.removeItem(atPath: fileURL.path)
-                print("Removed old image")
-            } catch let removeError {
-                print("couldn't remove file at path", removeError)
-            }
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            try? data.write(to: fileURL)
         }
-        
-        do {
-            try data.write(to: fileURL)
-        } catch let error {
-            print("error saving file with error", error)
-        }
-        
     }
 }
