@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2105F0BA21DFFA2500E5485F /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0B921DFFA2500E5485F /* Download.swift */; };
+		2105F0BA21DFFA2500E5485F /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0B921DFFA2500E5485F /* DownloadManager.swift */; };
 		212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */; };
 		212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF421DBE97F004B4D86 /* AsyncOperation.swift */; };
 		212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF621DBEA26004B4D86 /* GetImageOperation.swift */; };
@@ -32,7 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2105F0B921DFFA2500E5485F /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
+		2105F0B921DFFA2500E5485F /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageOperation.swift; sourceTree = "<group>"; };
 		212C4EF421DBE97F004B4D86 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		212C4EF621DBEA26004B4D86 /* GetImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageOperation.swift; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 				213D3F7821A5A8DD00E2E937 /* RssParser.swift */,
 				2199666821C1A0BF00FE7AAD /* RssService.swift */,
 				212C4EFA21DBEB8B004B4D86 /* ImageCache.swift */,
-				2105F0B921DFFA2500E5485F /* Download.swift */,
+				2105F0B921DFFA2500E5485F /* DownloadManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -252,7 +252,7 @@
 				213BC6E2219C61F000E7694B /* HomeViewController.swift in Sources */,
 				212C4EF921DBEA86004B4D86 /* SaveImageOperation.swift in Sources */,
 				212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */,
-				2105F0BA21DFFA2500E5485F /* Download.swift in Sources */,
+				2105F0BA21DFFA2500E5485F /* DownloadManager.swift in Sources */,
 				212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */,
 				21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */,
 				21EEFC1D21A0825100A97F33 /* Topic.swift in Sources */,

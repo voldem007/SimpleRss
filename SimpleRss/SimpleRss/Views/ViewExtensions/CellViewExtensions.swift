@@ -25,11 +25,11 @@ extension UITableViewCell{
                     let path = downloadOperation.url.lastPathComponent
                     guard let image = downloadOperation.result else { return }
                     let saveOperation = SaveImageOperation(path, image)
-                    ImageCache.shared().queue.addOperation(saveOperation)
+                    ImageCache.shared.addOperation(saveOperation)
                 }
-                Download.shared().queue.addOperation(downloadOperation)
+                DownloadManager.shared.addOperation(downloadOperation)
             }
         }
-        ImageCache.shared().queue.addOperation(getOperation)
+        ImageCache.shared.addOperation(getOperation)
     }
 }

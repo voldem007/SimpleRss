@@ -9,51 +9,52 @@
 import Foundation
 
 final class ImageCache {
-    let queue = OperationQueue()
+    static let shared = ImageCache()
+    private let operationQueue: OperationQueue
     
-    static var imagesCache: ImageCache?
+    lazy var imagesDirectory: URL = {
+        guard let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return URL(fileURLWithPath: "") }
+        return cacheDirectory.appendingPathComponent("Images")
+    }()
     
-    let imagesDirectory: URL
-    
-    static var shared = { () -> ImageCache in
-        let cache = imagesCache ?? ImageCache()
-        imagesCache = cache
-        return cache
+    private init() {
+        operationQueue = OperationQueue()
+        operationQueue.maxConcurrentOperationCount = 1
+        
+        initCache()
+        
+        let urls = try? FileManager.default.contentsOfDirectory(at: imagesDirectory, includingPropertiesForKeys: [URLResourceKey.creationDateKey], options: [FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants])
+        
+        let urlsForDelete = urls?.filter({ url in
+            var values = try? url.resourceValues(forKeys: [.creationDateKey])
+            if let date = values?.creationDate {
+                let days3Interval = Date().addingTimeInterval(-3*24*60*60).timeIntervalSinceNow
+                let intervalSinceCreate = date.timeIntervalSinceNow
+                return days3Interval > intervalSinceCreate
+            }
+            return false
+        })
+        
+        urlsForDelete?.forEach({ url in
+            if FileManager.default.fileExists(atPath: url.path) {
+                let blockOperation = BlockOperation()
+                blockOperation.qualityOfService = .background
+                
+                blockOperation.addExecutionBlock {
+                    try? FileManager.default.removeItem(atPath: url.path)
+                }
+                operationQueue.addOperation(blockOperation)
+            }
+        })
     }
     
-    init() {
-        queue.maxConcurrentOperationCount = 1
-        
-        imagesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("Images")
-        
+    private func initCache() {
         if !FileManager.default.fileExists(atPath: imagesDirectory.path) {
             try? FileManager.default.createDirectory(at: imagesDirectory, withIntermediateDirectories: false, attributes: [:])
         }
-        
-        let lop = BlockOperation()
-        lop.qualityOfService = .background
-        
-        if var cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
-            cachesDirectory.appendPathComponent("/Images")
-            let urls = try? FileManager.default.contentsOfDirectory(at: cachesDirectory, includingPropertiesForKeys: [URLResourceKey.creationDateKey], options: [FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants])
-           
-            urls?.forEach({ url in
-                if FileManager.default.fileExists(atPath: url.path) {
-                    let op = BlockOperation()
-                    op.qualityOfService = .background
-                    
-                    op.addExecutionBlock {
-                        try? FileManager.default.removeItem(atPath: url.path)
-                    }
-                    
-                    queue.addOperation(op)
-                }
-            })
-            
-            //var values = try? op?.first?.resourceValues(forKeys: [.creationDateKey])
-            //if let date = values??.creationDate{
-               // print(date)
-            //}
-        }
+    }
+    
+    func addOperation(_ op: Operation) {
+        operationQueue.addOperation(op)
     }
 }
