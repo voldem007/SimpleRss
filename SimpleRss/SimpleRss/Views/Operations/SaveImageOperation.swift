@@ -31,7 +31,7 @@ final class SaveImageOperation: AsyncOperation {
     }
     
     func saveImage(imageName: String, image: UIImage) {
-        let imagesDirectory = ImageCache.shared.imagesDirectory
+        let imagesDirectory = ImageCache.shared.imagesDirectoryURL
         
         let fileURL = imagesDirectory.appendingPathComponent(imageName)
         guard let data = image.jpegData(compressionQuality: 1) else { return }

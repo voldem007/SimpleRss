@@ -31,7 +31,7 @@ final class GetImageOperation: AsyncOperation {
     }
     
     func loadImageFromDiskWith(fileName: String) -> UIImage? {
-        let imagesDirectory = ImageCache.shared.imagesDirectory
+        let imagesDirectory = ImageCache.shared.imagesDirectoryURL
         let imageUrl = imagesDirectory.appendingPathComponent(fileName)
         return UIImage(contentsOfFile: imageUrl.path)
     }

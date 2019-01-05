@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2105F0BA21DFFA2500E5485F /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0B921DFFA2500E5485F /* DownloadManager.swift */; };
+		2105F0BC21E1651600E5485F /* URLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0BB21E1651600E5485F /* URLExtension.swift */; };
 		212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */; };
 		212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF421DBE97F004B4D86 /* AsyncOperation.swift */; };
 		212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF621DBEA26004B4D86 /* GetImageOperation.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		2105F0B921DFFA2500E5485F /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		2105F0BB21E1651600E5485F /* URLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtension.swift; sourceTree = "<group>"; };
 		212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageOperation.swift; sourceTree = "<group>"; };
 		212C4EF421DBE97F004B4D86 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		212C4EF621DBEA26004B4D86 /* GetImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageOperation.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				2199666821C1A0BF00FE7AAD /* RssService.swift */,
 				212C4EFA21DBEB8B004B4D86 /* ImageCache.swift */,
 				2105F0B921DFFA2500E5485F /* DownloadManager.swift */,
+				2105F0BB21E1651600E5485F /* URLExtension.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				212C4EFB21DBEB8B004B4D86 /* ImageCache.swift in Sources */,
 				21EEFC2521A0A06100A97F33 /* TopicViewCell.swift in Sources */,
 				213D3F7B21A6088600E2E937 /* Feed.swift in Sources */,
+				2105F0BC21E1651600E5485F /* URLExtension.swift in Sources */,
 				213BC6E2219C61F000E7694B /* HomeViewController.swift in Sources */,
 				212C4EF921DBEA86004B4D86 /* SaveImageOperation.swift in Sources */,
 				212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */,
