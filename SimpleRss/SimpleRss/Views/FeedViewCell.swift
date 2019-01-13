@@ -15,24 +15,15 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var pubDateLabel: UILabel!
     
-    weak var downloadOperation: DownloadImageOperation?
-    weak var getOperation: GetImageOperation?
+    var getOperation: GetImageOperation?
     
     var imageUrl: URL? {
         didSet {
-            previewImageView.image = nil
-            
-            getOperation?.cancel()
-            downloadOperation?.cancel()
-            
-            let getOp = GetImageOperation((imageUrl?.lastPathComponent)!)
-            getOperation = getOp
-            
-            let downloadOp = DownloadImageOperation(imageUrl!)
-            downloadOperation = downloadOp
-
-            retrieveImage(downloadOp, getOp) { [weak self] image in
-                OperationQueue.main.addOperation { [weak self] in
+            guard let url = imageUrl else { return }
+            ImageDownloadOrchestrator.shared.cancel(getOperation)
+            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak self] image in
+                guard let self = self else { return }
+                DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.previewImageView.image = image
                 }

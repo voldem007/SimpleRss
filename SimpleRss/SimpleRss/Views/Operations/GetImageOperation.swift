@@ -9,18 +9,18 @@
 import UIKit
 
 final class GetImageOperation: AsyncOperation {
-    let path: String
+    let url: URL
     var result: UIImage?
     
-    init(_ path: String) {
-        self.path = path
+    init(_ url: URL) {
+        self.url = url
         super.init()
     }
     
     override func start() {
         super.start()
         
-        let image = loadImageFromDiskWith(fileName: path)
+        let image = loadImageFromDiskWith(imageURL: url)
         
         if isCancelled {
             state = .finished
@@ -30,9 +30,7 @@ final class GetImageOperation: AsyncOperation {
         state = .finished
     }
     
-    func loadImageFromDiskWith(fileName: String) -> UIImage? {
-        let imagesDirectory = ImageCache.shared.imagesDirectoryURL
-        let imageUrl = imagesDirectory.appendingPathComponent(fileName)
-        return UIImage(contentsOfFile: imageUrl.path)
+    func loadImageFromDiskWith(imageURL: URL) -> UIImage? {
+        return UIImage(contentsOfFile: imageURL.path)
     }
 }

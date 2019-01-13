@@ -12,7 +12,7 @@ class HomeViewController: UIViewController {
     
     let topics: [Topic] = [Topic(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
                            Topic(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
-                                 Topic(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://news.tut.by/rss/politics.rss")]
+                                 Topic(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://www.hltv.org/rss/news")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
