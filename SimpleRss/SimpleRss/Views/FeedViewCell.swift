@@ -20,7 +20,6 @@ class FeedViewCell: UITableViewCell {
     var imageUrl: URL? {
         didSet {
             guard let url = imageUrl else { return }
-            ImageDownloadOrchestrator.shared.cancel(getOperation)
             getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak self] image in
                 guard let self = self else { return }
                 DispatchQueue.main.async { [weak self] in
@@ -39,6 +38,7 @@ class FeedViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         previewImageView.image = nil
+        ImageDownloadOrchestrator.shared.cancel(getOperation)
         expanding(isExpanded: false)
     }
     

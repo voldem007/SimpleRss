@@ -20,17 +20,14 @@ final class GetImageOperation: AsyncOperation {
     override func start() {
         super.start()
         
-        let image = loadImageFromDiskWith(imageURL: url)
+        let image = loadImageFromDiskWith(url: url)
         
-        if isCancelled {
-            state = .finished
-            return
-        }
         result = image
         state = .finished
     }
     
-    func loadImageFromDiskWith(imageURL: URL) -> UIImage? {
-        return UIImage(contentsOfFile: imageURL.path)
+    func loadImageFromDiskWith(url: URL) -> UIImage? {
+        guard !FileManager.default.fileExists(atPath: url.path) else { return nil }
+        return UIImage(contentsOfFile: url.path)
     }
 }

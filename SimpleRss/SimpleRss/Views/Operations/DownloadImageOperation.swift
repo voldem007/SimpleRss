@@ -22,11 +22,6 @@ final class DownloadImageOperation : AsyncOperation {
         
         let image = imageLoad(imageUrl: url)
         
-        if isCancelled {
-            state = .finished
-            return
-        }
-
         result = image
         state = .finished
     }
