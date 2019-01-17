@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RssParser: NSObject {
+final class RssParser: NSObject {
     var attributeValue = ""
     var attributeDict: [String : String]?
     var prevElementName = ""

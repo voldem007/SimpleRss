@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RssService: NSObject {
+final class RssService: NSObject {
     private struct TagConstants {
         static let item = "item"
         static let link = "url"

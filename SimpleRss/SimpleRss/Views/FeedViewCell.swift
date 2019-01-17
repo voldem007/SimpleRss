@@ -15,10 +15,18 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var pubDateLabel: UILabel!
     
+    var getOperation: GetImageOperation?
+    
     var imageUrl: URL? {
         didSet {
-            previewImageView.image = nil
-            updateImage()
+            guard let url = imageUrl else { return }
+            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak self] image in
+                guard let self = self else { return }
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.previewImageView.image = image
+                }
+            }
         }
     }
     
@@ -30,23 +38,12 @@ class FeedViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         previewImageView.image = nil
+        ImageDownloadOrchestrator.shared.cancel(getOperation)
         expanding(isExpanded: false)
     }
     
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
-    }
-    
-    func updateImage() {
-        DispatchQueue.global().async {
-            guard let url = self.imageUrl, let data = try? Data(contentsOf: url) else { return }
-            let image = UIImage(data: data)
-            DispatchQueue.main.async {
-                if self.imageUrl == url {
-                    self.previewImageView.image = image
-                }
-            }
-        }
     }
 }
