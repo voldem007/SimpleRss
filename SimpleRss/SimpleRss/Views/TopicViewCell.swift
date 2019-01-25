@@ -12,12 +12,14 @@ class TopicViewCell: UITableViewCell {
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    var getOperation: GetImageOperation?
+    var getOperation: GetOp?
+    
+    let orchestrator = Orchestrator()
     
     var imageUrl: URL? {
         didSet {
             guard let url = imageUrl else { return }
-            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak self] image in
+            getOperation = orchestrator.download(url) { [weak self] image in
                 guard let self = self else { return }
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -29,6 +31,6 @@ class TopicViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         previewImageView.image = nil
-        ImageDownloadOrchestrator.shared.cancel(getOperation)
+        orchestrator.cancel(getOperation)
     }
 }
