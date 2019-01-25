@@ -10,6 +10,9 @@
 
 @interface Orchestrator : NSObject
 
++ (Orchestrator *)sharedInstance;
+
+
 - (GetOp *)download:(NSURL *) url completion:(void (^)(UIImage *image))completion;
 - (void)cancel:(NSOperation *)op;
 

@@ -23,17 +23,32 @@ FileCache *imageCache;
     return self;
 }
 
++ (Orchestrator *)sharedInstance
+{
+    static Orchestrator *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[Orchestrator alloc] init];
+        // Do any other initialisation stuff here
+    });
+    return sharedInstance;
+}
+
 - (GetOp *)download:(NSURL *)url completion:(void (^)(UIImage *image))completion {
     GetOp *getOp = [imageCache get:url];
+    __weak GetOp *getWeakOperation = getOp;
     getOp.getCompletionHandler = ^(UIImage *image) {
-        //if(getOp.isCancelled) return;
+        GetOp *getStrongOperation = getWeakOperation;
+        if(getStrongOperation.isCancelled) return;
         if(image != nil) {
             completion(image);
         } else {
             DownloadOp *op = [downloadManager download:url];
-            //[getOp addDependency:op];
+            __weak DownloadOp *downloadWeakOperation = op;
+            [getStrongOperation addDependency:op];
             op.downloadCompletionHandler = ^(UIImage *image, NSURL *url) {
-                //if(op.isCancelled) return;
+                DownloadOp *downloadStrongOperation = downloadWeakOperation;
+                if(downloadStrongOperation.isCancelled) return;
                 completion(image);
                 if(image != nil) {
                     [imageCache save:url image:image];
