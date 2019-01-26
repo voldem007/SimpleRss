@@ -5,5 +5,5 @@
 #import "Orchestrator.h"
 #import "DownloadOp.h"
 #import "GetOp.h"
-#import "Manager.h"
-#import "FileCache.h"
+#import "Downloader.h"
+#import "Cacher.h"

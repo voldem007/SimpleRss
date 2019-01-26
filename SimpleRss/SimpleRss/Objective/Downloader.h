@@ -1,5 +1,5 @@
 //
-//  Manager.h
+//  Downloader.h
 //  SimpleRss
 //
 //  Created by Voldem on 1/20/19.
@@ -9,8 +9,11 @@
 #import "DownloadOp.h"
 #import <Foundation/Foundation.h>
 
-@interface Manager : NSObject
-    @property NSOperationQueue *operationQueue;
-    - (DownloadOp *)download:(NSURL *)url;
+@interface Downloader : NSObject
+
+- (id)initWithMaxOperations:(int) count;
+
+- (DownloadOp *)download:(NSURL *)url;
+
 @end
 

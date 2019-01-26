@@ -58,7 +58,7 @@
         [self completeOperation];
     }
     @catch(...) {
-        // Do not rethrow exceptions.
+        [self completeOperation];
     }
 }
 

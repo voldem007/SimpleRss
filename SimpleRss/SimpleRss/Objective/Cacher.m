@@ -1,31 +1,26 @@
 //
-//  Cache.m
+//  Cacher.m
 //  SimpleRss
 //
 //  Created by Voldem on 1/21/19.
 //  Copyright © 2019 Vladimir Koptev. All rights reserved.
 //
 
-#import "FileCache.h"
+#import "Cacher.h"
 #import "GetOp.h"
 #import <Foundation/Foundation.h>
 
-@implementation FileCache
+@implementation Cacher
 
 NSOperationQueue *operationQueue;
 int expiredDays = 3;
 NSURL *imagesDirectoryURL;
 
-- (id)init {
+- (id)initWithURL:(NSURL *)imagesDirectory {
     operationQueue = [[NSOperationQueue alloc] init];
     [operationQueue setMaxConcurrentOperationCount:1];
     
-    NSFileManager* sharedFM = [NSFileManager defaultManager];
-    NSURL *cacheUrl = [sharedFM URLsForDirectory:NSCachesDirectory
-                                             inDomains:NSUserDomainMask].firstObject;
-    
-    cacheUrl = [cacheUrl URLByAppendingPathComponent: @"Images"];
-    imagesDirectoryURL = cacheUrl;
+    imagesDirectoryURL = imagesDirectory;
     
     [self createIfEmptyCacheImageDirectory];
     [self deleteInnerExpiredFiles];

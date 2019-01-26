@@ -8,18 +8,24 @@
 
 #import "Orchestrator.h"
 #import "GetOp.h"
-#import "FileCache.h"
-#import "Manager.h"
+#import "Cacher.h"
+#import "Downloader.h"
 #import <Foundation/Foundation.h>
 
 @implementation Orchestrator
 
-Manager *downloadManager;
-FileCache *imageCache;
+Downloader *downloadManager;
+Cacher *imageCache;
 
 - (id)init {
-    downloadManager = [[Manager alloc] init];
-    imageCache = [[FileCache alloc] init];
+    
+    NSURL *cacheUrl = [NSFileManager.defaultManager URLsForDirectory:NSCachesDirectory
+                                       inDomains:NSUserDomainMask].firstObject;
+    NSURL *imagesDirectoryURL = [cacheUrl URLByAppendingPathComponent: @"Images"];
+    
+    imageCache = [[Cacher alloc] initWithURL:imagesDirectoryURL];
+    downloadManager = [[Downloader alloc] initWithMaxOperations:5];
+    
     return self;
 }
 

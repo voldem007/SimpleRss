@@ -51,16 +51,19 @@
 }
 
 - (void)main {
+    UIImage *image = nil;
     @try {
         if ([NSFileManager.defaultManager fileExistsAtPath:url.path]) {
-            UIImage *image = [UIImage imageWithContentsOfFile:url.path];
-            getCompletionHandler(image);
+            image = [UIImage imageWithContentsOfFile:url.path];
         }
+        getCompletionHandler(image);
         
         [self completeOperation];
     }
     @catch(...) {
-        // Do not rethrow exceptions.
+        getCompletionHandler(nil);
+        
+        [self completeOperation];
     }
 }
 

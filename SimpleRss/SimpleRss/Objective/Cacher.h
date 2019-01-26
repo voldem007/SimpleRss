@@ -1,5 +1,5 @@
 //
-//  Cache.h
+//  Cacher.h
 //  SimpleRss
 //
 //  Created by Voldem on 1/21/19.
@@ -10,7 +10,9 @@
 #import "GetOp.h"
 #import <Foundation/Foundation.h>
 
-@interface FileCache : NSObject
+@interface Cacher : NSObject
+
+- (id)initWithURL:(NSURL*) imagesDirectory;
 
 - (void)save:(NSURL *) url image:(UIImage *)image;
 - (GetOp *)get:(NSURL *)url;
