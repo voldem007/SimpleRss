@@ -12,7 +12,7 @@
 
 @interface Cacher : NSObject
 
-- (id)initWithURL:(NSURL*) imagesDirectory;
+- (id)initWithURL:(NSURL *)imagesDirectory expiredDate:(int)expiredDate;
 
 - (void)save:(NSURL *) url image:(UIImage *)image;
 - (GetOp *)get:(NSURL *)url;

@@ -13,14 +13,15 @@
 @implementation Cacher
 
 NSOperationQueue *operationQueue;
-int expiredDays = 3;
+int expiredDays;
 NSURL *imagesDirectoryURL;
 
-- (id)initWithURL:(NSURL *)imagesDirectory {
+- (id)initWithURL:(NSURL *)imagesDirectory expiredDate:(int)expiredDate {
     operationQueue = [[NSOperationQueue alloc] init];
     [operationQueue setMaxConcurrentOperationCount:1];
     
     imagesDirectoryURL = imagesDirectory;
+    expiredDays = expiredDate;
     
     [self createIfEmptyCacheImageDirectory];
     [self deleteInnerExpiredFiles];
@@ -45,7 +46,7 @@ NSURL *imagesDirectoryURL;
     NSURL *fileUrl = [imagesDirectoryURL URLByAppendingPathComponent:(url.lastPathComponent)];
     NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock: ^{
         NSData *data = UIImageJPEGRepresentation(image, 1);
-        if (![NSFileManager.defaultManager fileExistsAtPath:fileUrl.path]) {
+        if (![NSFileManager.defaultManager fileExistsAtPath:fileUrl.absoluteString]) {
             [data writeToURL:fileUrl atomically:true];
         }
     }];
@@ -64,7 +65,7 @@ NSURL *imagesDirectoryURL;
 
 - (void)deleteExpiredFiles:(NSArray<NSURL *> *) urlsForDelete {
     for (NSURL *url in urlsForDelete) {
-       if (![NSFileManager.defaultManager fileExistsAtPath:url.path]) {
+       if (![NSFileManager.defaultManager fileExistsAtPath:url.absoluteString]) {
            NSBlockOperation *blockOp = [NSBlockOperation blockOperationWithBlock: ^{
                [NSFileManager.defaultManager removeItemAtURL:url error:nil];
            }];
@@ -75,27 +76,22 @@ NSURL *imagesDirectoryURL;
 }
 
 - (NSArray<NSURL *> *)findExpiredURLs:(NSArray<NSURL *> *) urls {
-    NSArray<NSURL *> * expiredURLs = [[NSArray alloc] init];
+    NSMutableArray<NSURL *> * expiredURLs = [[NSMutableArray alloc] init];
     for (NSURL *url in urls) {
         NSDictionary<NSURLResourceKey, id> *values =[url resourceValuesForKeys:[NSArray arrayWithObject:NSURLCreationDateKey] error:nil];
-      //  id date = values[NSURLCreationDateKey];
+        NSDate *fileDate = values[NSURLCreationDateKey];
         
         NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
-        dayComponent.day = -3;
+        dayComponent.day = -expiredDays;
         
         NSCalendar *theCalendar = [NSCalendar currentCalendar];
         NSDate *nextDate = [theCalendar dateByAddingComponents:dayComponent toDate:[NSDate date] options:0];
 
-        NSComparisonResult result;
-        result = [nextDate compare:nextDate];
+        NSComparisonResult result = [nextDate compare:fileDate];
         
-        if(result==NSOrderedAscending) {
-            [expiredURLs arrayByAddingObject:url];
+        if(result==NSOrderedDescending) {
+            [expiredURLs addObject:url];
         }
-        //   NSLog(@"today is less");
-        //else if(result==NSOrderedDescending)
-         //   NSLog(@"newDate is less");
-        
     }
     return expiredURLs;
 }

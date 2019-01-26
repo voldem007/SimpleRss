@@ -23,7 +23,7 @@ Cacher *imageCache;
                                        inDomains:NSUserDomainMask].firstObject;
     NSURL *imagesDirectoryURL = [cacheUrl URLByAppendingPathComponent: @"Images"];
     
-    imageCache = [[Cacher alloc] initWithURL:imagesDirectoryURL];
+    imageCache = [[Cacher alloc] initWithURL:imagesDirectoryURL expiredDate:3];
     downloadManager = [[Downloader alloc] initWithMaxOperations:5];
     
     return self;
