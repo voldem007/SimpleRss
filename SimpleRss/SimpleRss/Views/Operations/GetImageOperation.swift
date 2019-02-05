@@ -27,7 +27,7 @@ final class GetImageOperation: AsyncOperation {
     }
     
     func loadImageFromDiskWith(url: URL) -> UIImage? {
-        guard !FileManager.default.fileExists(atPath: url.path) else { return nil }
+        guard !FileManager.default.fileExists(atPath: url.absoluteString) else { return nil }
         return UIImage(contentsOfFile: url.path)
     }
 }

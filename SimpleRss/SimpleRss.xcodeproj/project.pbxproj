@@ -12,6 +12,8 @@
 		2105F0C121EBA93800E5485F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C021EBA93800E5485F /* CacheManager.swift */; };
 		2105F0C321EBAB7800E5485F /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C221EBAB7800E5485F /* DownloadManager.swift */; };
 		2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C421EBB3CB00E5485F /* DownloadOrchestrator.swift */; };
+		211C750F21FA026400BB2234 /* Orchestrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 211C750E21FA026400BB2234 /* Orchestrator.m */; };
+		21293C1C21F890F900EE4C44 /* GetOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 21293C1B21F890F900EE4C44 /* GetOp.m */; };
 		212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */; };
 		212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF421DBE97F004B4D86 /* AsyncOperation.swift */; };
 		212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF621DBEA26004B4D86 /* GetImageOperation.swift */; };
@@ -25,6 +27,9 @@
 		213D3F7F21A6F97500E2E937 /* CellViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */; };
 		21575144219C6DD70066D7D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21575142219C6DD70066D7D0 /* Main.storyboard */; };
 		21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21575147219CC2A20066D7D0 /* FeedViewController.swift */; };
+		215DD36121F502EC001E8926 /* Downloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36021F502EC001E8926 /* Downloader.m */; };
+		215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36421F5C13A001E8926 /* DownloadOp.m */; };
+		215DD36821F5D70E001E8926 /* Cacher.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36721F5D70E001E8926 /* Cacher.m */; };
 		215FBABB21B523560092785B /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215FBABA21B523560092785B /* FeedViewModel.swift */; };
 		2199666921C1A0BF00FE7AAD /* RssService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199666821C1A0BF00FE7AAD /* RssService.swift */; };
 		21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF870321A32EBB00C00970 /* FeedViewCell.swift */; };
@@ -40,6 +45,10 @@
 		2105F0C021EBA93800E5485F /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		2105F0C221EBAB7800E5485F /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		2105F0C421EBB3CB00E5485F /* DownloadOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOrchestrator.swift; sourceTree = "<group>"; };
+		211C750D21FA024700BB2234 /* Orchestrator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Orchestrator.h; sourceTree = "<group>"; };
+		211C750E21FA026400BB2234 /* Orchestrator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Orchestrator.m; sourceTree = "<group>"; };
+		21293C1A21F890DF00EE4C44 /* GetOp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetOp.h; sourceTree = "<group>"; };
+		21293C1B21F890F900EE4C44 /* GetOp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetOp.m; sourceTree = "<group>"; };
 		212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageOperation.swift; sourceTree = "<group>"; };
 		212C4EF421DBE97F004B4D86 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		212C4EF621DBEA26004B4D86 /* GetImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageOperation.swift; sourceTree = "<group>"; };
@@ -55,6 +64,13 @@
 		213D3F7E21A6F97500E2E937 /* CellViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewExtensions.swift; sourceTree = "<group>"; };
 		21575143219C6DD70066D7D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21575147219CC2A20066D7D0 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		215DD35F21F502EC001E8926 /* SimpleRss-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimpleRss-Bridging-Header.h"; sourceTree = "<group>"; };
+		215DD36021F502EC001E8926 /* Downloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Downloader.m; sourceTree = "<group>"; };
+		215DD36221F50B9A001E8926 /* Downloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Downloader.h; sourceTree = "<group>"; };
+		215DD36421F5C13A001E8926 /* DownloadOp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadOp.m; sourceTree = "<group>"; };
+		215DD36621F5C6BA001E8926 /* DownloadOp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadOp.h; sourceTree = "<group>"; };
+		215DD36721F5D70E001E8926 /* Cacher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cacher.m; sourceTree = "<group>"; };
+		215DD36921F5D728001E8926 /* Cacher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cacher.h; sourceTree = "<group>"; };
 		215FBABA21B523560092785B /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		2199666821C1A0BF00FE7AAD /* RssService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssService.swift; sourceTree = "<group>"; };
 		21AF870321A32EBB00C00970 /* FeedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCell.swift; sourceTree = "<group>"; };
@@ -114,6 +130,7 @@
 		213BC6DE219C61F000E7694B /* SimpleRss */ = {
 			isa = PBXGroup;
 			children = (
+				215DD36321F5C0F6001E8926 /* Objective */,
 				2105F0BF21EBA8B500E5485F /* Protocols */,
 				213D3F7721A5A8BF00E2E937 /* Services */,
 				21AF870721A3576000C00970 /* Views */,
@@ -155,6 +172,24 @@
 				21575147219CC2A20066D7D0 /* FeedViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		215DD36321F5C0F6001E8926 /* Objective */ = {
+			isa = PBXGroup;
+			children = (
+				215DD36021F502EC001E8926 /* Downloader.m */,
+				215DD35F21F502EC001E8926 /* SimpleRss-Bridging-Header.h */,
+				215DD36221F50B9A001E8926 /* Downloader.h */,
+				215DD36421F5C13A001E8926 /* DownloadOp.m */,
+				215DD36621F5C6BA001E8926 /* DownloadOp.h */,
+				215DD36721F5D70E001E8926 /* Cacher.m */,
+				215DD36921F5D728001E8926 /* Cacher.h */,
+				21293C1A21F890DF00EE4C44 /* GetOp.h */,
+				21293C1B21F890F900EE4C44 /* GetOp.m */,
+				211C750D21FA024700BB2234 /* Orchestrator.h */,
+				211C750E21FA026400BB2234 /* Orchestrator.m */,
+			);
+			path = Objective;
 			sourceTree = "<group>";
 		};
 		215FBAB921B523310092785B /* ViewModels */ = {
@@ -220,6 +255,7 @@
 				TargetAttributes = {
 					213BC6DB219C61F000E7694B = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -263,17 +299,22 @@
 			files = (
 				215FBABB21B523560092785B /* FeedViewModel.swift in Sources */,
 				213D3F7F21A6F97500E2E937 /* CellViewExtensions.swift in Sources */,
+				215DD36821F5D70E001E8926 /* Cacher.m in Sources */,
 				212C4EFB21DBEB8B004B4D86 /* ImageDownloadOrchestrator.swift in Sources */,
 				2105F0BE21E775CE00E5485F /* ImageCacheManager.swift in Sources */,
 				21EEFC2521A0A06100A97F33 /* TopicViewCell.swift in Sources */,
 				213D3F7B21A6088600E2E937 /* Feed.swift in Sources */,
 				213BC6E2219C61F000E7694B /* HomeViewController.swift in Sources */,
 				212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */,
+				21293C1C21F890F900EE4C44 /* GetOp.m in Sources */,
+				215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */,
 				2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */,
 				2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */,
 				212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */,
 				21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */,
 				21EEFC1D21A0825100A97F33 /* Topic.swift in Sources */,
+				211C750F21FA026400BB2234 /* Orchestrator.m in Sources */,
+				215DD36121F502EC001E8926 /* Downloader.m in Sources */,
 				21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */,
 				213BC6E0219C61F000E7694B /* AppDelegate.swift in Sources */,
 				2105F0C321EBAB7800E5485F /* DownloadManager.swift in Sources */,
@@ -426,8 +467,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3FX238DES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				INFOPLIST_FILE = SimpleRss/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -435,6 +479,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.SimpleRss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SimpleRss/Objective/SimpleRss-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -444,8 +492,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3FX238DES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				INFOPLIST_FILE = SimpleRss/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -453,6 +504,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.SimpleRss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SimpleRss/Objective/SimpleRss-Bridging-Header.h";
+				SWIFT_REFLECTION_METADATA_LEVEL = none;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
