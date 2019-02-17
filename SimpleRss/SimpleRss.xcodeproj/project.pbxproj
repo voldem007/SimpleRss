@@ -12,6 +12,7 @@
 		2105F0C121EBA93800E5485F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C021EBA93800E5485F /* CacheManager.swift */; };
 		2105F0C321EBAB7800E5485F /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C221EBAB7800E5485F /* DownloadManager.swift */; };
 		2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C421EBB3CB00E5485F /* DownloadOrchestrator.swift */; };
+		2107B8DB2219FF620015171A /* rss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2107B8D92219FF620015171A /* rss.xcdatamodeld */; };
 		211C750F21FA026400BB2234 /* Orchestrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 211C750E21FA026400BB2234 /* Orchestrator.m */; };
 		21293C1C21F890F900EE4C44 /* GetOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 21293C1B21F890F900EE4C44 /* GetOp.m */; };
 		212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */; };
@@ -45,6 +46,7 @@
 		2105F0C021EBA93800E5485F /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		2105F0C221EBAB7800E5485F /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		2105F0C421EBB3CB00E5485F /* DownloadOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOrchestrator.swift; sourceTree = "<group>"; };
+		2107B8DA2219FF620015171A /* rss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = rss.xcdatamodel; sourceTree = "<group>"; };
 		211C750D21FA024700BB2234 /* Orchestrator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Orchestrator.h; sourceTree = "<group>"; };
 		211C750E21FA026400BB2234 /* Orchestrator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Orchestrator.m; sourceTree = "<group>"; };
 		21293C1A21F890DF00EE4C44 /* GetOp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetOp.h; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				213BC6E6219C61F200E7694B /* Assets.xcassets */,
 				213BC6E8219C61F200E7694B /* LaunchScreen.storyboard */,
 				213BC6EB219C61F200E7694B /* Info.plist */,
+				2107B8D92219FF620015171A /* rss.xcdatamodeld */,
 			);
 			path = SimpleRss;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				213BC6E2219C61F000E7694B /* HomeViewController.swift in Sources */,
 				212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */,
 				21293C1C21F890F900EE4C44 /* GetOp.m in Sources */,
+				2107B8DB2219FF620015171A /* rss.xcdatamodeld in Sources */,
 				215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */,
 				2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */,
 				2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */,
@@ -534,6 +538,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2107B8D92219FF620015171A /* rss.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2107B8DA2219FF620015171A /* rss.xcdatamodel */,
+			);
+			currentVersion = 2107B8DA2219FF620015171A /* rss.xcdatamodel */;
+			path = rss.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 213BC6D4219C61F000E7694B /* Project object */;
 }
