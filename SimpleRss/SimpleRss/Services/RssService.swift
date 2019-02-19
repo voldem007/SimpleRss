@@ -25,11 +25,11 @@ final class RssService: NSObject {
         static let noHandlerText = "No handler for "
     }
     
-    var feedList = [Feed]()
-    var feed: Feed?
+    var feedList = [FeedModel]()
+    var feed: FeedModel?
     lazy var parser: RssParser = RssParser()
     
-    func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [Feed]?, _ error: Error?) -> Void) {
+    func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [FeedModel]?, _ error: Error?) -> Void) {
         guard let link = link, let url = URL(string: link) else { return }
         parser.parse(url) { [weak self] (result, error) in
             guard let self = self else { completionHandler(nil, nil)
@@ -65,7 +65,7 @@ final class RssService: NSObject {
             feed = nil
         }
         else {
-            feed = Feed()
+            feed = FeedModel()
         }
     }
     

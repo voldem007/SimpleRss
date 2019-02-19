@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Feed {
+struct FeedModel {
     var title: String?
     var pubDate: String?
     var picLink: String?

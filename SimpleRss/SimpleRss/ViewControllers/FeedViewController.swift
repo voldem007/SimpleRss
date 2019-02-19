@@ -14,6 +14,15 @@ class FeedViewController: UIViewController {
     var feedList = [FeedViewModel]()
     var url: String?
     lazy var service: RssService = RssService()
+    lazy var dataService: DataService = DataService()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+            #selector(self.handleRefresh(_:)),
+                                 for: UIControl.Event.valueChanged)
+        return refreshControl
+    }()
     
     weak var tableView: UITableView!
     
@@ -41,16 +50,41 @@ class FeedViewController: UIViewController {
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         view.addSubview(tableView)
+        tableView.addSubview(refreshControl)
+        
         self.tableView = tableView;
         
+        getDataFromStorage()
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        
         fetchXMLData()
+        
+        //self.tableView.reloadData()
+        refreshControl.endRefreshing()
+    }
+    
+    func getDataFromStorage() {
+       
+        let feedModels = self.dataService.getFeed() ?? [FeedModel]()
+        feedList = feedModels.map { feed in FeedViewModel(feed) }
+        tableView.reloadData()
     }
     
     func fetchXMLData() {
         guard let url = url else { return }
+        
         service.getFeed(for: url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
+            
             self.feedList = feedList.map { feed in FeedViewModel(feed) }
+            self.dataService.saveFeed(feedList: feedList)
+            
+            //let op = self.dataService.getFeed()
+            //if let pop = op {
+             //   self.feedList = pop.map { feed in FeedViewModel(feed) }
+            //}
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
