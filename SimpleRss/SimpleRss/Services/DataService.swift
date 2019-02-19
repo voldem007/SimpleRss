@@ -29,31 +29,62 @@ class DataService {
         return appDelegate.persistentContainer.viewContext
     }
     
-    func getFeed() -> [FeedModel]? {
+    func getTopic(by title: String) -> TopicModel {
         
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Feed")
-        let feedList = try? updateContext.fetch(fetchRequest)
-        let feedModels = feedList?.compactMap({ element -> FeedModel in
-            let feed = element as? Feed
-            return FeedModel(title: feed?.title, pubDate: feed?.pubDate, picLink: feed?.picLink, description: feed?.text)
-        })
-        return feedModels
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
+        let predicate = NSPredicate(format: "title = %@", argumentArray : [title])
+        fetch.predicate = predicate
+        let topic = try? updateContext.fetch(fetch).first
+        let _topic = topic as? Topic
+        
+        return TopicModel(title: _topic!.title ?? "", picUrl: _topic?.picLink ?? "", feedUrl: _topic?.feedUrl ?? "")
     }
     
-    func saveFeed(feedList: [FeedModel]) {
+     func getTopics(by feedUrl: String) -> [TopicModel]? {
         
-        feedList.forEach({ feedModel in
-            let entity = NSEntityDescription.entity(forEntityName: "Feed", in: updateContext)
-            guard let e = entity else { return }
-            
-            let feed = NSManagedObject(entity: e, insertInto: updateContext)
-            feed.setValue(feedModel.description, forKeyPath: "text")
-            feed.setValue(feedModel.pubDate, forKeyPath: "pubDate")
-            feed.setValue(feedModel.picLink, forKeyPath: "picLink")
-            feed.setValue(feedModel.title, forKeyPath: "title")
-            
-            try? updateContext.save()
-            try?  updateContext.parent?.save()
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
+        let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
+        fetch.predicate = predicate
+        let topics = try? updateContext.fetch(fetch)
+        
+        return topics?.map { topic in
+            let _topic = topic as? Topic
+            return TopicModel(title: _topic?.title ?? "", picUrl: _topic?.picLink ?? "", feedUrl: _topic?.feedUrl ?? "")
+        }
+    }
+    
+    func getFeed(by feedUrl: String) -> [FeedModel]? {
+        
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
+        let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
+        fetch.predicate = predicate
+        let topic = try? updateContext.fetch(fetch).first
+        let _topic = topic as? Topic
+        
+        return _topic?.feed?.map { element in
+            let _element = element as? Feed
+            return FeedModel(title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
+            }
+    }
+    
+    func saveFeed(feedList: [FeedModel], for url: String) {
+        
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
+        let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [url])
+        fetch.predicate = predicate
+        let topic = try? updateContext.fetch(fetch).first
+        let _topic = topic as? Topic
+        
+        feedList.forEach({ feedModel in            
+            let feed = Feed(context: updateContext)
+            feed.text = feedModel.description
+            feed.pubDate = feedModel.pubDate
+            feed.picLink = feedModel.picLink
+            feed.title = feedModel.title
+            _topic?.addToFeed(feed)
         })
+        
+        try? updateContext.save()
+        try? updateContext.parent?.save()
     }
 }

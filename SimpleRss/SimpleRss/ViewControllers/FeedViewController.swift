@@ -60,14 +60,12 @@ class FeedViewController: UIViewController {
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         
         fetchXMLData()
-        
-        //self.tableView.reloadData()
         refreshControl.endRefreshing()
     }
     
     func getDataFromStorage() {
        
-        let feedModels = self.dataService.getFeed() ?? [FeedModel]()
+        let feedModels = self.dataService.getFeed(by: url ?? "") ?? [FeedModel]()
         feedList = feedModels.map { feed in FeedViewModel(feed) }
         tableView.reloadData()
     }
@@ -79,12 +77,8 @@ class FeedViewController: UIViewController {
             guard let self = self, let feedList = result else { return }
             
             self.feedList = feedList.map { feed in FeedViewModel(feed) }
-            self.dataService.saveFeed(feedList: feedList)
+            self.dataService.saveFeed(feedList: feedList, for: url)
             
-            //let op = self.dataService.getFeed()
-            //if let pop = op {
-             //   self.feedList = pop.map { feed in FeedViewModel(feed) }
-            //}
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }

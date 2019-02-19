@@ -21,6 +21,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = UINavigationController(rootViewController: HomeViewController())
         window?.makeKeyAndVisible()
+        
+        let defaults = UserDefaults.standard
+        let isPreloaded = defaults.bool(forKey: "isPreloaded")
+        if !isPreloaded {
+            preloadData()
+            defaults.set(true, forKey: "isPreloaded")
+        }
+        
         return true
     }
 
@@ -49,6 +57,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // MARK: - Core Data stack
+    
+    func preloadData() {
+        
+        let topics: [TopicModel] = [TopicModel(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
+                                    TopicModel(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
+                                    TopicModel(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://www.hltv.org/rss/news")]
+        
+        let managedObjectContext = persistentContainer.viewContext
+
+        topics.forEach({ topicModel in
+            let topic = NSEntityDescription.insertNewObject(forEntityName: "Topic", into: managedObjectContext) as! Topic
+            
+            topic.title = topicModel.title
+            topic.picLink = topicModel.picUrl
+            topic.feedUrl = topicModel.feedUrl
+            try? managedObjectContext.save()
+        })
+    }
     
     lazy var persistentContainer: NSPersistentContainer = {
         /*

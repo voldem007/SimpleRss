@@ -14,7 +14,6 @@
 		2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C421EBB3CB00E5485F /* DownloadOrchestrator.swift */; };
 		2107B8DB2219FF620015171A /* rss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2107B8D92219FF620015171A /* rss.xcdatamodeld */; };
 		2107B8E2221AB3010015171A /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107B8E1221AB3010015171A /* DataService.swift */; };
-		2107B8F7221AB6F90015171A /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107B8DD221A08BD0015171A /* Feed.swift */; };
 		211C750F21FA026400BB2234 /* Orchestrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 211C750E21FA026400BB2234 /* Orchestrator.m */; };
 		21293C1C21F890F900EE4C44 /* GetOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 21293C1B21F890F900EE4C44 /* GetOp.m */; };
 		212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */; };
@@ -62,8 +61,6 @@
 		2105F0C221EBAB7800E5485F /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		2105F0C421EBB3CB00E5485F /* DownloadOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOrchestrator.swift; sourceTree = "<group>"; };
 		2107B8DA2219FF620015171A /* rss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = rss.xcdatamodel; sourceTree = "<group>"; };
-		2107B8DD221A08BD0015171A /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
-		2107B8DF221AA67C0015171A /* Topic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		2107B8E1221AB3010015171A /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		2107B8EA221AB6B10015171A /* DataFlow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataFlow.h; sourceTree = "<group>"; };
 		2107B8EB221AB6B10015171A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -123,15 +120,6 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		2107B8DC221A08990015171A /* DataModels */ = {
-			isa = PBXGroup;
-			children = (
-				2107B8DD221A08BD0015171A /* Feed.swift */,
-				2107B8DF221AA67C0015171A /* Topic.swift */,
-			);
-			path = DataModels;
-			sourceTree = "<group>";
-		};
 		2107B8E9221AB6B10015171A /* DataFlow */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,7 +159,6 @@
 		213BC6DE219C61F000E7694B /* SimpleRss */ = {
 			isa = PBXGroup;
 			children = (
-				2107B8DC221A08990015171A /* DataModels */,
 				215DD36321F5C0F6001E8926 /* Objective */,
 				2105F0BF21EBA8B500E5485F /* Protocols */,
 				213D3F7721A5A8BF00E2E937 /* Services */,
@@ -359,7 +346,6 @@
 				2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */,
 				212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */,
 				21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */,
-				2107B8F7221AB6F90015171A /* Feed.swift in Sources */,
 				21EEFC1D21A0825100A97F33 /* TopicModel.swift in Sources */,
 				211C750F21FA026400BB2234 /* Orchestrator.m in Sources */,
 				215DD36121F502EC001E8926 /* Downloader.m in Sources */,
