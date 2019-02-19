@@ -10,9 +10,9 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    let topics: [TopicModel] = [TopicModel(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
-                           TopicModel(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
-                                 TopicModel(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://www.hltv.org/rss/news")]
+    lazy var topics: [TopicModel] = dataService.getTopics() ?? [TopicModel]()
+    
+    lazy var dataService: DataService = DataService()
 
     override func viewDidLoad() {
         super.viewDidLoad()

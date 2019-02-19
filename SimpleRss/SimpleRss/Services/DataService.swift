@@ -40,11 +40,9 @@ class DataService {
         return TopicModel(title: _topic!.title ?? "", picUrl: _topic?.picLink ?? "", feedUrl: _topic?.feedUrl ?? "")
     }
     
-     func getTopics(by feedUrl: String) -> [TopicModel]? {
+     func getTopics() -> [TopicModel]? {
         
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
-        let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
-        fetch.predicate = predicate
         let topics = try? updateContext.fetch(fetch)
         
         return topics?.map { topic in
