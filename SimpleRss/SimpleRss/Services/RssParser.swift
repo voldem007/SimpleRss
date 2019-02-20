@@ -13,10 +13,11 @@ final class RssParser: NSObject {
     var attributeDict: [String : String]?
     var prevElementName = ""
     var wasElementClosed = true
-    lazy var rssDictionary = [(String, Any)]()
+    var rssDictionary = [(String, Any)]()
     var completionHandler:(([(String, Any)]?, Error?) -> Void)!
     
     func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
+        rssDictionary = [(String, Any)]()
         self.completionHandler = completionHandler
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             guard let self = self else { completionHandler(nil, error)

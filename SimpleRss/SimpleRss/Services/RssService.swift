@@ -30,6 +30,8 @@ final class RssService: NSObject {
     lazy var parser: RssParser = RssParser()
     
     func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [FeedModel]?, _ error: Error?) -> Void) {
+        
+        feedList = [FeedModel]()
         guard let link = link, let url = URL(string: link) else { return }
         parser.parse(url) { [weak self] (result, error) in
             guard let self = self else { completionHandler(nil, nil)
