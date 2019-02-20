@@ -54,25 +54,28 @@ class FeedViewController: UIViewController {
         
         self.tableView = tableView;
         
-        getDataFromStorage()
+        getData()
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         
-        fetchXMLData()
+        fetchXmlData()
         refreshControl.endRefreshing()
     }
     
-    func getDataFromStorage() {
+    func getData() {
        
-        let feedModels = self.dataService.getFeed(by: url ?? "") ?? [FeedModel]()
-        feedList = feedModels.map { feed in FeedViewModel(feed) }
-        tableView.reloadData()
+        if let feedModels = self.dataService.getFeed(by: url ?? "") {
+            feedList = feedModels.map { feed in FeedViewModel(feed) }
+            tableView.reloadData()
+        } else {
+            fetchXmlData()
+        }
     }
     
-    func fetchXMLData() {
-        guard let url = url else { return }
+    func fetchXmlData() {
         
+        guard let url = url else { return }
         service.getFeed(for: url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
             

@@ -17,7 +17,7 @@ class DataService {
     
     lazy var updateContext: NSManagedObjectContext = {
         let _updateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        _updateContext.parent = parentContext
+        _updateContext.parent = viewContext
         return _updateContext
     }()
     
@@ -25,7 +25,7 @@ class DataService {
         return UIApplication.shared.delegate as! AppDelegate
     }()
     
-    private var parentContext: NSManagedObjectContext {
+    private var viewContext: NSManagedObjectContext {
         return appDelegate.persistentContainer.viewContext
     }
     
@@ -59,16 +59,20 @@ class DataService {
         let topic = try? updateContext.fetch(fetch).first
         let _topic = topic as? Topic
         
-        return _topic?.feed?.map { element in
+        let feedModels: [FeedModel]? = _topic?.feed?.map { element in
             let _element = element as? Feed
             return FeedModel(title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
-            }
+        }
+        
+        return feedModels?.count == 0 ? nil : feedModels
     }
     
     func saveFeed(feedList: [FeedModel], for url: String) {
         
+        deleteFeed(by: url)
+        
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
-        let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [url])
+        let predicate = NSPredicate(format: "feedUrl = %@", argumentArray: [url])
         fetch.predicate = predicate
         let topic = try? updateContext.fetch(fetch).first
         let _topic = topic as? Topic
@@ -84,5 +88,17 @@ class DataService {
         
         try? updateContext.save()
         try? updateContext.parent?.save()
+    }
+    
+    func deleteFeed(by feedUrl: String) {
+        
+        let fetchForDelete = NSFetchRequest<NSFetchRequestResult>(entityName: "Feed")
+        fetchForDelete.predicate = NSPredicate(format: "topic.feedUrl = %@", argumentArray : [feedUrl])
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchForDelete)
+        
+        _ = try? updateContext.execute(deleteRequest)
+        
+        updateContext.reset()
+        updateContext.parent?.reset()
     }
 }

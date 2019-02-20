@@ -14,7 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -22,12 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = UINavigationController(rootViewController: HomeViewController())
         window?.makeKeyAndVisible()
         
-        let defaults = UserDefaults.standard
-        let isPreloaded = defaults.bool(forKey: "isPreloaded")
-        if !isPreloaded {
-            preloadData()
-            defaults.set(true, forKey: "isPreloaded")
-        }
+        preloadDataIfFirstLaunch()
         
         return true
     }
@@ -58,24 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Core Data stack
     
-    func preloadData() {
-        
-        let topics: [TopicModel] = [TopicModel(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
-                                    TopicModel(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
-                                    TopicModel(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://www.hltv.org/rss/news")]
-        
-        let managedObjectContext = persistentContainer.viewContext
-
-        topics.forEach({ topicModel in
-            let topic = NSEntityDescription.insertNewObject(forEntityName: "Topic", into: managedObjectContext) as! Topic
-            
-            topic.title = topicModel.title
-            topic.picLink = topicModel.picUrl
-            topic.feedUrl = topicModel.feedUrl
-            try? managedObjectContext.save()
-        })
-    }
-    
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
@@ -102,6 +78,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
+}
+
+// MARK: - Core Data stack
+
+private extension AppDelegate {
+    
+    func preloadData() {
+        
+        let topics: [TopicModel] = [TopicModel(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
+                                    TopicModel(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
+                                    TopicModel(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://www.hltv.org/rss/news")]
+        
+        let managedObjectContext = persistentContainer.viewContext
+        
+        topics.forEach({ topicModel in
+            let topic = NSEntityDescription.insertNewObject(forEntityName: "Topic", into: managedObjectContext) as! Topic
+            
+            topic.title = topicModel.title
+            topic.picLink = topicModel.picUrl
+            topic.feedUrl = topicModel.feedUrl
+            try? managedObjectContext.save()
+        })
+    }
+    
+    func preloadDataIfFirstLaunch() {
+        let defaults = UserDefaults.standard
+        let isPreloaded = defaults.bool(forKey: "isPreloaded")
+        if !isPreloaded {
+            preloadData()
+            defaults.set(true, forKey: "isPreloaded")
+        }
+    }
     
     // MARK: - Core Data Saving support
     
