@@ -29,18 +29,7 @@ class DataService {
         return appDelegate.persistentContainer.viewContext
     }
     
-    func getTopic(by title: String) -> TopicModel {
-        
-        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
-        let predicate = NSPredicate(format: "title = %@", argumentArray : [title])
-        fetch.predicate = predicate
-        let topic = try? updateContext.fetch(fetch).first
-        let _topic = topic as? Topic
-        
-        return TopicModel(title: _topic!.title ?? "", picUrl: _topic?.picLink ?? "", feedUrl: _topic?.feedUrl ?? "")
-    }
-    
-     func getTopics() -> [TopicModel]? {
+    func getTopics() -> [TopicModel]? {
         
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Topic")
         let topics = try? updateContext.fetch(fetch)
