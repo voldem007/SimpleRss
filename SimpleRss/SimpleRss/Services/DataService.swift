@@ -11,10 +11,6 @@ import CoreData
 
 class DataService {
     
-    lazy var cacheContext: NSManagedObjectContext = {
-        return appDelegate.persistentContainer.newBackgroundContext()
-    }()
-    
     lazy var updateContext: NSManagedObjectContext = {
         let _updateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         _updateContext.parent = viewContext
