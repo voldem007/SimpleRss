@@ -64,12 +64,17 @@ class FeedViewController: UIViewController {
     }
     
     func getData() {
-       
-        if let feedModels = self.dataService.getFeed(by: url ?? "") {
-            feedList = feedModels.map { feed in FeedViewModel(feed) }
-            tableView.reloadData()
-        } else {
-            fetchXmlData()
+        
+        dataService.getFeed(by: url ?? "") { [weak self] _feedModels in
+            guard let self = self else { return }
+            if let feedModels = _feedModels {
+                self.feedList = feedModels.map { feed in FeedViewModel(feed) }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } else {
+                self.fetchXmlData()
+            }
         }
     }
     

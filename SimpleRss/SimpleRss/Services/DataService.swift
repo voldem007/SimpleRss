@@ -17,37 +17,40 @@ class DataService {
         return _updateContext
     }()
     
+    lazy var viewContext: NSManagedObjectContext = {
+        return appDelegate.persistentContainer.viewContext
+    }()
+    
     private lazy var appDelegate = {
         return UIApplication.shared.delegate as! AppDelegate
     }()
     
-    func getTopics() -> [TopicModel]? {
+    func getTopics(completion: @escaping([TopicModel]?) -> Void ) {
         
-        let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-        let topics = try? updateContext.fetch(fetch)
-        
-        return topics?.map { topic in
-            return TopicModel(title: topic.title ?? "", picUrl: topic.picLink ?? "", feedUrl: topic.feedUrl ?? "")
+        updateContext.perform {
+
+            let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
+            let topics = try? fetch.execute()
+            completion(topics?.map { topic in
+                return TopicModel(title: topic.title ?? "", picUrl: topic.picLink ?? "", feedUrl: topic.feedUrl ?? "")
+            })
         }
     }
     
-    func getFeed(by feedUrl: String) -> [FeedModel]? {
+    func getFeed(by feedUrl: String, completion: @escaping([FeedModel]?) -> Void) {
         
-        var feedModels: [FeedModel]?
-        updateContext.performAndWait {
+        updateContext.perform {
             
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
             fetch.predicate = predicate
             let topic = try? fetch.execute().first ?? Topic()
             
-            feedModels = topic?.feed?.map { element in
+            completion(topic?.feed?.map { element in
                 let _element = element as? Feed
                 return FeedModel(title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
-            }
-
+                })
         }
-        return feedModels?.count == 0 ? nil : feedModels
     }
     
     func saveFeed(feedList: [FeedModel], for url: String) {
@@ -76,7 +79,7 @@ class DataService {
         }
     }
     
-    func deleteFeed(by feedUrl: String) {
+    private func deleteFeed(by feedUrl: String) {
         
         updateContext.performAndWait {
         
