@@ -67,7 +67,7 @@ class FeedViewController: UIViewController {
         
         dataService.getFeed(by: url ?? "") { [weak self] _feedModels in
             guard let self = self else { return }
-            if let feedModels = _feedModels {
+            if let feedModels = _feedModels, !feedModels.isEmpty {
                 self.feedList = feedModels.map { feed in FeedViewModel(feed) }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
