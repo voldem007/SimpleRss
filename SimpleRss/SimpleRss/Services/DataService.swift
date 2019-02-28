@@ -11,14 +11,8 @@ import CoreData
 
 class DataService {
     
-    lazy var updateContext: NSManagedObjectContext = {
-        let _updateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        _updateContext.persistentStoreCoordinator = appDelegate.persistentContainer.persistentStoreCoordinator
-        return _updateContext
-    }()
-    
-    lazy var viewContext: NSManagedObjectContext = {
-        return appDelegate.persistentContainer.viewContext
+    private lazy var persistentContainer = {
+        return appDelegate.persistentContainer
     }()
     
     private lazy var appDelegate = {
@@ -27,7 +21,7 @@ class DataService {
     
     func getTopics(completion: @escaping([TopicModel]?) -> Void ) {
         
-        updateContext.perform {
+        persistentContainer.performBackgroundTask() { context in
 
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let topics = try? fetch.execute()
@@ -39,7 +33,7 @@ class DataService {
     
     func getFeed(by feedUrl: String, completion: @escaping([FeedModel]?) -> Void) {
         
-        updateContext.perform {
+        persistentContainer.performBackgroundTask() { context in
             
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
@@ -55,11 +49,10 @@ class DataService {
     
     func saveFeed(feedList: [FeedModel], for url: String) {
         
-        deleteFeed(by: url)
-        
-        updateContext.perform { [weak self] in
-            guard let self = self else { return }
-        
+        persistentContainer.performBackgroundTask() { [weak self] (context) in
+            
+            self?.deleteFeed(by: url, with: context)
+            
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let predicate = NSPredicate(format: "feedUrl = %@", argumentArray: [url])
             fetch.predicate = predicate
@@ -67,7 +60,7 @@ class DataService {
             let _topic = topic as? Topic
             
             feedList.forEach({ feedModel in
-                let feed = Feed(context: self.updateContext)
+                let feed = Feed(context: context)
                 feed.text = feedModel.description
                 feed.pubDate = feedModel.pubDate
                 feed.picLink = feedModel.picLink
@@ -75,21 +68,18 @@ class DataService {
                 _topic?.addToFeed(feed)
             })
             
-            try? self.updateContext.save()
+            try? context.save()
         }
     }
     
-    private func deleteFeed(by feedUrl: String) {
+    private func deleteFeed(by feedUrl: String, with context: NSManagedObjectContext) {
         
-        updateContext.performAndWait {
+        let fetchForDelete:NSFetchRequest<NSFetchRequestResult> = Feed.fetchRequest()
+        fetchForDelete.predicate = NSPredicate(format: "topic.feedUrl = %@", argumentArray : [feedUrl])
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchForDelete)
         
-            let fetchForDelete = NSFetchRequest<NSFetchRequestResult>(entityName: "Feed")
-            fetchForDelete.predicate = NSPredicate(format: "topic.feedUrl = %@", argumentArray : [feedUrl])
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchForDelete)
-            
-            _ = try? updateContext.execute(deleteRequest)
-            
-            updateContext.reset()
-        }
+        _ = try? context.execute(deleteRequest)
+        
+        context.reset()
     }
 }
