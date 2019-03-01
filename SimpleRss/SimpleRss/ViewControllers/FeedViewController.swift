@@ -14,6 +14,15 @@ class FeedViewController: UIViewController {
     var feedList = [FeedViewModel]()
     var url: String?
     lazy var service: RssService = RssService()
+    lazy var dataService: DataService = DataService()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+            #selector(self.handleRefresh(_:)),
+                                 for: UIControl.Event.valueChanged)
+        return refreshControl
+    }()
     
     weak var tableView: UITableView!
     
@@ -41,16 +50,43 @@ class FeedViewController: UIViewController {
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         view.addSubview(tableView)
+        tableView.addSubview(refreshControl)
+        
         self.tableView = tableView;
         
-        fetchXMLData()
+        getData()
     }
     
-    func fetchXMLData() {
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        
+        fetchXmlData()
+        refreshControl.endRefreshing()
+    }
+    
+    func getData() {
+        
+        dataService.getFeed(by: url ?? "") { [weak self] _feedModels in
+            guard let self = self else { return }
+            if let feedModels = _feedModels, !feedModels.isEmpty {
+                self.feedList = feedModels.map { feed in FeedViewModel(feed) }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } else {
+                self.fetchXmlData()
+            }
+        }
+    }
+    
+    func fetchXmlData() {
+        
         guard let url = url else { return }
         service.getFeed(for: url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
+            
             self.feedList = feedList.map { feed in FeedViewModel(feed) }
+            self.dataService.saveFeed(feedList: feedList, for: url)
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }

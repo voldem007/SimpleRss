@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Topic{
+public struct TopicModel {
     let title: String
     let picUrl: String
     let feedUrl: String

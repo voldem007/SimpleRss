@@ -10,9 +10,8 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    let topics: [Topic] = [Topic(title: "IT", picUrl: "https://img.tyt.by/n/brushko/0e/9/perseidy_12082017_tutby_brush_phsl_-9131.jpg", feedUrl: "https://news.tut.by/rss/it.rss"),
-                           Topic(title: "Economics", picUrl: "https://img.tyt.by/n/01/a/mid_belarusi_st.jpg", feedUrl: "https://news.tut.by/rss/economics.rss"),
-                                 Topic(title: "Politics", picUrl: "https://img.tyt.by/n/it/0f/7/world-of-tanks.jpg", feedUrl: "https://www.hltv.org/rss/news")]
+    lazy var dataService: DataService = DataService()
+    var topics = [TopicModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +27,10 @@ class HomeViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        
+        dataService.getTopics(){ [weak self] _topics in
+            self?.topics = _topics ?? [TopicModel]()
+        }
 
         view.addSubview(tableView)
     }

@@ -9,7 +9,7 @@
 import Foundation
 
 class FeedViewModel {
-    private let feedModel: Feed
+    private let feedModel: FeedModel
     private var expanded: Bool = false
     
     var isExpanded: Bool { return expanded }
@@ -18,7 +18,7 @@ class FeedViewModel {
     var picUrl: String? { return feedModel.picLink }
     var description: String? { return feedModel.description }
     
-    init(_ feedModel: Feed) {
+    init(_ feedModel: FeedModel) {
         self.feedModel = feedModel
     }
     
