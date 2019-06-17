@@ -11,11 +11,6 @@ import UIKit
 
 class FeedViewController: UIViewController {
     
-    var feedList = [FeedViewModel]()
-    var url: String?
-    lazy var service: RssService = RssService()
-    lazy var dataService: DataService = DataService()
-    
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action:
@@ -24,10 +19,12 @@ class FeedViewController: UIViewController {
         return refreshControl
     }()
     
-    weak var tableView: UITableView!
+    private let viewModel: FeedViewModel
+    private weak var tableView: UITableView!
     
-    init(url: String) {
-        self.url = url
+    init(viewModel: FeedViewModel) {
+        self.viewModel = viewModel
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,43 +51,21 @@ class FeedViewController: UIViewController {
         
         self.tableView = tableView;
         
-        getData()
+        viewModel.getData { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView?.reloadData()
+            }
+        }
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         
-        fetchXmlData()
-        refreshControl.endRefreshing()
-    }
-    
-    func getData() {
-        
-        dataService.getFeed(by: url ?? "") { [weak self] _feedModels in
-            guard let self = self else { return }
-            if let feedModels = _feedModels, !feedModels.isEmpty {
-                self.feedList = feedModels.map { feed in FeedViewModel(feed) }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            } else {
-                self.fetchXmlData()
-            }
-        }
-    }
-    
-    func fetchXmlData() {
-        
-        guard let url = url else { return }
-        service.getFeed(for: url) { [weak self] (result, error) in
-            guard let self = self, let feedList = result else { return }
-            
-            self.feedList = feedList.map { feed in FeedViewModel(feed) }
-            self.dataService.saveFeed(feedList: feedList, for: url)
-            
+        viewModel.fetchXmlData() { [weak self] in
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self?.tableView?.reloadData()
             }
         }
+        refreshControl.endRefreshing()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,7 +79,7 @@ extension FeedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
-        let feed = feedList[indexPath.row]
+        let feed = viewModel.feedList[indexPath.row]
         
         cell.titleLabel.text = feed.title
         if let url = feed.picUrl {
@@ -118,7 +93,7 @@ extension FeedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return feedList.count
+        return viewModel.feedList.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -131,7 +106,7 @@ extension FeedViewController: UITableViewDelegate {
         
         guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
         
-        let feed = feedList[indexPath.row]
+        let feed = viewModel.feedList[indexPath.row]
         feed.toggle()
         cell.isExpanded = feed.isExpanded
         

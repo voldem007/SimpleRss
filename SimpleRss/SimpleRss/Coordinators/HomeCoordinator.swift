@@ -11,19 +11,20 @@ import Foundation
 final class HomeCoordinator: NavigationCoordinator {
     
     internal var navigationController: UINavigationController
+    private lazy var dataService = DataService()
+    private lazy var rssService = RssService()
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        let home = HomeViewController()
-        home.delegate = self
+        let home = HomeViewController(viewModel: HomeViewModel(dataService: dataService), delegate: self)
         navigationController.pushViewController(home, animated: true)
     }
     
     private func showFeed(url: String) {
-        navigationController.pushViewController(FeedViewController(url: url), animated: true)
+        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModel(dataService: dataService, rssService: rssService, url: url)), animated: true)
     }
 }
 

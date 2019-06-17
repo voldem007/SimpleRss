@@ -14,11 +14,21 @@ protocol HomeViewControllerDelegeate: AnyObject {
 
 class HomeViewController: UIViewController {
     
-    private lazy var dataService: DataService = DataService()
-    private var topics = [TopicModel]()
+    private weak var tableView: UITableView?
+    private let viewModel: HomeViewModel
+    private weak var delegate: HomeViewControllerDelegeate?
     
-    weak var delegate: HomeViewControllerDelegeate?
-
+    init(viewModel: HomeViewModel, delegate: HomeViewControllerDelegeate) {
+        self.viewModel = viewModel
+        self.delegate = delegate
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,8 +44,12 @@ class HomeViewController: UIViewController {
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        dataService.getTopics(){ [weak self] _topics in
-            self?.topics = _topics ?? [TopicModel]()
+        self.tableView = tableView
+        
+        viewModel.getTopics(){ [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView?.reloadData()
+            }
         }
 
         view.addSubview(tableView)
@@ -49,19 +63,19 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        delegate?.userDidSelectFeed(url: topics[indexPath.row].feedUrl)
+        delegate?.userDidSelectFeed(url: viewModel.topics[indexPath.row].feedUrl)
     }
 }
 
 extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return topics.count
+        return viewModel.topics.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TopicViewCell.cellIdentifier()) as? TopicViewCell else { return UITableViewCell() }
         
-        let topic = topics[indexPath.row]
+        let topic = viewModel.topics[indexPath.row]
         
         cell.titleLabel.text = topic.title
         cell.imageUrl = URL(string: topic.picUrl)

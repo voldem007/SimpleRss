@@ -1,5 +1,5 @@
 //
-//  FeedViewModel.swift
+//  FeedItemViewModel.swift
 //  SimpleRss
 //
 //  Created by Voldem on 12/3/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FeedViewModel {
+class FeedItemViewModel {
     private let feedModel: FeedModel
     private var expanded: Bool = false
     

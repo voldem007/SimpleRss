@@ -19,7 +19,7 @@ class DataService {
         return UIApplication.shared.delegate as! AppDelegate
     }()
     
-    func getTopics(completion: @escaping([TopicModel]?) -> Void ) {
+    func getTopics(completion: @escaping([TopicModel]?) -> Void) {
         
         persistentContainer.performBackgroundTask() { context in
 
