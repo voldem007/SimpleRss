@@ -27,8 +27,8 @@ class FeedViewController: UIViewController {
     weak var tableView: UITableView!
     
     init(url: String) {
-        super.init(nibName: nil, bundle: nil)
         self.url = url
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

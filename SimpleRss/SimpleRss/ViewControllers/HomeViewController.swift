@@ -8,10 +8,16 @@
 
 import UIKit
 
+protocol HomeViewControllerDelegeate: AnyObject {
+    func userDidSelectFeed(url: String)
+}
+
 class HomeViewController: UIViewController {
     
-    lazy var dataService: DataService = DataService()
-    var topics = [TopicModel]()
+    private lazy var dataService: DataService = DataService()
+    private var topics = [TopicModel]()
+    
+    weak var delegate: HomeViewControllerDelegeate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,15 +45,11 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         title = "rss"
     }
-    
-    private func navigateToFeed(feedUrl: String) {
-        navigationController?.pushViewController(FeedViewController(url: feedUrl), animated: true)
-    }
 }
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        navigateToFeed(feedUrl: topics[indexPath.row].feedUrl)
+        delegate?.userDidSelectFeed(url: topics[indexPath.row].feedUrl)
     }
 }
 
