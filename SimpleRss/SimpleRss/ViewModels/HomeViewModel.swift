@@ -17,6 +17,7 @@ class HomeViewModel {
     
     private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
+    var onTopicsChanged: (() -> Void)?
     
     var topics = [TopicModel]()
     
@@ -25,10 +26,10 @@ class HomeViewModel {
         self.delegate = delegate
     }
     
-    func getTopics(completion: @escaping () -> Void) {
+    func getTopics() {
         rssDataService.getTopics(){ [weak self] _topics in
             self?.topics = _topics ?? [TopicModel]()
-            completion()
+            self?.onTopicsChanged?()
         }
     }
     

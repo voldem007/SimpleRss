@@ -40,18 +40,25 @@ class HomeViewController: UIViewController {
         
         self.tableView = tableView
         
-        viewModel.getTopics(){ [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView?.reloadData()
-            }
-        }
-
         view.addSubview(tableView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        viewModel.onTopicsChanged = { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView?.reloadData()
+            }
+        }
+        viewModel.getTopics()
+        
         title = "rss"
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.onTopicsChanged = nil
     }
 }
 

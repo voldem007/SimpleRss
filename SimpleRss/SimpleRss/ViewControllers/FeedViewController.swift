@@ -49,33 +49,43 @@ class FeedViewController: UIViewController {
         view.addSubview(tableView)
         tableView.addSubview(refreshControl)
         
+        viewModel.loadChanged = { [weak self] isBusy in
+            DispatchQueue.main.async {
+                if !isBusy {
+                    self?.refreshControl.endRefreshing()
+                }
+            }
+        }
+        
         self.tableView = tableView;
-        
-        viewModel.getData { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView?.reloadData()
-            }
-        }
-    }
-    
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        
-        viewModel.fetchXmlData() { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView?.reloadData()
-            }
-        }
-        refreshControl.endRefreshing()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.title = "feed";
+        viewModel.onFeedChanged = { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView?.reloadData()
+            }
+        }
+        viewModel.getLocalData()
+        
+        title = "feed"
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.onFeedChanged = nil
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        
+        viewModel.getNetworkData()
     }
 }
 
 extension FeedViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
@@ -102,6 +112,7 @@ extension FeedViewController: UITableViewDataSource {
 }
 
 extension FeedViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
         guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
