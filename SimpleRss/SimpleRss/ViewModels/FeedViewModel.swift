@@ -10,33 +10,31 @@ import Foundation
 
 class FeedViewModel {
     
-    private let dataService: DataService
-    private let rssService: RssService
+    private let rssDataService: DataService
+    private let rssService: NetworkService
     private let url: String
     
     var feedList = [FeedItemViewModel]()
     
-    init(dataService: DataService, rssService: RssService, url: String) {
-        self.dataService = dataService
+    init(rssDataService: DataService, rssService: NetworkService, url: String) {
+        self.rssDataService = rssDataService
         self.rssService = rssService
         self.url = url
     }
     
     func fetchXmlData(completion: @escaping () -> Void) {
-        
         rssService.getFeed(for: url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
             
             self.feedList = feedList.map { feed in FeedItemViewModel(feed) }
-            self.dataService.saveFeed(feedList: feedList, for: self.url)
+            self.rssDataService.saveFeed(feedList: feedList, for: self.url)
             
             completion()
         }
     }
     
     func getData(completion: @escaping () -> Void) {
-        
-        dataService.getFeed(by: url) { [weak self] _feedModels in
+        rssDataService.getFeed(by: url) { [weak self] _feedModels in
             guard let self = self else { return }
             if let feedModels = _feedModels, !feedModels.isEmpty {
                 self.feedList = feedModels.map { feed in FeedItemViewModel(feed) }

@@ -9,6 +9,7 @@
 import UIKit
 
 protocol DownloadOrchestrator {
+    
     init(cacheManager: CacheManager, downloadManager: DownloadManager)
     
     func download(url: URL, _ completion: @escaping(_ image: UIImage?) -> Void) -> GetImageOperation

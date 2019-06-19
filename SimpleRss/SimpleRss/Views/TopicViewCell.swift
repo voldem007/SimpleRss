@@ -9,6 +9,7 @@
 import UIKit
 
 class TopicViewCell: UITableViewCell {
+    
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     

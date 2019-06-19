@@ -8,19 +8,31 @@
 
 import Foundation
 
+protocol HomeViewModelDelegeate: AnyObject {
+    
+    func userDidSelectFeed(url: String)
+}
+
 class HomeViewModel {
-    private let dataService: DataService
+    
+    private let rssDataService: DataService
+    private weak var delegate: HomeViewModelDelegeate?
     
     var topics = [TopicModel]()
     
-    init(dataService: DataService) {
-        self.dataService = dataService
+    init(dataService: DataService, delegate: HomeViewModelDelegeate) {
+        self.rssDataService = dataService
+        self.delegate = delegate
     }
     
     func getTopics(completion: @escaping () -> Void) {
-        dataService.getTopics(){ [weak self] _topics in
+        rssDataService.getTopics(){ [weak self] _topics in
             self?.topics = _topics ?? [TopicModel]()
             completion()
         }
+    }
+    
+    func showFeed(url: String) {
+        delegate?.userDidSelectFeed(url: url)
     }
 }

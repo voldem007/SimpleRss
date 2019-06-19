@@ -9,6 +9,7 @@
 import Foundation
 
 protocol DownloadManager {
+    
     init(maxConcurrentOperation: Int)
     
     func download(url: URL) -> DownloadImageOperation

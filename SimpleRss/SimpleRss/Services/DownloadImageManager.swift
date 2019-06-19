@@ -9,6 +9,7 @@
 import UIKit
 
 class ImageDownloadManager: DownloadManager {
+    
     private let operationQueue: OperationQueue
     
     required init(maxConcurrentOperation: Int) {

@@ -8,10 +8,12 @@
 
 import Foundation
 
-protocol Coordinator: AnyObject {
+protocol Coordinator {
+    
     func start()
 }
 
 protocol NavigationCoordinator: Coordinator {
+    
     var navigationController: UINavigationController { get }
 }

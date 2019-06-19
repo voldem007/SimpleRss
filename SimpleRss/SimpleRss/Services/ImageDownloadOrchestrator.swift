@@ -9,6 +9,7 @@
 import UIKit
 
 class ImageDownloadOrchestrator: DownloadOrchestrator {
+    
     private static let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent("Images")
     
     static let shared = ImageDownloadOrchestrator(cacheManager: ImageCacheManager(imagesDirectoryURL: path!, expiredDays: 3), downloadManager: ImageDownloadManager(maxConcurrentOperation: 5))

@@ -1,5 +1,5 @@
 //
-//  DataService.swift
+//  RssDataService.swift
 //  SimpleRss
 //
 //  Created by Voldem on 2/18/19.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class DataService {
+class RssDataService: DataService {
     
     private lazy var persistentContainer = {
         return appDelegate.persistentContainer
@@ -20,9 +20,7 @@ class DataService {
     }()
     
     func getTopics(completion: @escaping([TopicModel]?) -> Void) {
-        
         persistentContainer.performBackgroundTask() { context in
-
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let topics = try? fetch.execute()
             completion(topics?.map { topic in
@@ -32,9 +30,7 @@ class DataService {
     }
     
     func getFeed(by feedUrl: String, completion: @escaping([FeedModel]?) -> Void) {
-        
         persistentContainer.performBackgroundTask() { context in
-            
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
             fetch.predicate = predicate
@@ -48,11 +44,8 @@ class DataService {
     }
     
     func saveFeed(feedList: [FeedModel], for url: String) {
-        
         persistentContainer.performBackgroundTask() { [weak self] (context) in
-            
             self?.deleteFeed(by: url, with: context)
-            
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
             let predicate = NSPredicate(format: "feedUrl = %@", argumentArray: [url])
             fetch.predicate = predicate
@@ -73,7 +66,6 @@ class DataService {
     }
     
     private func deleteFeed(by feedUrl: String, with context: NSManagedObjectContext) {
-        
         let fetchForDelete:NSFetchRequest<NSFetchRequestResult> = Feed.fetchRequest()
         fetchForDelete.predicate = NSPredicate(format: "topic.feedUrl = %@", argumentArray : [feedUrl])
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchForDelete)

@@ -11,24 +11,24 @@ import Foundation
 final class HomeCoordinator: NavigationCoordinator {
     
     internal var navigationController: UINavigationController
-    private lazy var dataService = DataService()
-    private lazy var rssService = RssService()
+    private lazy var rssDataService: DataService = RssDataService()
+    private lazy var rssService: NetworkService = RssNetworkService()
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        let home = HomeViewController(viewModel: HomeViewModel(dataService: dataService), delegate: self)
+        let home = HomeViewController(viewModel: HomeViewModel(dataService: rssDataService, delegate: self))
         navigationController.pushViewController(home, animated: true)
     }
     
     private func showFeed(url: String) {
-        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModel(dataService: dataService, rssService: rssService, url: url)), animated: true)
+        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModel(rssDataService: rssDataService, rssService: rssService, url: url)), animated: true)
     }
 }
 
-extension HomeCoordinator: HomeViewControllerDelegeate {
+extension HomeCoordinator: HomeViewModelDelegeate {
     
     func userDidSelectFeed(url: String) {
         showFeed(url: url)

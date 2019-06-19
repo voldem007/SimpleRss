@@ -8,19 +8,13 @@
 
 import UIKit
 
-protocol HomeViewControllerDelegeate: AnyObject {
-    func userDidSelectFeed(url: String)
-}
-
 class HomeViewController: UIViewController {
     
     private weak var tableView: UITableView?
     private let viewModel: HomeViewModel
-    private weak var delegate: HomeViewControllerDelegeate?
     
-    init(viewModel: HomeViewModel, delegate: HomeViewControllerDelegeate) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
-        self.delegate = delegate
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -62,12 +56,14 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        delegate?.userDidSelectFeed(url: viewModel.topics[indexPath.row].feedUrl)
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.showFeed(url: viewModel.topics[indexPath.row].feedUrl)
     }
 }
 
 extension HomeViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.topics.count
     }

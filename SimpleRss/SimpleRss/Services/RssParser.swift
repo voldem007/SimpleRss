@@ -9,6 +9,7 @@
 import Foundation
 
 final class RssParser: NSObject {
+    
     var attributeValue = ""
     var attributeDict: [String : String]?
     var prevElementName = ""
@@ -39,6 +40,7 @@ final class RssParser: NSObject {
 }
 
 extension RssParser: XMLParserDelegate {
+    
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         if !attributeDict.isEmpty {
             self.attributeDict = attributeDict
@@ -51,6 +53,7 @@ extension RssParser: XMLParserDelegate {
         prevElementName = elementName
         wasElementClosed = false
     }
+    
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         attributeValue.append(string)
     }

@@ -1,5 +1,5 @@
 //
-//  RssService.swift
+//  RssNetworkService
 //  SimpleRss
 //
 //  Created by Voldem on 12/12/18.
@@ -8,7 +8,8 @@
 
 import Foundation
 
-final class RssService: NSObject {
+final class RssNetworkService: NetworkService {
+    
     private struct TagConstants {
         static let item = "item"
         static let link = "url"
@@ -30,7 +31,6 @@ final class RssService: NSObject {
     lazy var parser: RssParser = RssParser()
     
     func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [FeedModel]?, _ error: Error?) -> Void) {
-        
         feedList = [FeedModel]()
         guard let link = link, let url = URL(string: link) else { return }
         parser.parse(url) { [weak self] (result, error) in

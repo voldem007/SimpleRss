@@ -9,6 +9,7 @@
 import UIKit
 
 protocol CacheManager {
+    
     init(imagesDirectoryURL: URL, expiredDays: Int)
     
     func save(url: URL, image: UIImage)
