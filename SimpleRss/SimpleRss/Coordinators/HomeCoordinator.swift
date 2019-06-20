@@ -19,12 +19,12 @@ final class HomeCoordinator: NavigationCoordinator {
     }
     
     func start() {
-        let home = HomeViewController(viewModel: HomeViewModel(dataService: rssDataService, delegate: self))
+        let home = HomeViewController(viewModel: HomeViewModelImplementation(dataService: rssDataService, delegate: self))
         navigationController.pushViewController(home, animated: true)
     }
     
     private func showFeed(url: String) {
-        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModel(rssDataService: rssDataService, rssService: rssService, url: url)), animated: true)
+        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModelImplementation(rssDataService: rssDataService, rssService: rssService, url: url)), animated: true)
     }
 }
 

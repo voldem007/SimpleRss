@@ -8,7 +8,20 @@
 
 import Foundation
 
-class FeedViewModel {
+protocol FeedViewModel: AnyObject {
+    
+    var onFeedChanged: (() -> Void)? { get set }
+    var loadChanged: ((Bool) -> Void)? { get set }
+    
+    var feedList: [FeedItemViewModel] { get }
+    
+    init(rssDataService: DataService, rssService: NetworkService, url: String)
+    
+    func getNetworkData()
+    func getLocalData()
+}
+
+class FeedViewModelImplementation: FeedViewModel {
     
     private let rssDataService: DataService
     private let rssService: NetworkService
@@ -17,9 +30,9 @@ class FeedViewModel {
     var onFeedChanged: (() -> Void)?
     var loadChanged: ((Bool) -> Void)?
     
-    var feedList = [FeedItemViewModel]()
+    private(set) var feedList = [FeedItemViewModel]()
     
-    init(rssDataService: DataService, rssService: NetworkService, url: String) {
+    required init(rssDataService: DataService, rssService: NetworkService, url: String) {
         self.rssDataService = rssDataService
         self.rssService = rssService
         self.url = url

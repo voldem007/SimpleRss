@@ -13,15 +13,27 @@ protocol HomeViewModelDelegeate: AnyObject {
     func userDidSelectFeed(url: String)
 }
 
-class HomeViewModel {
+protocol HomeViewModel: AnyObject {
+    
+    var onTopicsChanged: (() -> Void)? { get set }
+    
+    var topics: [TopicModel] { get }
+    
+    init(dataService: DataService, delegate: HomeViewModelDelegeate)
+    
+    func getTopics()
+    func showFeed(url: String)
+}
+
+class HomeViewModelImplementation: HomeViewModel {
     
     private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
     var onTopicsChanged: (() -> Void)?
     
-    var topics = [TopicModel]()
+    private(set) var topics = [TopicModel]()
     
-    init(dataService: DataService, delegate: HomeViewModelDelegeate) {
+    required init(dataService: DataService, delegate: HomeViewModelDelegeate) {
         self.rssDataService = dataService
         self.delegate = delegate
     }
