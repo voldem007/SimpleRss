@@ -13,35 +13,41 @@ protocol HomeViewModelDelegeate: AnyObject {
     func userDidSelectFeed(url: String)
 }
 
-protocol HomeViewModel: AnyObject {
+protocol HomeViewModel: LoadingStateReportable, ViewModel where Content == [TopicModel] {
     
-    var onTopicsChanged: (() -> Void)? { get set }
-    
-    var topics: [TopicModel] { get }
-    
-    init(dataService: DataService, delegate: HomeViewModelDelegeate)
-    
-    func getTopics()
+    func loadTopics()
     func showFeed(url: String)
 }
 
 class HomeViewModelImplementation: HomeViewModel {
     
+    typealias Content = [TopicModel]
+
     private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
-    var onTopicsChanged: (() -> Void)?
     
-    private(set) var topics = [TopicModel]()
+    var onStateChanged: ((LoadingState) -> Void)?
+
+    private(set) var content = Content()
     
-    required init(dataService: DataService, delegate: HomeViewModelDelegeate) {
+    init(dataService: DataService, delegate: HomeViewModelDelegeate) {
         self.rssDataService = dataService
         self.delegate = delegate
     }
+}
+
+extension HomeViewModelImplementation {
     
-    func getTopics() {
-        rssDataService.getTopics(){ [weak self] _topics in
-            self?.topics = _topics ?? [TopicModel]()
-            self?.onTopicsChanged?()
+    func loadTopics() {
+        reportState(.inProgress)
+        rssDataService.getTopics(){ [weak self] result in
+            guard let self = self else { return }
+            guard let topics = result else {
+                self.reportState(.failed(nil))
+                return
+            }
+            self.content = topics
+            self.reportState(.loaded)
         }
     }
     

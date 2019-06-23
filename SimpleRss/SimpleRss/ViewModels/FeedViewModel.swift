@@ -8,58 +8,66 @@
 
 import Foundation
 
-protocol FeedViewModel: AnyObject {
-    
-    var onFeedChanged: (() -> Void)? { get set }
-    var loadChanged: ((Bool) -> Void)? { get set }
-    
-    var feedList: [FeedItemViewModel] { get }
-    
-    init(rssDataService: DataService, rssService: NetworkService, url: String)
+protocol FeedViewModel: LoadingStateReportable, ViewModel where Content == [FeedItemViewModel] {
     
     func getNetworkData()
     func getLocalData()
 }
 
-class FeedViewModelImplementation: FeedViewModel {
+class FeedViewModelImplementation {
     
     private let rssDataService: DataService
     private let rssService: NetworkService
     private let url: String
     
-    var onFeedChanged: (() -> Void)?
-    var loadChanged: ((Bool) -> Void)?
+    var onStateChanged: ((LoadingState) -> Void)?
     
-    private(set) var feedList = [FeedItemViewModel]()
+    private(set) var content = Content()
     
-    required init(rssDataService: DataService, rssService: NetworkService, url: String) {
+    init(rssDataService: DataService, rssService: NetworkService, url: String) {
         self.rssDataService = rssDataService
         self.rssService = rssService
         self.url = url
     }
+}
+
+extension FeedViewModelImplementation: FeedViewModel {
     
     func getNetworkData() {
-        loadChanged?(true)
+        reportState(.inProgress)
         rssService.getFeed(for: url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
-            
-            self.feedList = feedList.map { feed in FeedItemViewModel(feed) }
+            if error != nil {
+                self.reportState(.failed(error))
+                return
+            }
+            self.content = feedList.map { feed in FeedItemViewModel(feed) }
             self.rssDataService.saveFeed(feedList: feedList, for: self.url)
             
-            self.onFeedChanged?()
-            self.loadChanged?(false)
+            self.reportState(.loaded)
         }
     }
     
     func getLocalData() {
+        reportState(.inProgress)
         rssDataService.getFeed(by: url) { [weak self] _feedModels in
             guard let self = self else { return }
             if let feedModels = _feedModels, !feedModels.isEmpty {
-                self.feedList = feedModels.map { feed in FeedItemViewModel(feed) }
-                self.onFeedChanged?()
+                self.content = feedModels.map { feed in FeedItemViewModel(feed) }
+                self.reportState(.loaded)
             } else {
                 self.getNetworkData()
             }
+        }
+    }
+}
+
+extension LoadingStateReportable {
+    
+    func reportState(_ state: LoadingState) {
+        DispatchQueue.main.async { [weak self] in
+            guard let stateChanged = self?.onStateChanged else { return }
+            stateChanged(state)
         }
     }
 }

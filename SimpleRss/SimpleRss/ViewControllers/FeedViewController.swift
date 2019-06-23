@@ -9,20 +9,11 @@
 import Foundation
 import UIKit
 
-class FeedViewController: UIViewController {
+class FeedViewController<VM: FeedViewModel>: UITableViewController {
     
-    lazy var refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action:
-            #selector(self.handleRefresh(_:)),
-                                 for: UIControl.Event.valueChanged)
-        return refreshControl
-    }()
+    private let viewModel: VM
     
-    private let viewModel: FeedViewModel
-    private weak var tableView: UITableView!
-    
-    init(viewModel: FeedViewModel) {
+    init(viewModel: VM) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -35,8 +26,6 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tableView = UITableView(frame: view.bounds)
-        
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -46,28 +35,28 @@ class FeedViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        view.addSubview(tableView)
-        tableView.addSubview(refreshControl)
-        
-        viewModel.loadChanged = { [weak self] isBusy in
-            DispatchQueue.main.async {
-                if !isBusy {
-                    self?.refreshControl.endRefreshing()
-                }
-            }
-        }
-        
-        self.tableView = tableView;
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+            #selector(self.handleRefresh(_:)),
+                                 for: UIControl.Event.valueChanged)
+        self.refreshControl = refreshControl
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewModel.onFeedChanged = { [weak self] in
-            DispatchQueue.main.async {
+        viewModel.onStateChanged = { [weak self] state in
+            switch state {
+            case .loaded:
                 self?.tableView?.reloadData()
+                self?.refreshControl?.endRefreshing()
+            case .failed(let error):
+                print("\(error.debugDescription)")
+            case .inProgress:
+                print("in Progress")
             }
         }
+        
         viewModel.getLocalData()
         
         title = "feed"
@@ -75,21 +64,18 @@ class FeedViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.onFeedChanged = nil
+        
+        viewModel.onStateChanged = nil
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        
         viewModel.getNetworkData()
     }
-}
-
-extension FeedViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
         
-        let feed = viewModel.feedList[indexPath.row]
+        let feed = viewModel.content[indexPath.row]
         
         cell.titleLabel.text = feed.title
         if let url = feed.picUrl {
@@ -102,22 +88,18 @@ extension FeedViewController: UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.feedList.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.content.count
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-}
-
-extension FeedViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
         
-        let feed = viewModel.feedList[indexPath.row]
+        let feed = viewModel.content[indexPath.row]
         feed.toggle()
         cell.isExpanded = feed.isExpanded
         
