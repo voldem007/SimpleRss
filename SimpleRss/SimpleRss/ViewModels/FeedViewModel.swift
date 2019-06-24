@@ -8,7 +8,9 @@
 
 import Foundation
 
-protocol FeedViewModel: LoadingStateReportable, ViewModel where Content == [FeedItemViewModel] {
+protocol FeedViewModel: LoadingStateReportable {
+    
+    var content: [FeedItemViewModel] { get }
     
     func getNetworkData()
     func getLocalData()
@@ -22,7 +24,7 @@ class FeedViewModelImplementation {
     
     var onStateChanged: ((LoadingState) -> Void)?
     
-    private(set) var content = Content()
+    private(set) var content = [FeedItemViewModel]()
     
     init(rssDataService: DataService, rssService: NetworkService, url: String) {
         self.rssDataService = rssDataService

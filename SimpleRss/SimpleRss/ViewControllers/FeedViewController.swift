@@ -6,14 +6,13 @@
 //  Copyright © 2018 Vladimir Koptev. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class FeedViewController<VM: FeedViewModel>: UITableViewController {
+class FeedViewController: UITableViewController {
     
-    private let viewModel: VM
+    private let viewModel: FeedViewModel
     
-    init(viewModel: VM) {
+    init(viewModel: FeedViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)

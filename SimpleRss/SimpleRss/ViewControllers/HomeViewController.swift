@@ -8,11 +8,11 @@
 
 import UIKit
 
-class HomeViewController<VM: HomeViewModel>: UITableViewController {
+class HomeViewController: UITableViewController {
     
-    private let viewModel: VM
+    private let viewModel: HomeViewModel
     
-    init(viewModel: VM) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
