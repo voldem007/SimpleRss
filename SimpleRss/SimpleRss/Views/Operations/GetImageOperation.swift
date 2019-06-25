@@ -9,6 +9,7 @@
 import UIKit
 
 final class GetImageOperation: AsyncOperation {
+    
     let url: URL
     var result: UIImage?
     

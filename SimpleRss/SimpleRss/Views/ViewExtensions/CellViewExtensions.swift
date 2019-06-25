@@ -8,7 +8,8 @@
 
 import UIKit
 
-extension UITableViewCell{
+extension UITableViewCell {
+    
     static func cellIdentifier() -> String {
         return String(describing: self)
     }

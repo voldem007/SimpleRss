@@ -9,6 +9,7 @@
 import UIKit
 
 class ImageCacheManager: CacheManager {
+    
     private let expiredDays: Int
     private let imagesDirectoryURL: URL
     private let operationQueue: OperationQueue
