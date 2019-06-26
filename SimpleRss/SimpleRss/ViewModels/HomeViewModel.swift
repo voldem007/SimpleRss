@@ -7,15 +7,17 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
 
 protocol HomeViewModelDelegeate: AnyObject {
     
     func userDidSelectFeed(url: String)
 }
 
-protocol HomeViewModel: LoadingStateReportable {
-    
-    var content: [TopicModel] { get }
+protocol HomeViewModel {
+
+    var content: BehaviorRelay<[TopicModel]> { get }
     
     func loadTopics()
     func showFeed(url: String)
@@ -25,29 +27,23 @@ class HomeViewModelImplementation: HomeViewModel {
 
     private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
-    
-    var onStateChanged: ((LoadingState) -> Void)?
-
-    private(set) var content = [TopicModel]()
+    private(set) var content = BehaviorRelay<[TopicModel]>(value: [])
     
     init(dataService: DataService, delegate: HomeViewModelDelegeate) {
         self.rssDataService = dataService
         self.delegate = delegate
+        
+        loadTopics()
     }
 }
 
 extension HomeViewModelImplementation {
     
     func loadTopics() {
-        reportState(.inProgress)
-        rssDataService.getTopics(){ [weak self] result in
+        rssDataService.getTopics() { [weak self] result in
             guard let self = self else { return }
-            guard let topics = result else {
-                self.reportState(.failed(nil))
-                return
-            }
-            self.content = topics
-            self.reportState(.loaded)
+            guard let topics = result else { return }
+            self.content.accept(topics)
         }
     }
     

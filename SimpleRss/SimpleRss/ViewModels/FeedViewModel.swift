@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
 
-protocol FeedViewModel: LoadingStateReportable {
+protocol FeedViewModel: ViewModel {
     
-    var content: [FeedItemViewModel] { get }
+    var content: BehaviorRelay<[FeedItemViewModel]> { get }
     
     func getNetworkData()
     func getLocalData()
@@ -21,55 +23,44 @@ class FeedViewModelImplementation {
     private let rssDataService: DataService
     private let rssService: NetworkService
     private let url: String
-    
-    var onStateChanged: ((LoadingState) -> Void)?
-    
-    private(set) var content = [FeedItemViewModel]()
+        
+    private(set) var content = BehaviorRelay<[FeedItemViewModel]>(value: [])
+    private(set) var isBusy = BehaviorRelay<Bool>(value: false)
     
     init(rssDataService: DataService, rssService: NetworkService, url: String) {
         self.rssDataService = rssDataService
         self.rssService = rssService
         self.url = url
+        
+        getLocalData()
     }
 }
 
 extension FeedViewModelImplementation: FeedViewModel {
     
     func getNetworkData() {
-        reportState(.inProgress)
+        isBusy.accept(true)
         rssService.getFeed(for: url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
             if error != nil {
-                self.reportState(.failed(error))
                 return
             }
-            self.content = feedList.map { feed in FeedItemViewModel(feed) }
+            self.content.accept(feedList.map { feed in FeedItemViewModel(feed) })
             self.rssDataService.saveFeed(feedList: feedList, for: self.url)
-            
-            self.reportState(.loaded)
+            self.isBusy.accept(false)
         }
     }
     
     func getLocalData() {
-        reportState(.inProgress)
+        self.isBusy.accept(true)
         rssDataService.getFeed(by: url) { [weak self] _feedModels in
             guard let self = self else { return }
             if let feedModels = _feedModels, !feedModels.isEmpty {
-                self.content = feedModels.map { feed in FeedItemViewModel(feed) }
-                self.reportState(.loaded)
+                self.content.accept(feedModels.map { feed in FeedItemViewModel(feed) })
+                self.isBusy.accept(false)
             } else {
                 self.getNetworkData()
             }
-        }
-    }
-}
-
-extension LoadingStateReportable {
-    
-    func reportState(_ state: LoadingState) {
-        DispatchQueue.main.async { [weak self] in
-            guard let stateChanged = self?.onStateChanged else { return }
-            stateChanged(state)
         }
     }
 }
