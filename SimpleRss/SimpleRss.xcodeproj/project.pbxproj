@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		2102EB2222BFFCB90034ECBD /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102EB2122BFFCB90034ECBD /* ViewModel.swift */; };
 		2102EB3B22C3B0A80034ECBD /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3622C3B0A80034ECBD /* RxCocoa.framework */; };
-		2102EB4622C3B7040034ECBD /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB4122C3B7030034ECBD /* RxRelay.framework */; };
-		2102EB4822C3B7050034ECBD /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB4222C3B7040034ECBD /* RxSwift.framework */; };
-		2102EB4E22C3B7050034ECBD /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB4522C3B7040034ECBD /* RxBlocking.framework */; };
 		2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0B921DFFA2500E5485F /* DownloadImageManager.swift */; };
 		2105F0BE21E775CE00E5485F /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0BD21E775CE00E5485F /* ImageCacheManager.swift */; };
 		2105F0C121EBA93800E5485F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0C021EBA93800E5485F /* CacheManager.swift */; };
@@ -60,11 +57,6 @@
 		2102EB3822C3B0A80034ECBD /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
 		2102EB3922C3B0A80034ECBD /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		2102EB3A22C3B0A80034ECBD /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
-		2102EB4122C3B7030034ECBD /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
-		2102EB4222C3B7040034ECBD /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
-		2102EB4322C3B7040034ECBD /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
-		2102EB4422C3B7040034ECBD /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
-		2102EB4522C3B7040034ECBD /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		2105F0B921DFFA2500E5485F /* DownloadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageManager.swift; sourceTree = "<group>"; };
 		2105F0BD21E775CE00E5485F /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		2105F0C021EBA93800E5485F /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
@@ -122,9 +114,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2102EB3B22C3B0A80034ECBD /* RxCocoa.framework in Frameworks */,
-				2102EB4E22C3B7050034ECBD /* RxBlocking.framework in Frameworks */,
-				2102EB4822C3B7050034ECBD /* RxSwift.framework in Frameworks */,
-				2102EB4622C3B7040034ECBD /* RxRelay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,11 +168,6 @@
 		213BC6D3219C61F000E7694B = {
 			isa = PBXGroup;
 			children = (
-				2102EB4522C3B7040034ECBD /* RxBlocking.framework */,
-				2102EB4322C3B7040034ECBD /* RxCocoa.framework */,
-				2102EB4122C3B7030034ECBD /* RxRelay.framework */,
-				2102EB4222C3B7040034ECBD /* RxSwift.framework */,
-				2102EB4422C3B7040034ECBD /* RxTest.framework */,
 				213BC6DE219C61F000E7694B /* SimpleRss */,
 				2107B8E9221AB6B10015171A /* DataFlow */,
 				213BC6DD219C61F000E7694B /* Products */,
