@@ -28,13 +28,21 @@ class HomeViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let nib = UINib(nibName: TopicViewCell.cellIdentifier, bundle: nil)
-        
+        setupUI()
+        setupBinding()
+    }
+    
+    fileprivate func setupUI() {
+        let nib = UINib(nibName: TopicViewCell.cellIdentifier, bundle: nil) 
         tableView.register(nib, forCellReuseIdentifier: TopicViewCell.cellIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
+        title = "rss"
+    }
+    
+    fileprivate func setupBinding() {
         viewModel.content
             .observeOn(MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: TopicViewCell.cellIdentifier)) { row, topic, cell in
@@ -52,11 +60,5 @@ class HomeViewController: UITableViewController {
                 self?.viewModel.showFeed(url: url)
             })
             .disposed(by: disposeBag)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        title = "rss"
     }
 }

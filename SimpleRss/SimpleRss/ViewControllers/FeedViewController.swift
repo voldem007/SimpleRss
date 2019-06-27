@@ -29,27 +29,20 @@ class FeedViewController: UITableViewController {
         super.viewDidLoad()
         
         setupUI()
-        setupSub()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        title = "feed"
+        setupBinding()
     }
     
     fileprivate func setupUI() {
+        title = "feed"
         let nib = UINib(nibName: FeedViewCell.cellIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: FeedViewCell.cellIdentifier)
-        
         tableView.rowHeight = UITableView.automaticDimension
         tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        let refreshControl = UIRefreshControl()
-        self.refreshControl = refreshControl
+        refreshControl = UIRefreshControl()
     }
     
-    fileprivate func setupSub() {
+    fileprivate func setupBinding() {
         viewModel.content
             .observeOn(MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: FeedViewCell.cellIdentifier)) { row, feed, cell in
@@ -81,6 +74,18 @@ class FeedViewController: UITableViewController {
             .filter { $0 == true }
             .subscribe { [weak self] _ in
                 self?.viewModel.getNetworkData()
+            }
+            .disposed(by: disposeBag)
+        
+        Observable
+            .zip(tableView.rx.itemSelected, tableView.rx.modelSelected(FeedItemViewModel.self))
+            .bind { [weak self] indexPath, feed in
+                guard let self = self else { return }
+                guard let cell = self.tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
+                feed.toggle()
+                cell.isExpanded = feed.isExpanded
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
             }
             .disposed(by: disposeBag)
     }
