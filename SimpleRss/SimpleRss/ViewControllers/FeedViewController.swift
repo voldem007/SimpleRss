@@ -46,13 +46,14 @@ class FeedViewController: UITableViewController {
             .bind(to: tableView.rx.items(cellIdentifier: FeedViewCell.cellIdentifier)) { [weak self] row, feed, cell in
                 guard
                     let cell = cell as? FeedViewCell,
+                    let bag = cell.disposeBag,
                     let self = self else { return }
                 
                 cell.setup(feed, self)
                 self.tableView.rx
                     .modelSelected(FeedItemViewModel.self)
                     .bind(to: feed.toggle)
-                    .disposed(by: cell.disposeBag)
+                    .disposed(by: bag)
                 
             }
             .disposed(by: disposeBag)

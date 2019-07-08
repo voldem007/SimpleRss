@@ -19,6 +19,7 @@ class FeedItemViewModel {
     let description: BehaviorRelay<String?>
     let picUrl: BehaviorRelay<URL?>
     let toggle = PublishRelay<FeedItemViewModel>()
+    let update = PublishRelay<Any>()
 
     let disposeBag: DisposeBag = DisposeBag()
     
@@ -36,7 +37,7 @@ class FeedItemViewModel {
                 guard let self = self else { return }
                 if let item = item.event.element, item == self {
                     self.isExpanded.accept(!self.isExpanded.value)
-                    
+                    self.update.accept("")
                 }
             }
             .disposed(by: disposeBag)

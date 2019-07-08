@@ -18,7 +18,7 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet private weak var pubDateLabel: UILabel!
     
     private var getOperation: GetImageOperation?
-    var disposeBag = DisposeBag()
+    var disposeBag: DisposeBag? = DisposeBag()
     private weak var delegate: FeedCellDelegate?
     
     var imageUrl: URL? {
@@ -35,35 +35,44 @@ class FeedViewCell: UITableViewCell {
     }
     
     func setup(_ feed: FeedItemViewModel, _ delegate: FeedCellDelegate) {
+        guard let bag = disposeBag else {
+            return
+        }
         self.delegate = delegate
         feed.title
             .asDriver()
             .drive(titleLabel.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         
         feed.pubDate
             .asDriver()
             .drive(pubDateLabel.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         
         feed.description
             .asDriver()
             .drive(descriptionLabel.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         
         feed.picUrl
             .asDriver()
             .drive(rx.url)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
         
         feed.isExpanded
             .asDriver()
             .drive(rx.isExpanded)
-            .disposed(by: disposeBag)
+            .disposed(by: bag)
+        
+        feed.update
+            .asDriver(onErrorJustReturn: "")
+            .drive(rx.update)
+            .disposed(by: bag)
     }
     
     override func prepareForReuse() {
         
+        disposeBag = nil
         disposeBag = DisposeBag()
         
         previewImageView.image = nil
@@ -74,6 +83,9 @@ class FeedViewCell: UITableViewCell {
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
+    }
+    
+    func updateTableView() {
         delegate?.updateTableView()
     }
 }
@@ -89,6 +101,12 @@ private extension Reactive where Base: FeedViewCell {
     var isExpanded: Binder<Bool> {
         return Binder(self.base) { view, isExpanded in
             view.expanding(isExpanded: isExpanded)
+        }
+    }
+    
+    var update: Binder<Any> {
+        return Binder(self.base) { view, _ in
+            view.updateTableView()
         }
     }
 }
