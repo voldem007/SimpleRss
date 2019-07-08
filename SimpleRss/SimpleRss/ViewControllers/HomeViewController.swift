@@ -33,13 +33,11 @@ class HomeViewController: UITableViewController {
     }
     
     fileprivate func setupUI() {
+        title = "rss"
         let nib = UINib(nibName: TopicViewCell.cellIdentifier, bundle: nil) 
         tableView.register(nib, forCellReuseIdentifier: TopicViewCell.cellIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
-        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        title = "rss"
     }
     
     fileprivate func setupBinding() {
@@ -52,13 +50,9 @@ class HomeViewController: UITableViewController {
             }
             .disposed(by: disposeBag)
         
-        tableView
-            .rx
+        tableView.rx
             .modelSelected(TopicModel.self)
-            .map { $0.feedUrl }
-            .subscribe(onNext: { [weak self] url in
-                self?.viewModel.showFeed(url: url)
-            })
+            .bind(to: viewModel.selectedTopic)
             .disposed(by: disposeBag)
     }
 }

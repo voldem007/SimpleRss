@@ -9,13 +9,12 @@
 import Foundation
 import RxSwift
 import RxRelay
+import RxCocoa
 
 protocol FeedViewModel: ViewModel {
     
     var content: BehaviorRelay<[FeedItemViewModel]> { get }
-    
-    func getNetworkData()
-    func getLocalData()
+    var updateFeed: PublishRelay<Bool> { get }
 }
 
 class FeedViewModelImplementation {
@@ -23,24 +22,37 @@ class FeedViewModelImplementation {
     private let rssDataService: DataService
     private let rssService: NetworkService
     private let url: String
-        
-    private(set) var content = BehaviorRelay<[FeedItemViewModel]>(value: [])
+    
+    private let disposeBag = DisposeBag()
+    
+    let content = BehaviorRelay<[FeedItemViewModel]>(value: [])
+    let selectedFeed = PublishRelay<FeedItemViewModel>()
     private(set) var isBusy = BehaviorRelay<Bool>(value: false)
+    let updateFeed = PublishRelay<Bool>()
     
     init(rssDataService: DataService, rssService: NetworkService, url: String) {
         self.rssDataService = rssDataService
         self.rssService = rssService
         self.url = url
         
+        setBinding()
         getLocalData()
     }
 }
 
 extension FeedViewModelImplementation: FeedViewModel {
     
+    func setBinding() {
+        updateFeed.subscribe { [weak self] event in
+            guard let self = self else { return }
+            self.getNetworkData()
+            }
+            .disposed(by: disposeBag)
+    }
+    
     func getNetworkData() {
         isBusy.accept(true)
-        rssService.getFeed(for: url) { [weak self] (result, error) in
+        rssService.getFeed(for: self.url) { [weak self] (result, error) in
             guard let self = self, let feedList = result else { return }
             if error != nil {
                 return
@@ -53,7 +65,7 @@ extension FeedViewModelImplementation: FeedViewModel {
     
     func getLocalData() {
         self.isBusy.accept(true)
-        rssDataService.getFeed(by: url) { [weak self] _feedModels in
+        self.rssDataService.getFeed(by: self.url) { [weak self] _feedModels in
             guard let self = self else { return }
             if let feedModels = _feedModels, !feedModels.isEmpty {
                 self.content.accept(feedModels.map { feed in FeedItemViewModel(feed) })

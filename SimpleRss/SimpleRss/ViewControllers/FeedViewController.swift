@@ -37,56 +37,52 @@ class FeedViewController: UITableViewController {
         let nib = UINib(nibName: FeedViewCell.cellIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: FeedViewCell.cellIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
         refreshControl = UIRefreshControl()
     }
     
     fileprivate func setupBinding() {
-        viewModel.content
-            .observeOn(MainScheduler.instance)
-            .bind(to: tableView.rx.items(cellIdentifier: FeedViewCell.cellIdentifier)) { row, feed, cell in
-                guard let feedCell = cell as? FeedViewCell else { return }
-                feedCell.titleLabel.text = feed.title
-                if let url = feed.picUrl {
-                    feedCell.imageUrl = URL(string: url)
-                }
-                feedCell.descriptionLabel.text = feed.description
-                feedCell.pubDateLabel.text = feed.pubDate
-                feedCell.expanding(isExpanded: feed.isExpanded)
+        viewModel
+            .content
+            .bind(to: tableView.rx.items(cellIdentifier: FeedViewCell.cellIdentifier)) { [weak self] row, feed, cell in
+                guard
+                    let cell = cell as? FeedViewCell,
+                    let self = self else { return }
+                
+                cell.setup(feed, self)
+                self.tableView.rx
+                    .modelSelected(FeedItemViewModel.self)
+                    .bind(to: feed.toggle)
+                    .disposed(by: cell.disposeBag)
+                
             }
             .disposed(by: disposeBag)
         
-        viewModel.isBusy
-            .observeOn(MainScheduler.instance)
-            .subscribe { [weak self] event in
-                guard let self = self else { return }
-                guard let isBusy = event.element, isBusy else {
-                    self.refreshControl?.endRefreshing()
-                    return
-                }
-            }
-            .disposed(by: disposeBag)
+        if let rc = refreshControl {
+            viewModel
+                .isBusy
+                .asDriver()
+                .drive(rc.rx.isRefreshing)
+                .disposed(by: disposeBag)
         
-        refreshControl?.rx
-            .controlEvent(.valueChanged)
-            .map { [weak self] _ in self?.refreshControl?.isRefreshing }
-            .filter { $0 == true }
-            .subscribe { [weak self] _ in
-                self?.viewModel.getNetworkData()
-            }
-            .disposed(by: disposeBag)
-        
-        Observable
-            .zip(tableView.rx.itemSelected, tableView.rx.modelSelected(FeedItemViewModel.self))
-            .bind { [weak self] indexPath, feed in
-                guard let self = self else { return }
-                guard let cell = self.tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
-                feed.toggle()
-                cell.isExpanded = feed.isExpanded
-                self.tableView.beginUpdates()
-                self.tableView.endUpdates()
-            }
-            .disposed(by: disposeBag)
+            rc.rx
+                .controlEvent(.valueChanged)
+                .map { _ in rc.isRefreshing }
+                .filter { $0 == true }
+                .bind(to: viewModel.updateFeed)
+                .disposed(by: disposeBag)
+        }
     }
+}
+
+extension FeedViewController: FeedCellDelegate {
+    
+    func updateTableView() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+}
+
+protocol FeedCellDelegate: class {
+    
+    func updateTableView()
 }

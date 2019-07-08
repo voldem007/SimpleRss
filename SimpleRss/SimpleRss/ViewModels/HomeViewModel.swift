@@ -17,33 +17,48 @@ protocol HomeViewModelDelegeate: AnyObject {
 
 protocol HomeViewModel {
 
-    var content: BehaviorRelay<[TopicModel]> { get }
-    
-    func loadTopics()
-    func showFeed(url: String)
+    var content: Observable<[TopicModel]> { get }
+    var selectedTopic: PublishRelay<TopicModel> { get }
 }
 
 class HomeViewModelImplementation: HomeViewModel {
 
     private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
-    private(set) var content = BehaviorRelay<[TopicModel]>(value: [])
+    private let disposeBag = DisposeBag()
+    
+    lazy var content = { return loadTopics() }()
+    var selectedTopic = PublishRelay<TopicModel>()
     
     init(dataService: DataService, delegate: HomeViewModelDelegeate) {
         self.rssDataService = dataService
         self.delegate = delegate
         
-        loadTopics()
+        setBinding()
     }
 }
 
 extension HomeViewModelImplementation {
     
-    func loadTopics() {
-        rssDataService.getTopics() { [weak self] result in
-            guard let self = self else { return }
-            guard let topics = result else { return }
-            self.content.accept(topics)
+    func setBinding() {
+        selectedTopic.map({ $0.feedUrl }).subscribe { [weak self] event in
+            guard let self = self, let url = event.element else { return }
+            self.showFeed(url: url)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func loadTopics() -> Observable<[TopicModel]> {
+        return Observable.create { [weak self] observer in
+            self?.rssDataService.getTopics() { result in
+                guard let topics = result else { return }
+                observer.onNext(topics)
+                observer.onCompleted()
+            }
+            
+            return Disposables.create {
+                // empty because the data service does not support cancelling requests
+            }
         }
     }
     

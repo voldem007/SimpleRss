@@ -7,15 +7,19 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class FeedViewCell: UITableViewCell {
     
-    @IBOutlet weak var previewImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var pubDateLabel: UILabel!
+    @IBOutlet private weak var previewImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var descriptionLabel: UILabel!
+    @IBOutlet private weak var pubDateLabel: UILabel!
     
-    var getOperation: GetImageOperation?
+    private var getOperation: GetImageOperation?
+    var disposeBag = DisposeBag()
+    private weak var delegate: FeedCellDelegate?
     
     var imageUrl: URL? {
         didSet {
@@ -30,13 +34,38 @@ class FeedViewCell: UITableViewCell {
         }
     }
     
-    var isExpanded: Bool = false {
-        didSet {
-            expanding(isExpanded: isExpanded)
-        }
+    func setup(_ feed: FeedItemViewModel, _ delegate: FeedCellDelegate) {
+        self.delegate = delegate
+        feed.title
+            .asDriver()
+            .drive(titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        feed.pubDate
+            .asDriver()
+            .drive(pubDateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        feed.description
+            .asDriver()
+            .drive(descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        feed.picUrl
+            .asDriver()
+            .drive(rx.url)
+            .disposed(by: disposeBag)
+        
+        feed.isExpanded
+            .asDriver()
+            .drive(rx.isExpanded)
+            .disposed(by: disposeBag)
     }
     
     override func prepareForReuse() {
+        
+        disposeBag = DisposeBag()
+        
         previewImageView.image = nil
         ImageDownloadOrchestrator.shared.cancel(getOperation)
         expanding(isExpanded: false)
@@ -45,5 +74,21 @@ class FeedViewCell: UITableViewCell {
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
+        delegate?.updateTableView()
+    }
+}
+
+private extension Reactive where Base: FeedViewCell {
+    
+    var url: Binder<URL?> {
+        return Binder(self.base) { view, url in
+            view.imageUrl = url
+        }
+    }
+    
+    var isExpanded: Binder<Bool> {
+        return Binder(self.base) { view, isExpanded in
+            view.expanding(isExpanded: isExpanded)
+        }
     }
 }
