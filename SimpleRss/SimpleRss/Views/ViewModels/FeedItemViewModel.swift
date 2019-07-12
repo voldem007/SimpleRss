@@ -13,17 +13,18 @@ import RxCocoa
 
 class FeedItemViewModel {
     
+    let guid: String
     let title: BehaviorRelay<String?>
     let isExpanded = BehaviorRelay(value: false)
     let pubDate: BehaviorRelay<String?>
     let description: BehaviorRelay<String?>
     let picUrl: BehaviorRelay<URL?>
-    let toggle = PublishRelay<FeedItemViewModel>()
-    let update = PublishRelay<Any>()
+    let toggle = PublishRelay<Void>()
 
     let disposeBag: DisposeBag = DisposeBag()
     
     init(_ feedModel: FeedModel) {
+        guid = feedModel.guid
         title = BehaviorRelay(value: feedModel.title)
         pubDate = BehaviorRelay(value: feedModel.pubDate)
         description = BehaviorRelay(value: feedModel.description)
@@ -35,10 +36,7 @@ class FeedItemViewModel {
         toggle
             .subscribe { [weak self] item in
                 guard let self = self else { return }
-                if let item = item.event.element, item == self {
-                    self.isExpanded.accept(!self.isExpanded.value)
-                    self.update.accept("")
-                }
+                self.isExpanded.accept(!self.isExpanded.value)
             }
             .disposed(by: disposeBag)
     }
@@ -47,6 +45,6 @@ class FeedItemViewModel {
 extension FeedItemViewModel: Equatable {
     
     static func == (lhs: FeedItemViewModel, rhs: FeedItemViewModel) -> Bool {
-        return lhs.title.value == rhs.title.value
+        return lhs.guid == rhs.guid
     }
 }

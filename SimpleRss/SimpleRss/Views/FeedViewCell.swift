@@ -18,7 +18,7 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet private weak var pubDateLabel: UILabel!
     
     private var getOperation: GetImageOperation?
-    var disposeBag: DisposeBag? = DisposeBag()
+    private var disposeBag: DisposeBag? = DisposeBag()
     private weak var delegate: FeedCellDelegate?
     
     var imageUrl: URL? {
@@ -64,8 +64,8 @@ class FeedViewCell: UITableViewCell {
             .drive(rx.isExpanded)
             .disposed(by: bag)
         
-        feed.update
-            .asDriver(onErrorJustReturn: "")
+        feed.toggle
+            .asDriver(onErrorJustReturn: Void())
             .drive(rx.update)
             .disposed(by: bag)
     }
@@ -104,7 +104,7 @@ private extension Reactive where Base: FeedViewCell {
         }
     }
     
-    var update: Binder<Any> {
+    var update: Binder<Void> {
         return Binder(self.base) { view, _ in
             view.updateTableView()
         }

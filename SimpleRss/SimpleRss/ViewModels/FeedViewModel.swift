@@ -15,6 +15,7 @@ protocol FeedViewModel: ViewModel {
     
     var content: BehaviorRelay<[FeedItemViewModel]> { get }
     var updateFeed: PublishRelay<Bool> { get }
+    var selectedFeed: PublishRelay<FeedItemViewModel> { get }
 }
 
 class FeedViewModelImplementation {
@@ -57,7 +58,18 @@ extension FeedViewModelImplementation: FeedViewModel {
             if error != nil {
                 return
             }
-            self.content.accept(feedList.map { feed in FeedItemViewModel(feed) })
+            self.content.accept(feedList.map { feed in
+                let feedVM = FeedItemViewModel(feed)
+                
+                self.selectedFeed
+                    .filter {
+                        $0 == feedVM
+                    }
+                    .map { _ in Void() }
+                    .bind(to: feedVM.toggle)
+                    .disposed(by: self.disposeBag)
+                return feedVM
+            })
             self.rssDataService.saveFeed(feedList: feedList, for: self.url)
             self.isBusy.accept(false)
         }
@@ -68,7 +80,19 @@ extension FeedViewModelImplementation: FeedViewModel {
         self.rssDataService.getFeed(by: self.url) { [weak self] _feedModels in
             guard let self = self else { return }
             if let feedModels = _feedModels, !feedModels.isEmpty {
-                self.content.accept(feedModels.map { feed in FeedItemViewModel(feed) })
+                self.content.accept(feedModels.map { feed in
+                    let feedVM = FeedItemViewModel(feed)
+                    
+                    self.selectedFeed
+                        .filter {
+                            $0 == feedVM
+                        }
+                        .map { _ in Void() }
+                        .bind(to: feedVM.toggle)
+                        .disposed(by: self.disposeBag)
+                    return feedVM
+                    
+                })
                 self.isBusy.accept(false)
             } else {
                 self.getNetworkData()

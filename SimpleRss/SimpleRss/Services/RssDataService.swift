@@ -38,7 +38,7 @@ class RssDataService: DataService {
             
             completion(topic?.feed?.map { element in
                 let _element = element as? Feed
-                return FeedModel(title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
+                return FeedModel(guid: _element?.guid ?? UUID().uuidString ,title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
                 })
         }
     }

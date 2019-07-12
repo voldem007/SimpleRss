@@ -12,6 +12,7 @@ final class RssNetworkService: NetworkService {
     
     private struct TagConstants {
         static let item = "item"
+        static let guid = "guid"
         static let link = "url"
         static let title = "title"
         static let pubDate = "pubDate"
@@ -42,6 +43,8 @@ final class RssNetworkService: NetworkService {
                     self.createOrAppendFeed()
                 case TagConstants.title:
                     self.feed?.title = self.parseAndTrim(value)
+                case TagConstants.guid:
+                    self.feed?.guid = self.parseAndTrim(value) ?? UUID().uuidString
                 case TagConstants.pubDate:
                     self.feed?.pubDate = self.parseAndTrim(value)
                 case TagConstants.mediaDict:

@@ -42,7 +42,6 @@ class HomeViewController: UITableViewController {
     
     fileprivate func setupBinding() {
         viewModel.content
-            .observeOn(MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: TopicViewCell.cellIdentifier)) { row, topic, cell in
                 guard let topicCell = cell as? TopicViewCell else { return }
                 topicCell.titleLabel.text = topic.title
