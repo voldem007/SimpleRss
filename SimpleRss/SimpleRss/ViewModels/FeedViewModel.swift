@@ -52,51 +52,44 @@ extension FeedViewModelImplementation: FeedViewModel {
     }
     
     func getNetworkData() {
+        guard let url = URL(string: url) else { return }
         isBusy.accept(true)
-        rssService.getFeed(for: self.url) { [weak self] (result, error) in
-            guard let self = self, let feedList = result else { return }
-            if error != nil {
-                return
-            }
-            self.content.accept(feedList.map { feed in
-                let feedVM = FeedItemViewModel(feed)
-                
-                self.selectedFeed
-                    .filter {
-                        $0 == feedVM
-                    }
-                    .map { _ in Void() }
-                    .bind(to: feedVM.toggle)
-                    .disposed(by: self.disposeBag)
-                return feedVM
-            })
-            self.rssDataService.saveFeed(feedList: feedList, for: self.url)
+        rssService.getFeed(for: url).subscribe(onSuccess: { [weak self] feedModels in
+            guard let self = self else { return }
+            self.mapSubscribers(feedModels: feedModels)
+            self.rssDataService.saveFeed(feedList: feedModels, for: self.url)
             self.isBusy.accept(false)
-        }
+            }, onError: nil,
+               onCompleted: { [weak self] in
+                self?.isBusy.accept(true)
+            }
+        )
+        .disposed(by: disposeBag)
     }
     
     func getLocalData() {
         self.isBusy.accept(true)
-        self.rssDataService.getFeed(by: self.url) { [weak self] _feedModels in
-            guard let self = self else { return }
-            if let feedModels = _feedModels, !feedModels.isEmpty {
-                self.content.accept(feedModels.map { feed in
-                    let feedVM = FeedItemViewModel(feed)
-                    
-                    self.selectedFeed
-                        .filter {
-                            $0 == feedVM
-                        }
-                        .map { _ in Void() }
-                        .bind(to: feedVM.toggle)
-                        .disposed(by: self.disposeBag)
-                    return feedVM
-                    
-                })
-                self.isBusy.accept(false)
-            } else {
-                self.getNetworkData()
+        self.rssDataService.getFeed(by: self.url).subscribe(onSuccess: { [weak self] feedModels in
+            self?.mapSubscribers(feedModels: feedModels)
+            self?.isBusy.accept(false)
+            }, onError: nil,
+               onCompleted: { [weak self] in
+                self?.isBusy.accept(false)
+                self?.getNetworkData()
             }
-        }
+        )
+        .disposed(by: disposeBag)
+    }
+    
+    func mapSubscribers(feedModels: [FeedModel]) {
+        content.accept(feedModels.map { feed in
+            let feedVM = FeedItemViewModel(feed)
+            selectedFeed
+                .filter { $0 == feedVM }
+                .map { _ in Void() }
+                .bind(to: feedVM.toggle)
+                .disposed(by: disposeBag)
+            return feedVM
+        })
     }
 }

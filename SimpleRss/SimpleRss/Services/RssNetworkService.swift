@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 final class RssNetworkService: NetworkService {
     
@@ -31,31 +32,39 @@ final class RssNetworkService: NetworkService {
     var feed: FeedModel?
     lazy var parser: RssParser = RssParser()
     
-    func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [FeedModel]?, _ error: Error?) -> Void) {
-        feedList = [FeedModel]()
-        guard let link = link, let url = URL(string: link) else { return }
-        parser.parse(url) { [weak self] (result, error) in
-            guard let self = self else { completionHandler(nil, nil)
-                return }
-            result?.forEach({ (key, value) in
-                switch key {
-                case TagConstants.item:
-                    self.createOrAppendFeed()
-                case TagConstants.title:
-                    self.feed?.title = self.parseAndTrim(value)
-                case TagConstants.guid:
-                    self.feed?.guid = self.parseAndTrim(value) ?? UUID().uuidString
-                case TagConstants.pubDate:
-                    self.feed?.pubDate = self.parseAndTrim(value)
-                case TagConstants.mediaDict:
-                    self.feed?.picLink = self.parsePicLink(value)
-                case TagConstants.description:
-                    self.feed?.description = self.parseDescriptionTag(value)
-                default:
-                    print(ErrorConstants.noHandlerText + key)
+    func getFeed(for url: URL) -> Maybe<[FeedModel]> {
+        return Maybe<[FeedModel]>.create { [weak self] maybe in
+            self?.parser.parse(url) { [weak self] (result, error) in
+                guard let self = self else {
+                    maybe(.completed)
+                    return
                 }
-            })
-            completionHandler (self.feedList, error)
+                self.feedList = [FeedModel]()
+                result?.forEach({ (key, value) in
+                    switch key {
+                    case TagConstants.item:
+                        self.createOrAppendFeed()
+                    case TagConstants.title:
+                        self.feed?.title = self.parseAndTrim(value)
+                    case TagConstants.guid:
+                        self.feed?.guid = self.parseAndTrim(value) ?? UUID().uuidString
+                    case TagConstants.pubDate:
+                        self.feed?.pubDate = self.parseAndTrim(value)
+                    case TagConstants.mediaDict:
+                        self.feed?.picLink = self.parsePicLink(value)
+                    case TagConstants.description:
+                        self.feed?.description = self.parseDescriptionTag(value)
+                    default:
+                        print(ErrorConstants.noHandlerText + key)
+                    }
+                })
+                if let er = error {
+                    maybe(.error(er))
+                }
+                maybe(.success(self.feedList))
+            }
+            
+            return Disposables.create()
         }
     }
     
@@ -65,8 +74,8 @@ final class RssNetworkService: NetworkService {
     }
     
     private func createOrAppendFeed() {
-        if let _ = feed {
-            self.feedList.append(feed!)
+        if let f = feed {
+            self.feedList.append(f)
             feed = nil
         }
         else {

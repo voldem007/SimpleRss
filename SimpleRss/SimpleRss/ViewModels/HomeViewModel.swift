@@ -50,15 +50,16 @@ extension HomeViewModelImplementation {
     
     func loadTopics() -> Observable<[TopicModel]> {
         return Observable.create { [weak self] observer in
-            self?.rssDataService.getTopics() { result in
-                guard let topics = result else { return }
+            guard let self = self else { return  Disposables.create() }
+            self.rssDataService.getTopics().subscribe(onSuccess: { topics in
                 observer.onNext(topics)
                 observer.onCompleted()
-            }
+            }, onError: { error in
+                observer.onError(error)
+            })
+            .disposed(by: self.disposeBag)
             
-            return Disposables.create {
-                // empty because the data service does not support cancelling requests
-            }
+            return Disposables.create()
         }
     }
     
