@@ -43,9 +43,8 @@ class HomeViewController: UITableViewController {
     fileprivate func setupBinding() {
         viewModel.content
             .bind(to: tableView.rx.items(cellIdentifier: TopicViewCell.cellIdentifier)) { row, topic, cell in
-                guard let topicCell = cell as? TopicViewCell else { return }
-                topicCell.titleLabel.text = topic.title
-                topicCell.imageUrl = URL(string: topic.picUrl)
+                guard let cell = cell as? TopicViewCell else { return }
+                cell.setup(topic)
             }
             .disposed(by: disposeBag)
         

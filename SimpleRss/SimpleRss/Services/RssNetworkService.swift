@@ -32,15 +32,12 @@ final class RssNetworkService: NetworkService {
     var feed: FeedModel?
     lazy var parser: RssParser = RssParser()
     
-    func getFeed(for url: URL) -> Maybe<[FeedModel]> {
-        return Maybe<[FeedModel]>.create { [weak self] maybe in
-            self?.parser.parse(url) { [weak self] (result, error) in
-                guard let self = self else {
-                    maybe(.completed)
-                    return
-                }
+    func getFeed(for url: URL) -> Single<[FeedModel]> {
+        return Single<[FeedModel]>.create { [weak parser] single in
+            parser?.parse(url) { [weak self] (result, error) in
+                guard let self = self else { return }
                 self.feedList = [FeedModel]()
-                result?.forEach({ (key, value) in
+                result?.forEach { (key, value) in
                     switch key {
                     case TagConstants.item:
                         self.createOrAppendFeed()
@@ -57,11 +54,11 @@ final class RssNetworkService: NetworkService {
                     default:
                         print(ErrorConstants.noHandlerText + key)
                     }
-                })
-                if let er = error {
-                    maybe(.error(er))
                 }
-                maybe(.success(self.feedList))
+                if let er = error {
+                    single(.error(er))
+                }
+                single(.success(self.feedList))
             }
             
             return Disposables.create()

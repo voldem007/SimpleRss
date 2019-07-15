@@ -59,10 +59,7 @@ extension FeedViewModelImplementation: FeedViewModel {
             self.mapSubscribers(feedModels: feedModels)
             self.rssDataService.saveFeed(feedList: feedModels, for: self.url)
             self.isBusy.accept(false)
-            }, onError: nil,
-               onCompleted: { [weak self] in
-                self?.isBusy.accept(true)
-            }
+            }, onError: nil
         )
         .disposed(by: disposeBag)
     }
@@ -82,14 +79,6 @@ extension FeedViewModelImplementation: FeedViewModel {
     }
     
     func mapSubscribers(feedModels: [FeedModel]) {
-        content.accept(feedModels.map { feed in
-            let feedVM = FeedItemViewModel(feed)
-            selectedFeed
-                .filter { $0 == feedVM }
-                .map { _ in Void() }
-                .bind(to: feedVM.toggle)
-                .disposed(by: disposeBag)
-            return feedVM
-        })
+        content.accept(feedModels.map { feed in FeedItemViewModel(feed, selectedFeed) })
     }
 }

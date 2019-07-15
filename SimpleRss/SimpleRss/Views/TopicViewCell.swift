@@ -10,10 +10,10 @@ import UIKit
 
 class TopicViewCell: UITableViewCell {
     
-    @IBOutlet weak var previewImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet private weak var previewImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
     
-    var getOperation: GetImageOperation?
+    private var getOperation: GetImageOperation!
     
     var imageUrl: URL? {
         didSet {
@@ -26,6 +26,11 @@ class TopicViewCell: UITableViewCell {
                 }
             }
         }
+    }
+    
+    func setup(_ topic: TopicModel) {
+        titleLabel.text = topic.title
+        imageUrl = URL(string: topic.picUrl)
     }
     
     override func prepareForReuse() {

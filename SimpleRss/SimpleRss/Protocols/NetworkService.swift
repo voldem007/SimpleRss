@@ -11,5 +11,5 @@ import RxSwift
 
 protocol NetworkService {
     
-    func getFeed(for url: URL) -> Maybe<[FeedModel]>
+    func getFeed(for url: URL) -> Single<[FeedModel]>
 }

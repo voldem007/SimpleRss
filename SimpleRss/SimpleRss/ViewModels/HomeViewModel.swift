@@ -51,15 +51,14 @@ extension HomeViewModelImplementation {
     func loadTopics() -> Observable<[TopicModel]> {
         return Observable.create { [weak self] observer in
             guard let self = self else { return  Disposables.create() }
-            self.rssDataService.getTopics().subscribe(onSuccess: { topics in
+            let subscription = self.rssDataService.getTopics().subscribe(onSuccess: { topics in
                 observer.onNext(topics)
                 observer.onCompleted()
             }, onError: { error in
                 observer.onError(error)
             })
-            .disposed(by: self.disposeBag)
             
-            return Disposables.create()
+            return subscription
         }
     }
     

@@ -23,21 +23,27 @@ class FeedItemViewModel {
 
     let disposeBag: DisposeBag = DisposeBag()
     
-    init(_ feedModel: FeedModel) {
+    init(_ feedModel: FeedModel, _ selectedFeed: PublishRelay<FeedItemViewModel>) {
         guid = feedModel.guid
         title = BehaviorRelay(value: feedModel.title)
         pubDate = BehaviorRelay(value: feedModel.pubDate)
         description = BehaviorRelay(value: feedModel.description)
         picUrl = BehaviorRelay(value: URL(string: feedModel.picLink ?? ""))
-        setBinding()
+        setBinding(selectedFeed)
     }
     
-    func setBinding() {
+    func setBinding(_ selectedFeed: PublishRelay<FeedItemViewModel>) {
         toggle
             .subscribe { [weak self] item in
                 guard let self = self else { return }
                 self.isExpanded.accept(!self.isExpanded.value)
             }
+            .disposed(by: disposeBag)
+        
+        selectedFeed
+            .filter { $0 == self }
+            .map { _ in Void() }
+            .bind(to: toggle)
             .disposed(by: disposeBag)
     }
 }

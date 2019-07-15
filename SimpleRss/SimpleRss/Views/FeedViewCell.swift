@@ -17,7 +17,7 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet private weak var descriptionLabel: UILabel!
     @IBOutlet private weak var pubDateLabel: UILabel!
     
-    private var getOperation: GetImageOperation?
+    private var getOperation: GetImageOperation!
     private var disposeBag: DisposeBag? = DisposeBag()
     private weak var delegate: FeedCellDelegate?
     
