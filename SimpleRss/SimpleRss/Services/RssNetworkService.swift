@@ -28,29 +28,28 @@ final class RssNetworkService: NetworkService {
         static let noHandlerText = "No handler for "
     }
     
-    var feedList = [FeedModel]()
-    var feed: FeedModel?
     lazy var parser: RssParser = RssParser()
     
     func getFeed(for url: URL) -> Single<[FeedModel]> {
         return Single<[FeedModel]>.create { [weak parser] single in
             parser?.parse(url) { [weak self] (result, error) in
                 guard let self = self else { return }
-                self.feedList = [FeedModel]()
+                var feed: FeedModel?
+                var feedList = [FeedModel]()
                 result?.forEach { (key, value) in
                     switch key {
                     case TagConstants.item:
-                        self.createOrAppendFeed()
+                        feed = self.createOrAppendFeed(feed: feed, append: { feedList.append($0) })
                     case TagConstants.title:
-                        self.feed?.title = self.parseAndTrim(value)
+                        feed?.title = self.parseAndTrim(value)
                     case TagConstants.guid:
-                        self.feed?.guid = self.parseAndTrim(value) ?? UUID().uuidString
+                        feed?.guid = self.parseAndTrim(value) ?? UUID().uuidString
                     case TagConstants.pubDate:
-                        self.feed?.pubDate = self.parseAndTrim(value)
+                        feed?.pubDate = self.parseAndTrim(value)
                     case TagConstants.mediaDict:
-                        self.feed?.picLink = self.parsePicLink(value)
+                        feed?.picLink = self.parsePicLink(value)
                     case TagConstants.description:
-                        self.feed?.description = self.parseDescriptionTag(value)
+                        feed?.description = self.parseDescriptionTag(value)
                     default:
                         print(ErrorConstants.noHandlerText + key)
                     }
@@ -58,7 +57,7 @@ final class RssNetworkService: NetworkService {
                 if let er = error {
                     single(.error(er))
                 }
-                single(.success(self.feedList))
+                single(.success(feedList))
             }
             
             return Disposables.create()
@@ -70,13 +69,13 @@ final class RssNetworkService: NetworkService {
         return String(description[beginRange.upperBound..<endRange.lowerBound])
     }
     
-    private func createOrAppendFeed() {
+    private func createOrAppendFeed(feed: FeedModel?, append: (FeedModel) -> Void) -> FeedModel? {
         if let f = feed {
-            self.feedList.append(f)
-            feed = nil
+            append(f)
+            return nil
         }
         else {
-            feed = FeedModel()
+            return FeedModel()
         }
     }
     
