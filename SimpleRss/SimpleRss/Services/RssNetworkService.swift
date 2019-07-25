@@ -11,6 +11,30 @@ import RxSwift
 
 final class RssNetworkService: NetworkService {
     
+    private enum RssError: Error {
+        case noData
+    }
+    
+    lazy var parser: RssParser = RssParser()
+    
+    func getFeed(for url: URL) -> Single<[FeedModel]> {
+        return Single<[FeedModel]>.create { [weak parser] single in
+            parser?.parse(url) { (result, error) in
+                guard let rawXml = result else {
+                    single(.error(error ?? RssError.noData))
+                    return
+                }
+                single(.success(FeedModel.from(rawXml)))
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+}
+
+private extension FeedModel {
+    
     private struct TagConstants {
         static let item = "item"
         static let guid = "guid"
@@ -23,69 +47,49 @@ final class RssNetworkService: NetworkService {
         static let brOpen = "<br"
     }
     
-    private struct ErrorConstants {
-        static let errorMessage = "Error while parsing"
-        static let noHandlerText = "No handler for "
-    }
-    
-    lazy var parser: RssParser = RssParser()
-    
-    func getFeed(for url: URL) -> Single<[FeedModel]> {
-        return Single<[FeedModel]>.create { [weak parser] single in
-            parser?.parse(url) { [weak self] (result, error) in
-                guard let self = self else { return }
-                var feed: FeedModel?
-                var feedList = [FeedModel]()
-                result?.forEach { (key, value) in
-                    switch key {
-                    case TagConstants.item:
-                        feed = self.createOrAppendFeed(feed: feed, append: { feedList.append($0) })
-                    case TagConstants.title:
-                        feed?.title = self.parseAndTrim(value)
-                    case TagConstants.guid:
-                        feed?.guid = self.parseAndTrim(value) ?? UUID().uuidString
-                    case TagConstants.pubDate:
-                        feed?.pubDate = self.parseAndTrim(value)
-                    case TagConstants.mediaDict:
-                        feed?.picLink = self.parsePicLink(value)
-                    case TagConstants.description:
-                        feed?.description = self.parseDescriptionTag(value)
-                    default:
-                        print(ErrorConstants.noHandlerText + key)
-                    }
+    static func from(_ raw: [(String, Any)]) -> [FeedModel] {
+        func tryParsingStringValue(_ value: Any, defaultValue: String? = nil) -> String? {
+            guard let value = value as? String else { return defaultValue }
+            return value.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        
+        func tryParsingImageLinkValue(_ value: Any) -> String? {
+            guard let mediaDict = value as? [String : String] else { return nil }
+            return mediaDict[TagConstants.link]
+        }
+        
+        func tryParsingDescriptionValue(_ value: Any) -> String? {
+            guard let description = value as? String,
+                let beginRange = description.range(of: TagConstants.close),
+                let endRange = description.range(of: TagConstants.brOpen) else { return nil }
+            return String(description[beginRange.upperBound..<endRange.lowerBound])
+        }
+        
+        var current: FeedModel?
+        var result = [FeedModel]()
+        for (key, value) in raw {
+            switch key {
+            case TagConstants.item:
+                if let feed = current {
+                    result.append(feed)
+                    current = nil
+                } else {
+                    current = FeedModel()
                 }
-                if let er = error {
-                    single(.error(er))
-                }
-                single(.success(feedList))
+            case TagConstants.title:
+                current?.title = tryParsingStringValue(value)
+            case TagConstants.guid:
+                current?.guid = tryParsingStringValue(value, defaultValue: UUID().uuidString)!
+            case TagConstants.pubDate:
+                current?.pubDate = tryParsingStringValue(value)
+            case TagConstants.mediaDict:
+                current?.picLink = tryParsingImageLinkValue(value)
+            case TagConstants.description:
+                current?.description = tryParsingDescriptionValue(value)
+            default:
+                print("No handler for '\(key)'")
             }
-            
-            return Disposables.create()
         }
-    }
-    
-    private func parseDescriptionTag(_ value: Any) -> String? {
-        guard let description = value as? String, let beginRange = description.range(of: TagConstants.close), let endRange = description.range(of: TagConstants.brOpen) else { return nil }
-        return String(description[beginRange.upperBound..<endRange.lowerBound])
-    }
-    
-    private func createOrAppendFeed(feed: FeedModel?, append: (FeedModel) -> Void) -> FeedModel? {
-        if let f = feed {
-            append(f)
-            return nil
-        }
-        else {
-            return FeedModel()
-        }
-    }
-    
-    private func parseAndTrim(_ value: Any) -> String? {
-        guard let value = value as? String else { return nil }
-        return value.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
-    private func parsePicLink(_ value: Any) -> String? {
-        guard let mediaDict = value as? [String : String] else { return nil }
-        return mediaDict[TagConstants.link]
+        return result
     }
 }
