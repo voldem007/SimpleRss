@@ -18,8 +18,8 @@ final class RssNetworkService: NetworkService {
     lazy var parser: RssParser = RssParser()
     
     func getFeed(for url: URL) -> Single<[FeedModel]> {
-        return Single<[FeedModel]>.create { [weak parser] single in
-            parser?.parse(url) { (result, error) in
+        return Single<[FeedModel]>.create { [parser] single in
+            parser.parse(url) { (result, error) in
                 guard let rawXml = result else {
                     single(.error(error ?? RssError.noData))
                     return

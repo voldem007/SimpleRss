@@ -21,8 +21,8 @@ class RssDataService: DataService {
     }()
     
     func getTopics() -> Single<[TopicModel]> {
-        return Single<[TopicModel]>.create { [weak self] single in
-            self?.persistentContainer.performBackgroundTask() { context in
+        return Single<[TopicModel]>.create { [persistentContainer] single in
+            persistentContainer.performBackgroundTask() { context in
                 let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
                 do {
                     let topics = try fetch.execute()
@@ -39,8 +39,8 @@ class RssDataService: DataService {
     }
     
     func getFeed(by feedUrl: String) -> Maybe<[FeedModel]> {
-        return Maybe<[FeedModel]>.create { [weak self] maybe -> Disposable in
-            self?.persistentContainer.performBackgroundTask() { context in
+        return Maybe<[FeedModel]>.create { [persistentContainer] maybe -> Disposable in
+            persistentContainer.performBackgroundTask() { context in
                 let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
                 let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
                 fetch.predicate = predicate
