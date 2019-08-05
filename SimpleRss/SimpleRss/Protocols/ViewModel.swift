@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import RxRelay
+import RxSwift
 
 protocol ViewModel: AnyObject {
     
-    var isBusy: BehaviorRelay<Bool> { get }
+    var isBusy: Observable<Bool>? { get }
 }

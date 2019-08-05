@@ -13,8 +13,8 @@ import RxCocoa
 
 protocol FeedViewModel: ViewModel {
     
-    var content: BehaviorRelay<[FeedItemViewModel]> { get }
-    var updateFeed: PublishRelay<Bool> { get }
+    var content: Observable<[FeedItemViewModel]>? { get }
+    var updateFeed: PublishRelay<Void> { get }
     var selectedFeed: PublishRelay<FeedItemViewModel> { get }
 }
 
@@ -26,59 +26,56 @@ class FeedViewModelImplementation {
     
     private let disposeBag = DisposeBag()
     
-    let content = BehaviorRelay<[FeedItemViewModel]>(value: [])
+    private(set) var content: Observable<[FeedItemViewModel]>?
     let selectedFeed = PublishRelay<FeedItemViewModel>()
-    private(set) var isBusy = BehaviorRelay<Bool>(value: false)
-    let updateFeed = PublishRelay<Bool>()
+    private(set) var isBusy: Observable<Bool>?
+    let updateFeed = PublishRelay<Void>()
     
     init(rssDataService: DataService, rssService: NetworkService, url: String) {
         self.rssDataService = rssDataService
         self.rssService = rssService
         self.url = url
+
+        let refresh = updateFeed.flatMap { _ in rssService.getFeed(for: URL(string: self.url)!) }.do(onNext: { [weak self] feedModels in
+            guard let self = self else { return }
+            self.rssDataService.saveFeed(feedList: feedModels, for: self.url)
+        })
         
-        setBinding()
-        getLocalData()
+        self.content = self.rssDataService.getFeed(by: self.url).asObservable().concat(refresh).map { feed in
+            feed.map { feedItem in FeedItemViewModel(feedItem, self.selectedFeed) }
+        }
+        
+        self.isBusy = self.content?.map { _ in false }
     }
 }
 
 extension FeedViewModelImplementation: FeedViewModel {
     
-    func setBinding() {
-        updateFeed.subscribe { [weak self] event in
-            guard let self = self else { return }
-            self.getNetworkData()
-            }
-            .disposed(by: disposeBag)
+    func getNetworkData() -> Observable<[FeedItemViewModel]> {
+        return Observable.create { observer in
+            let url = URL(string: self.url)!
+            let sub = self.rssService.getFeed(for: url).subscribe(onSuccess: { [weak self] feedModels in
+                guard let self = self else { return }
+                observer.onNext(feedModels.map { feed in FeedItemViewModel(feed, self.selectedFeed) })
+                self.rssDataService.saveFeed(feedList: feedModels, for: self.url)
+                }, onError: nil
+            )
+            return sub
+        }
     }
     
-    func getNetworkData() {
-        guard let url = URL(string: url) else { return }
-        isBusy.accept(true)
-        rssService.getFeed(for: url).subscribe(onSuccess: { [weak self] feedModels in
-            guard let self = self else { return }
-            self.mapSubscribers(feedModels: feedModels)
-            self.rssDataService.saveFeed(feedList: feedModels, for: self.url)
-            self.isBusy.accept(false)
-            }, onError: nil
-        )
-        .disposed(by: disposeBag)
-    }
-    
-    func getLocalData() {
-        self.isBusy.accept(true)
-        self.rssDataService.getFeed(by: self.url).subscribe(onSuccess: { [weak self] feedModels in
-            self?.mapSubscribers(feedModels: feedModels)
-            self?.isBusy.accept(false)
-            }, onError: nil,
-               onCompleted: { [weak self] in
-                self?.isBusy.accept(false)
-                self?.getNetworkData()
-            }
-        )
-        .disposed(by: disposeBag)
-    }
-    
-    func mapSubscribers(feedModels: [FeedModel]) {
-        content.accept(feedModels.map { feed in FeedItemViewModel(feed, selectedFeed) })
+    func getLocalData() -> Observable<[FeedItemViewModel]> {
+        return Observable.create { observer in
+            let sub = self.rssDataService.getFeed(by: self.url).subscribe(onSuccess: { [weak self] feedModels in
+                guard let self = self else { return }
+                observer.onNext(feedModels.map { feed in FeedItemViewModel(feed, self.selectedFeed) })
+                }, onError: nil,
+                   onCompleted: { [weak self] in
+                    observer.onCompleted()
+                    //self?.getNetworkData()
+                }
+            )
+            return sub
+        }
     }
 }

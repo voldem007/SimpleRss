@@ -42,7 +42,7 @@ class FeedViewController: UITableViewController {
     
     fileprivate func setupBinding() {
         viewModel
-            .content
+            .content?
             .bind(to: tableView.rx.items(cellIdentifier: FeedViewCell.cellIdentifier)) { [weak self] row, feed, cell in
                 guard
                     let cell = cell as? FeedViewCell,
@@ -59,8 +59,8 @@ class FeedViewController: UITableViewController {
         
         if let rc = refreshControl {
             viewModel
-                .isBusy
-                .asDriver()
+                .isBusy?
+                .asDriver(onErrorJustReturn: false)
                 .drive(rc.rx.isRefreshing)
                 .disposed(by: disposeBag)
         
@@ -68,6 +68,7 @@ class FeedViewController: UITableViewController {
                 .controlEvent(.valueChanged)
                 .map { _ in rc.isRefreshing }
                 .filter { $0 == true }
+                .map { _ in Void() }
                 .bind(to: viewModel.updateFeed)
                 .disposed(by: disposeBag)
         }
