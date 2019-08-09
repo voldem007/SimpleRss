@@ -23,16 +23,15 @@ protocol HomeViewModel {
 
 class HomeViewModelImplementation: HomeViewModel {
 
-    private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
     private let disposeBag = DisposeBag()
     
-    lazy var content = { return loadTopics() }()
+    var content: Observable<[TopicModel]>
     var selectedTopic = PublishRelay<TopicModel>()
     
-    init(dataService: DataService, delegate: HomeViewModelDelegeate) {
-        self.rssDataService = dataService
+    init(rssDataService: DataService, delegate: HomeViewModelDelegeate) {
         self.delegate = delegate
+        self.content = rssDataService.getTopics().asObservable()
         
         setBinding()
     }
@@ -46,21 +45,7 @@ extension HomeViewModelImplementation {
             self.showFeed(url: url)
             }
             .disposed(by: disposeBag)
-    }
-    
-    func loadTopics() -> Observable<[TopicModel]> {
-        return Observable.create { [weak self] observer in
-            guard let self = self else { return  Disposables.create() }
-            let subscription = self.rssDataService.getTopics().subscribe(onSuccess: { topics in
-                observer.onNext(topics)
-                observer.onCompleted()
-            }, onError: { error in
-                observer.onError(error)
-            })
-            
-            return subscription
-        }
-    }
+    }    
     
     func showFeed(url: String) {
         delegate?.userDidSelectFeed(url: url)

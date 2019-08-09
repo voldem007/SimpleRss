@@ -15,36 +15,29 @@ class FeedItemViewModel {
     
     let guid: String
     let title: BehaviorRelay<String?>
-    let isExpanded = BehaviorRelay(value: false)
+    var isExpanded: Observable<Bool>?
     let pubDate: BehaviorRelay<String?>
     let description: BehaviorRelay<String?>
     let picUrl: BehaviorRelay<URL?>
-    let toggle = PublishRelay<Void>()
-
-    let disposeBag: DisposeBag = DisposeBag()
+    var isOpened = false
     
-    init(_ feedModel: FeedModel, _ selectedFeed: PublishRelay<FeedItemViewModel>) {
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    init(_ feedModel: FeedModel, _ selectedFeed: Observable<FeedItemViewModel>) {
         guid = feedModel.guid
         title = BehaviorRelay(value: feedModel.title)
         pubDate = BehaviorRelay(value: feedModel.pubDate)
         description = BehaviorRelay(value: feedModel.description)
         picUrl = BehaviorRelay(value: URL(string: feedModel.picLink ?? ""))
-        setBinding(selectedFeed)
+        
+        isExpanded = selectedFeed
+            .filter { $0.guid == feedModel.guid }
+            .map { [weak self] _ in return self?.toggle() ?? false }
     }
     
-    func setBinding(_ selectedFeed: PublishRelay<FeedItemViewModel>) {
-        toggle
-            .subscribe { [weak self] item in
-                guard let self = self else { return }
-                self.isExpanded.accept(!self.isExpanded.value)
-            }
-            .disposed(by: disposeBag)
-        
-        selectedFeed
-            .filter { $0 == self }
-            .map { _ in Void() }
-            .bind(to: toggle)
-            .disposed(by: disposeBag)
+    private func toggle() -> Bool {
+        isOpened = !isOpened
+        return isOpened
     }
 }
 

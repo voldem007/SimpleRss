@@ -11,5 +11,5 @@ import RxSwift
 
 protocol ViewModel: AnyObject {
     
-    var isBusy: Observable<Bool>? { get }
+    var isBusy: Observable<Bool> { get }
 }

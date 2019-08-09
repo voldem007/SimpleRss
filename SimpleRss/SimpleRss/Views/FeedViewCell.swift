@@ -59,14 +59,9 @@ class FeedViewCell: UITableViewCell {
             .drive(rx.url)
             .disposed(by: bag)
         
-        feed.isExpanded
-            .asDriver()
+        feed.isExpanded?
+            .asDriver(onErrorJustReturn: false)
             .drive(rx.isExpanded)
-            .disposed(by: bag)
-        
-        feed.toggle
-            .asDriver(onErrorJustReturn: Void())
-            .drive(rx.update)
             .disposed(by: bag)
     }
     
@@ -101,11 +96,6 @@ private extension Reactive where Base: FeedViewCell {
     var isExpanded: Binder<Bool> {
         return Binder(self.base) { view, isExpanded in
             view.expanding(isExpanded: isExpanded)
-        }
-    }
-    
-    var update: Binder<Void> {
-        return Binder(self.base) { view, _ in
             view.updateTableView()
         }
     }
