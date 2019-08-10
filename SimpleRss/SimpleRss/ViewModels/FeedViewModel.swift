@@ -36,7 +36,7 @@ class FeedViewModelImplementation: FeedViewModel {
         self.rssService = rssService
         self.url = url
         
-        let selected = selectedFeed.share(replay: 1, scope: .whileConnected)
+        let selected = selectedFeed.asObservable()
         
         let refresh = updateFeed
             .flatMap { _ in rssService.getFeed(for: URL(string: url)!) }

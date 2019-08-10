@@ -15,11 +15,10 @@ class FeedItemViewModel {
     
     let guid: String
     let title: BehaviorRelay<String?>
-    var isExpanded: Observable<Bool>?
+    let isExpanded: Observable<Bool>
     let pubDate: BehaviorRelay<String?>
     let description: BehaviorRelay<String?>
     let picUrl: BehaviorRelay<URL?>
-    var isOpened = false
     
     private let disposeBag: DisposeBag = DisposeBag()
     
@@ -30,14 +29,12 @@ class FeedItemViewModel {
         description = BehaviorRelay(value: feedModel.description)
         picUrl = BehaviorRelay(value: URL(string: feedModel.picLink ?? ""))
         
+        var expanded = false
         isExpanded = selectedFeed
             .filter { $0.guid == feedModel.guid }
-            .map { [weak self] _ in return self?.toggle() ?? false }
-    }
-    
-    private func toggle() -> Bool {
-        isOpened = !isOpened
-        return isOpened
+            .do(onNext: { _ in expanded.toggle() })
+            .map { _ in expanded }
+            .share(replay: 1, scope: .forever)
     }
 }
 

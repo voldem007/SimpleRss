@@ -59,7 +59,7 @@ class FeedViewCell: UITableViewCell {
             .drive(rx.url)
             .disposed(by: bag)
         
-        feed.isExpanded?
+        feed.isExpanded
             .asDriver(onErrorJustReturn: false)
             .drive(rx.isExpanded)
             .disposed(by: bag)
