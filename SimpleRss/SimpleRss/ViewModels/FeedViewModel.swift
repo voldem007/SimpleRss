@@ -20,32 +20,26 @@ protocol FeedViewModel: ViewModel {
 
 class FeedViewModelImplementation: FeedViewModel {
     
-    private let rssDataService: DataService
-    private let rssService: NetworkService
-    private let url: String
-    
-    private let disposeBag = DisposeBag()
-    
     let content: Observable<[FeedItemViewModel]>
     let selectedFeed = PublishRelay<FeedItemViewModel>()
     let isBusy: Observable<Bool>
     let updateFeed = PublishRelay<Void>()
     
     init(rssDataService: DataService, rssService: NetworkService, url: String) {
-        self.rssDataService = rssDataService
-        self.rssService = rssService
-        self.url = url
-        
         let selected = selectedFeed.asObservable()
         
         let refresh = updateFeed
-            .flatMap { _ in rssService.getFeed(for: URL(string: url)!) }
-            .do(onNext: { rssDataService.saveFeed(feedList: $0, for: url) })
+            .flatMap { _ in rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]()) }
+            .do(onNext: {
+                guard !$0.isEmpty else { return }
+                rssDataService.saveFeed(feedList: $0, for: url)
+            })
         
         content = rssDataService.getFeed(by: url)
             .asObservable()
             .concat(refresh)
-            .map { $0.map { feedItem in FeedItemViewModel(feedItem, selected) } }
+            .materialize()
+            .map { $0.element?.map { feedItem in FeedItemViewModel(feedItem, selected) } ?? [FeedItemViewModel]() }
             .share(replay: 1, scope: .whileConnected)
         
         isBusy = content.map { _ in false }

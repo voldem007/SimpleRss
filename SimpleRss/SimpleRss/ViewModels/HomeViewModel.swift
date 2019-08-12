@@ -40,7 +40,7 @@ class HomeViewModelImplementation: HomeViewModel {
 extension HomeViewModelImplementation {
     
     func setBinding() {
-        selectedTopic.map({ $0.feedUrl }).subscribe { [weak self] event in
+        selectedTopic.map { $0.feedUrl } .subscribe { [weak self] event in
             guard let self = self, let url = event.element else { return }
             self.showFeed(url: url)
             }
