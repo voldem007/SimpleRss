@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class FeedViewController: UITableViewController {
     
     private let viewModel: FeedViewModel
+    private let disposeBag = DisposeBag()
     
     init(viewModel: FeedViewModel) {
         self.viewModel = viewModel
@@ -25,84 +28,62 @@ class FeedViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        let nib = UINib(nibName: FeedViewCell.cellIdentifier(), bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: FeedViewCell.cellIdentifier())
-
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action:
-            #selector(self.handleRefresh(_:)),
-                                 for: UIControl.Event.valueChanged)
-        self.refreshControl = refreshControl
+        setupUI()
+        setupBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        viewModel.onStateChanged = { [weak self] state in
-            switch state {
-            case .loaded:
-                self?.tableView?.reloadData()
-                self?.refreshControl?.endRefreshing()
-            case .failed(let error):
-                print("\(error.debugDescription)")
-            case .inProgress:
-                print("in Progress")
-            }
-        }
-        
-        viewModel.getLocalData()
-        
+    fileprivate func setupUI() {
         title = "feed"
+        let nib = UINib(nibName: FeedViewCell.cellIdentifier, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: FeedViewCell.cellIdentifier)
+        tableView.rowHeight = UITableView.automaticDimension
+        refreshControl = UIRefreshControl()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    fileprivate func setupBinding() {
+        viewModel
+            .content
+            .bind(to: tableView.rx.items(cellIdentifier: FeedViewCell.cellIdentifier)) { [weak self] row, feed, cell in
+                guard
+                    let cell = cell as? FeedViewCell,
+                    let self = self else { return }
+                
+                cell.setup(feed, self)
+            }
+            .disposed(by: disposeBag)
         
-        viewModel.onStateChanged = nil
-    }
-    
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        viewModel.getNetworkData()
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedViewCell.cellIdentifier()) as? FeedViewCell else { return UITableViewCell() }
+        tableView.rx
+            .modelSelected(FeedItemViewModel.self)
+            .bind(to: viewModel.selectedFeed)
+            .disposed(by: disposeBag)
         
-        let feed = viewModel.content[indexPath.row]
+        if let rc = refreshControl {
+            viewModel
+                .isBusy
+                .asDriver(onErrorJustReturn: false)
+                .drive(rc.rx.isRefreshing)
+                .disposed(by: disposeBag)
         
-        cell.titleLabel.text = feed.title
-        if let url = feed.picUrl {
-            cell.imageUrl = URL(string: url)
+            rc.rx
+                .controlEvent(.valueChanged)
+                .map { _ in rc.isRefreshing }
+                .filter { $0 == true }
+                .map { _ in Void() }
+                .bind(to: viewModel.updateFeed)
+                .disposed(by: disposeBag)
         }
-        cell.descriptionLabel.text = feed.description
-        cell.pubDateLabel.text = feed.pubDate
-        cell.expanding(isExpanded: feed.isExpanded)
-     
-        return cell
     }
+}
+
+extension FeedViewController: FeedCellDelegate {
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.content.count
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? FeedViewCell else { return }
-        
-        let feed = viewModel.content[indexPath.row]
-        feed.toggle()
-        cell.isExpanded = feed.isExpanded
-        
+    func updateTableView() {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
+}
+
+protocol FeedCellDelegate: class {
+    
+    func updateTableView()
 }

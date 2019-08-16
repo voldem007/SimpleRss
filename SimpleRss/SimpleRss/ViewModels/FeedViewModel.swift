@@ -7,69 +7,41 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
+import RxCocoa
 
-protocol FeedViewModel: LoadingStateReportable {
+protocol FeedViewModel: ViewModel {
     
-    var content: [FeedItemViewModel] { get }
-    
-    func getNetworkData()
-    func getLocalData()
+    var content: Observable<[FeedItemViewModel]> { get }
+    var updateFeed: PublishRelay<Void> { get }
+    var selectedFeed: PublishRelay<FeedItemViewModel> { get }
 }
 
-class FeedViewModelImplementation {
+class FeedViewModelImplementation: FeedViewModel {
     
-    private let rssDataService: DataService
-    private let rssService: NetworkService
-    private let url: String
-    
-    var onStateChanged: ((LoadingState) -> Void)?
-    
-    private(set) var content = [FeedItemViewModel]()
+    let content: Observable<[FeedItemViewModel]>
+    let selectedFeed = PublishRelay<FeedItemViewModel>()
+    let isBusy: Observable<Bool>
+    let updateFeed = PublishRelay<Void>()
     
     init(rssDataService: DataService, rssService: NetworkService, url: String) {
-        self.rssDataService = rssDataService
-        self.rssService = rssService
-        self.url = url
-    }
-}
-
-extension FeedViewModelImplementation: FeedViewModel {
-    
-    func getNetworkData() {
-        reportState(.inProgress)
-        rssService.getFeed(for: url) { [weak self] (result, error) in
-            guard let self = self, let feedList = result else { return }
-            if error != nil {
-                self.reportState(.failed(error))
-                return
-            }
-            self.content = feedList.map { feed in FeedItemViewModel(feed) }
-            self.rssDataService.saveFeed(feedList: feedList, for: self.url)
-            
-            self.reportState(.loaded)
-        }
-    }
-    
-    func getLocalData() {
-        reportState(.inProgress)
-        rssDataService.getFeed(by: url) { [weak self] _feedModels in
-            guard let self = self else { return }
-            if let feedModels = _feedModels, !feedModels.isEmpty {
-                self.content = feedModels.map { feed in FeedItemViewModel(feed) }
-                self.reportState(.loaded)
-            } else {
-                self.getNetworkData()
-            }
-        }
-    }
-}
-
-extension LoadingStateReportable {
-    
-    func reportState(_ state: LoadingState) {
-        DispatchQueue.main.async { [weak self] in
-            guard let stateChanged = self?.onStateChanged else { return }
-            stateChanged(state)
-        }
+        let selected = selectedFeed.asObservable()
+        
+        let refresh = updateFeed
+            .flatMap { _ in rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]()) }
+            .do(onNext: {
+                guard !$0.isEmpty else { return }
+                rssDataService.saveFeed(feedList: $0, for: url)
+            })
+        
+        content = rssDataService.getFeed(by: url)
+            .asObservable()
+            .concat(refresh)
+            .materialize()
+            .map { $0.element?.map { feedItem in FeedItemViewModel(feedItem, selected) } ?? [FeedItemViewModel]() }
+            .share(replay: 1, scope: .whileConnected)
+        
+        isBusy = content.map { _ in false }
     }
 }

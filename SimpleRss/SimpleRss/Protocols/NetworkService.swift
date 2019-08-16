@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol NetworkService {
     
-    func getFeed(for link: String?, withCallback completionHandler: @escaping(_ result: [FeedModel]?, _ error: Error?) -> Void)
+    func getFeed(for url: URL) -> Single<[FeedModel]>
 }

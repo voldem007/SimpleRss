@@ -7,49 +7,45 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
 
 protocol HomeViewModelDelegeate: AnyObject {
     
     func userDidSelectFeed(url: String)
 }
 
-protocol HomeViewModel: LoadingStateReportable {
-    
-    var content: [TopicModel] { get }
-    
-    func loadTopics()
-    func showFeed(url: String)
+protocol HomeViewModel {
+
+    var content: Observable<[TopicModel]> { get }
+    var selectedTopic: PublishRelay<TopicModel> { get }
 }
 
 class HomeViewModelImplementation: HomeViewModel {
 
-    private let rssDataService: DataService
     private weak var delegate: HomeViewModelDelegeate?
+    private let disposeBag = DisposeBag()
     
-    var onStateChanged: ((LoadingState) -> Void)?
-
-    private(set) var content = [TopicModel]()
+    var content: Observable<[TopicModel]>
+    var selectedTopic = PublishRelay<TopicModel>()
     
-    init(dataService: DataService, delegate: HomeViewModelDelegeate) {
-        self.rssDataService = dataService
+    init(rssDataService: DataService, delegate: HomeViewModelDelegeate) {
         self.delegate = delegate
+        self.content = rssDataService.getTopics().asObservable()
+        
+        setBinding()
     }
 }
 
 extension HomeViewModelImplementation {
     
-    func loadTopics() {
-        reportState(.inProgress)
-        rssDataService.getTopics(){ [weak self] result in
-            guard let self = self else { return }
-            guard let topics = result else {
-                self.reportState(.failed(nil))
-                return
+    func setBinding() {
+        selectedTopic.map { $0.feedUrl } .subscribe { [weak self] event in
+            guard let self = self, let url = event.element else { return }
+            self.showFeed(url: url)
             }
-            self.content = topics
-            self.reportState(.loaded)
-        }
-    }
+            .disposed(by: disposeBag)
+    }    
     
     func showFeed(url: String) {
         delegate?.userDidSelectFeed(url: url)

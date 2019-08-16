@@ -19,7 +19,7 @@ final class HomeCoordinator: NavigationCoordinator {
     }
     
     func start() {
-        let home = HomeViewController(viewModel: HomeViewModelImplementation(dataService: rssDataService, delegate: self))
+        let home = HomeViewController(viewModel: HomeViewModelImplementation(rssDataService: rssDataService, delegate: self))
         navigationController.pushViewController(home, animated: true)
     }
     

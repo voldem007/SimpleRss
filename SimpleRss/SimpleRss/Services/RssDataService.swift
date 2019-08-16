@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import RxSwift
 
 class RssDataService: DataService {
     
@@ -19,27 +20,43 @@ class RssDataService: DataService {
         return UIApplication.shared.delegate as! AppDelegate
     }()
     
-    func getTopics(completion: @escaping([TopicModel]?) -> Void) {
-        persistentContainer.performBackgroundTask() { context in
-            let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-            let topics = try? fetch.execute()
-            completion(topics?.map { topic in
-                return TopicModel(title: topic.title ?? "", picUrl: topic.picLink ?? "", feedUrl: topic.feedUrl ?? "")
-            })
+    func getTopics() -> Single<[TopicModel]> {
+        return Single<[TopicModel]>.create { [persistentContainer] single in
+            persistentContainer.performBackgroundTask() { context in
+                let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
+                do {
+                    let topics = try fetch.execute()
+                    single(.success(topics.map { topic in
+                        return TopicModel(title: topic.title ?? "", picUrl: topic.picLink ?? "", feedUrl: topic.feedUrl ?? "")
+                    }))
+                } catch let error {
+                    single(.error(error))
+                }
+            }
+            
+            return Disposables.create()
         }
     }
     
-    func getFeed(by feedUrl: String, completion: @escaping([FeedModel]?) -> Void) {
-        persistentContainer.performBackgroundTask() { context in
-            let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-            let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
-            fetch.predicate = predicate
-            let topic = try? fetch.execute().first ?? Topic()
+    func getFeed(by feedUrl: String) -> Maybe<[FeedModel]> {
+        return Maybe<[FeedModel]>.create { [persistentContainer] maybe -> Disposable in
+            persistentContainer.performBackgroundTask() { context in
+                let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
+                let predicate = NSPredicate(format: "feedUrl = %@", argumentArray : [feedUrl])
+                fetch.predicate = predicate
+                do {
+                    let topic = try fetch.execute().first ?? Topic()
+                    guard let feed = topic.feed else { return maybe(.completed) }
+                    maybe(.success(feed.map { element in
+                        let _element = element as? Feed
+                        return FeedModel(guid: _element?.guid ?? UUID().uuidString ,title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
+                    }))
+                } catch let error {
+                    maybe(.error(error))
+                }
+            }
             
-            completion(topic?.feed?.map { element in
-                let _element = element as? Feed
-                return FeedModel(title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
-                })
+            return Disposables.create()
         }
     }
     

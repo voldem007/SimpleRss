@@ -7,22 +7,40 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
+import RxCocoa
 
 class FeedItemViewModel {
-    private let feedModel: FeedModel
-    private var expanded: Bool = false
     
-    var isExpanded: Bool { return expanded }
-    var title: String? { return feedModel.title }
-    var pubDate: String? { return feedModel.pubDate }
-    var picUrl: String? { return feedModel.picLink }
-    var description: String? { return feedModel.description }
+    let guid: String
+    let title: BehaviorRelay<String?>
+    let isExpanded: Observable<Bool>
+    let pubDate: BehaviorRelay<String?>
+    let description: BehaviorRelay<String?>
+    let picUrl: BehaviorRelay<URL?>
     
-    init(_ feedModel: FeedModel) {
-        self.feedModel = feedModel
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    init(_ feedModel: FeedModel, _ selectedFeed: Observable<FeedItemViewModel>) {
+        guid = feedModel.guid
+        title = BehaviorRelay(value: feedModel.title)
+        pubDate = BehaviorRelay(value: feedModel.pubDate)
+        description = BehaviorRelay(value: feedModel.description)
+        picUrl = BehaviorRelay(value: URL(string: feedModel.picLink ?? ""))
+        
+        var expanded = false
+        isExpanded = selectedFeed
+            .filter { $0.guid == feedModel.guid }
+            .do(onNext: { _ in expanded.toggle() })
+            .map { _ in expanded }
+            .share(replay: 1, scope: .forever)
     }
+}
+
+extension FeedItemViewModel: Equatable {
     
-    func toggle() {
-        expanded = !expanded
+    static func == (lhs: FeedItemViewModel, rhs: FeedItemViewModel) -> Bool {
+        return lhs.guid == rhs.guid
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 
 extension UITableViewCell {
     
-    static func cellIdentifier() -> String {
+    static var cellIdentifier: String {
         return String(describing: self)
     }
 }

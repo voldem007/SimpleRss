@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol DataService {
     
-    func getTopics(completion: @escaping([TopicModel]?) -> Void)
-    func getFeed(by feedUrl: String, completion: @escaping([FeedModel]?) -> Void)
+    func getTopics() -> Single<[TopicModel]>
+    func getFeed(by feedUrl: String) -> Maybe<[FeedModel]>
     func saveFeed(feedList: [FeedModel], for url: String)
 }
