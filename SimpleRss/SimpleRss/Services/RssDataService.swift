@@ -49,7 +49,7 @@ class RssDataService: DataService {
                     guard let feed = topic.feed else { return maybe(.completed) }
                     maybe(.success(feed.map { element in
                         let _element = element as? Feed
-                        return FeedModel(guid: _element?.guid ?? UUID().uuidString ,title: _element?.title, pubDate: _element?.pubDate, picLink: _element?.picLink, description: _element?.text)
+                        return FeedModel(guid: _element?.guid ?? UUID().uuidString ,title: _element?.title, pubDate: _element?.pubDate, picLinks: _element?.picLinks ?? [], description: _element?.text)
                     }))
                 } catch let error {
                     maybe(.error(error))
@@ -69,14 +69,14 @@ class RssDataService: DataService {
             let topic = try? fetch.execute().first
             let _topic = topic as? Topic
             
-            feedList.forEach({ feedModel in
+            feedList.forEach { feedModel in
                 let feed = Feed(context: context)
                 feed.text = feedModel.description
                 feed.pubDate = feedModel.pubDate
-                feed.picLink = feedModel.picLink
+                feed.picLinks = feedModel.picLinks 
                 feed.title = feedModel.title
                 _topic?.addToFeed(feed)
-            })
+            }
             
             try? context.save()
         }
