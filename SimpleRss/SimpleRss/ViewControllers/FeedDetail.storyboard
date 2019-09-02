@@ -17,13 +17,82 @@
                     <view key="view" contentMode="scaleToFill" id="l6H-6M-Lrr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lmL-L1-EPQ">
+                                <rect key="frame" x="8" y="36" width="359" height="20.5"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="e3z-dZ-VDo">
+                                <rect key="frame" x="0.0" y="64.5" width="375" height="602.5"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9ST-jP-DLX">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="J41-IM-BCo"/>
+                                        </constraints>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="F65-nm-kzv">
+                                            <size key="itemSize" width="50" height="50"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" id="xtB-uG-kB5">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </view>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rHW-yF-Jlt">
+                                        <rect key="frame" x="0.0" y="216" width="375" height="386.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="749" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bfN-UC-qlS">
+                                                <rect key="frame" x="8" y="8" width="359" height="8"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="skP-GB-cgB">
+                                                <rect key="frame" x="8" y="24" width="359" height="354.5"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="efy-r4-1Y2" firstAttribute="trailing" secondItem="lmL-L1-EPQ" secondAttribute="trailing" constant="8" id="3pk-Wd-MQq"/>
+                            <constraint firstItem="e3z-dZ-VDo" firstAttribute="trailing" secondItem="efy-r4-1Y2" secondAttribute="trailing" id="HgG-ll-TMN"/>
+                            <constraint firstItem="e3z-dZ-VDo" firstAttribute="leading" secondItem="efy-r4-1Y2" secondAttribute="leading" id="Nej-X7-zVG"/>
+                            <constraint firstItem="efy-r4-1Y2" firstAttribute="bottom" secondItem="e3z-dZ-VDo" secondAttribute="bottom" id="Z2g-eG-CWJ"/>
+                            <constraint firstItem="e3z-dZ-VDo" firstAttribute="top" secondItem="lmL-L1-EPQ" secondAttribute="bottom" constant="8" id="aMb-Tm-hpu"/>
+                            <constraint firstItem="lmL-L1-EPQ" firstAttribute="leading" secondItem="efy-r4-1Y2" secondAttribute="leading" constant="8" id="gDt-L9-reG"/>
+                            <constraint firstItem="lmL-L1-EPQ" firstAttribute="top" secondItem="efy-r4-1Y2" secondAttribute="top" constant="16" id="hJZ-NC-iH0"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="efy-r4-1Y2"/>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="9ST-jP-DLX" id="r67-Me-2lD"/>
+                        <outlet property="descriptionTextView" destination="skP-GB-cgB" id="IE6-zn-Fe8"/>
+                        <outlet property="pubDateLabel" destination="bfN-UC-qlS" id="xQV-0d-rLL"/>
+                        <outlet property="titleLabel" destination="lmL-L1-EPQ" id="T9p-Le-wYW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZJ2-qw-5n5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-386" y="-233"/>
+            <point key="canvasLocation" x="-386.39999999999998" y="-233.43328335832086"/>
         </scene>
     </scenes>
 </document>

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2100F465231D443A00A7C2F3 /* DetailViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2100F464231D443A00A7C2F3 /* DetailViewCell.xib */; };
+		2100F467231D448100A7C2F3 /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2100F466231D448100A7C2F3 /* DetailViewCell.swift */; };
 		2102EB2222BFFCB90034ECBD /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102EB2122BFFCB90034ECBD /* ViewModel.swift */; };
 		2102EB3B22C3B0A80034ECBD /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3622C3B0A80034ECBD /* RxCocoa.framework */; };
 		2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0B921DFFA2500E5485F /* DownloadImageManager.swift */; };
@@ -54,6 +56,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2100F464231D443A00A7C2F3 /* DetailViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewCell.xib; sourceTree = "<group>"; };
+		2100F466231D448100A7C2F3 /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		2102EB2122BFFCB90034ECBD /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		2102EB3622C3B0A80034ECBD /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		2102EB3722C3B0A80034ECBD /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
@@ -278,6 +282,8 @@
 				21EEFC2421A0A06100A97F33 /* TopicViewCell.xib */,
 				21AF870321A32EBB00C00970 /* FeedViewCell.swift */,
 				21AF870421A32EBB00C00970 /* FeedViewCell.xib */,
+				2100F464231D443A00A7C2F3 /* DetailViewCell.xib */,
+				2100F466231D448100A7C2F3 /* DetailViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -371,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21EEFC2621A0A06100A97F33 /* TopicViewCell.xib in Resources */,
+				2100F465231D443A00A7C2F3 /* DetailViewCell.xib in Resources */,
 				21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */,
 				21575144219C6DD70066D7D0 /* Main.storyboard in Resources */,
 				2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */,
@@ -427,6 +434,7 @@
 				212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */,
 				2107B8E2221AB3010015171A /* RssDataService.swift in Sources */,
 				21293C1C21F890F900EE4C44 /* GetOp.m in Sources */,
+				2100F467231D448100A7C2F3 /* DetailViewCell.swift in Sources */,
 				2107B8DB2219FF620015171A /* rss.xcdatamodeld in Sources */,
 				215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */,
 				2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */,

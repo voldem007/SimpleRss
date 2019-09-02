@@ -54,8 +54,8 @@ class FeedViewCell: UITableViewCell {
             .drive(descriptionLabel.rx.text)
             .disposed(by: bag)
         
-        feed.picUrl
-            .asDriver()
+        feed.picUrls.compactMap { $0.first }
+            .asDriver(onErrorJustReturn: URL(string: "default")!)
             .drive(rx.url)
             .disposed(by: bag)
         

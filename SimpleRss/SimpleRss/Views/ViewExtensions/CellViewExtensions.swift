@@ -15,6 +15,13 @@ extension UITableViewCell {
     }
 }
 
+extension UICollectionViewCell {
+    
+    static var cellIdentifier: String {
+        return String(describing: self)
+    }
+}
+
 extension UIViewController {
     
     /// Loads a controller from a storyboard based on it's inferred class name.

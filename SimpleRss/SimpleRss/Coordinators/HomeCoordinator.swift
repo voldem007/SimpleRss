@@ -29,7 +29,7 @@ final class HomeCoordinator: NavigationCoordinator {
     
     private func showDetail(_ feed: FeedItemViewModel) {
         let controller: FeedDetailViewController = .instantiateFromStoryboard()
-        controller.viewModel = FeedDetailViewModelImplementation()
+        controller.viewModel = FeedDetailViewModelImplementation(feed: feed)
         navigationController.pushViewController(controller, animated: true)
     }
 }
