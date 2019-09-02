@@ -18,10 +18,8 @@ class TopicViewCell: UITableViewCell {
     var imageUrl: URL? {
         didSet {
             guard let url = imageUrl else { return }
-            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak self] image in
-                guard let self = self else { return }
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+            getOperation = ImageDownloadOrchestrator.shared.download(url: url) {  image in
+                DispatchQueue.main.async {
                     self.previewImageView.image = image
                 }
             }

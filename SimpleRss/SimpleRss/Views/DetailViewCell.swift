@@ -9,7 +9,7 @@
 import Foundation
 
 class DetailViewCell: UICollectionViewCell {
-    @IBOutlet weak var pictureImageView: UIImageView!
+    @IBOutlet private weak var pictureImageView: UIImageView!
     
     private var getOperation: GetImageOperation!
     

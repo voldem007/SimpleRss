@@ -15,7 +15,7 @@ class FeedItemViewModel {
     
     let guid: String
     let title: BehaviorRelay<String>
-    //let isExpanded: Observable<Bool>
+    let isExpanded: BehaviorRelay<Bool>
     let pubDate: BehaviorRelay<String>
     let description: BehaviorRelay<String>
     let picUrls: BehaviorRelay<[URL]>
@@ -28,13 +28,7 @@ class FeedItemViewModel {
         pubDate = BehaviorRelay(value: feedModel.pubDate ?? "")
         description = BehaviorRelay(value: feedModel.description ?? "")
         picUrls = BehaviorRelay(value: feedModel.picLinks.map { URL(string: $0)! })
-        
-        var expanded = false
-//        isExpanded = selectedFeed
-//            .filter { $0.guid == feedModel.guid }
-//            .do(onNext: { _ in expanded.toggle() })
-//            .map { _ in expanded }
-//            .share(replay: 1, scope: .forever)
+        isExpanded = BehaviorRelay(value: false)
     }
 }
 

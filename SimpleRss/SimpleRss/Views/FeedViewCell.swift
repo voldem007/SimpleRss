@@ -12,10 +12,13 @@ import RxCocoa
 
 class FeedViewCell: UITableViewCell {
     
+    @IBOutlet private weak var expandButton: UIButton!
     @IBOutlet private weak var previewImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var descriptionLabel: UILabel!
     @IBOutlet private weak var pubDateLabel: UILabel!
+    @IBOutlet private weak var buttonTopConstaint: NSLayoutConstraint!
+    @IBOutlet private weak var buttonFirstBaselineConstraint: NSLayoutConstraint!
     
     private var getOperation: GetImageOperation!
     private var disposeBag: DisposeBag? = DisposeBag()
@@ -24,10 +27,8 @@ class FeedViewCell: UITableViewCell {
     var imageUrl: URL? {
         didSet {
             guard let url = imageUrl else { return }
-            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak self] image in
-                guard let self = self else { return }
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { image in
+                DispatchQueue.main.async {
                     self.previewImageView.image = image
                 }
             }
@@ -59,10 +60,17 @@ class FeedViewCell: UITableViewCell {
             .drive(rx.url)
             .disposed(by: bag)
         
-//        feed.isExpanded
-//            .asDriver(onErrorJustReturn: false)
-//            .drive(rx.isExpanded)
-//            .disposed(by: bag)
+        feed.isExpanded
+            .asDriver(onErrorJustReturn: false)
+            .drive(rx.isExpanded)
+            .disposed(by: bag)
+        
+        expandButton.rx
+            .tap
+            .subscribe { [weak self] e in
+                feed.isExpanded.accept(!feed.isExpanded.value)
+                self?.updateTableView()
+            }.disposed(by: bag)
     }
     
     override func prepareForReuse() {
@@ -78,6 +86,16 @@ class FeedViewCell: UITableViewCell {
     func expanding(isExpanded: Bool) {
         descriptionLabel.numberOfLines = isExpanded ? 0 : 1;
         descriptionLabel.lineBreakMode = isExpanded ? .byWordWrapping : .byTruncatingTail
+        
+        if isExpanded {
+            buttonTopConstaint.isActive = false
+            buttonFirstBaselineConstraint.isActive = true
+            expandButton.setTitle("less", for: .normal)
+        } else {
+            buttonTopConstaint.isActive = true
+            buttonFirstBaselineConstraint.isActive = false
+            expandButton.setTitle("more", for: .normal)
+        }
     }
     
     func updateTableView() {
@@ -96,7 +114,6 @@ private extension Reactive where Base: FeedViewCell {
     var isExpanded: Binder<Bool> {
         return Binder(self.base) { view, isExpanded in
             view.expanding(isExpanded: isExpanded)
-            view.updateTableView()
         }
     }
 }
