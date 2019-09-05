@@ -18,9 +18,9 @@ class TopicViewCell: UITableViewCell {
     var imageUrl: URL? {
         didSet {
             guard let url = imageUrl else { return }
-            getOperation = ImageDownloadOrchestrator.shared.download(url: url) {  image in
+            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak previewImageView] image in
                 DispatchQueue.main.async {
-                    self.previewImageView.image = image
+                    previewImageView?.image = image
                 }
             }
         }

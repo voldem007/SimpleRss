@@ -49,7 +49,7 @@ class FeedDetailViewController: UIViewController {
             .drive(pubDateLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel?.picUrls.asObservable()
+        viewModel?.picUrls
             .bind(to: self.collectionView.rx.items(cellIdentifier: DetailViewCell.cellIdentifier)) { row, url, cell in
                 guard let cell = cell as? DetailViewCell else { return }
                 cell.setup(pictureUrl: url)

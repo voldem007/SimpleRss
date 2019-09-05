@@ -27,9 +27,9 @@ class FeedViewCell: UITableViewCell {
     var imageUrl: URL? {
         didSet {
             guard let url = imageUrl else { return }
-            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { image in
+            getOperation = ImageDownloadOrchestrator.shared.download(url: url) { [weak previewImageView] image in
                 DispatchQueue.main.async {
-                    self.previewImageView.image = image
+                    previewImageView?.image = image
                 }
             }
         }
@@ -55,8 +55,9 @@ class FeedViewCell: UITableViewCell {
             .drive(descriptionLabel.rx.text)
             .disposed(by: bag)
         
-        feed.picUrls.compactMap { $0.first }
-            .asDriver(onErrorJustReturn: URL(string: "default")!)
+        feed.picUrls
+            .asDriver()
+            .map { $0.first ?? UIImageView.urlToImagePlaceholder }
             .drive(rx.url)
             .disposed(by: bag)
         
@@ -92,8 +93,8 @@ class FeedViewCell: UITableViewCell {
             buttonFirstBaselineConstraint.isActive = true
             expandButton.setTitle("less", for: .normal)
         } else {
-            buttonTopConstaint.isActive = true
             buttonFirstBaselineConstraint.isActive = false
+            buttonTopConstaint.isActive = true
             expandButton.setTitle("more", for: .normal)
         }
     }

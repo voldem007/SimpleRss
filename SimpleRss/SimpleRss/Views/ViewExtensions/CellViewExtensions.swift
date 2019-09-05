@@ -22,6 +22,13 @@ extension UICollectionViewCell {
     }
 }
 
+extension UIImageView {
+    
+    static var urlToImagePlaceholder: URL {
+        return URL(string: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg")!
+    }
+}
+
 extension UIViewController {
     
     /// Loads a controller from a storyboard based on it's inferred class name.

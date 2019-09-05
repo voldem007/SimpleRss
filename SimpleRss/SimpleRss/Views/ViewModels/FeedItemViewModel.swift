@@ -27,7 +27,7 @@ class FeedItemViewModel {
         title = BehaviorRelay(value: feedModel.title ?? "")
         pubDate = BehaviorRelay(value: feedModel.pubDate ?? "")
         description = BehaviorRelay(value: feedModel.description ?? "")
-        picUrls = BehaviorRelay(value: feedModel.picLinks.map { URL(string: $0)! })
+        picUrls = BehaviorRelay(value: feedModel.picLinks.compactMap { $0.isEmpty ? UIImageView.urlToImagePlaceholder : URL(string: $0)! })
         isExpanded = BehaviorRelay(value: false)
     }
 }
