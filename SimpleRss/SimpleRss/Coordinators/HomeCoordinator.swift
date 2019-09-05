@@ -24,13 +24,26 @@ final class HomeCoordinator: NavigationCoordinator {
     }
     
     private func showFeed(url: String) {
-        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModelImplementation(rssDataService: rssDataService, rssService: rssService, url: url)), animated: true)
+        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModelImplementation(rssDataService: rssDataService, rssService: rssService, url: url, delegate: self)), animated: true)
+    }
+    
+    private func showDetail(_ feed: FeedItemViewModel) {
+        let controller: FeedDetailViewController = .instantiateFromStoryboard()
+        controller.viewModel = FeedDetailViewModelImplementation(feed: feed)
+        navigationController.pushViewController(controller, animated: true)
     }
 }
 
 extension HomeCoordinator: HomeViewModelDelegeate {
     
-    func userDidSelectFeed(url: String) {
+    func userDidSelectTopic(url: String) {
         showFeed(url: url)
+    }
+}
+
+extension HomeCoordinator: FeedViewModelDelegeate {
+    
+    func userDidSelectFeed(_ feed: FeedItemViewModel) {
+        showDetail(feed)
     }
 }

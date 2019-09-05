@@ -11,6 +11,11 @@ import RxSwift
 import RxRelay
 import RxCocoa
 
+protocol FeedViewModelDelegeate: AnyObject {
+    
+    func userDidSelectFeed(_ feed: FeedItemViewModel)
+}
+
 protocol FeedViewModel: ViewModel {
     
     var content: Observable<[FeedItemViewModel]> { get }
@@ -20,13 +25,16 @@ protocol FeedViewModel: ViewModel {
 
 class FeedViewModelImplementation: FeedViewModel {
     
+    private let disposeBag = DisposeBag()
+    private weak var delegate: FeedViewModelDelegeate?
+    
     let content: Observable<[FeedItemViewModel]>
     let selectedFeed = PublishRelay<FeedItemViewModel>()
     let isBusy: Observable<Bool>
     let updateFeed = PublishRelay<Void>()
     
-    init(rssDataService: DataService, rssService: NetworkService, url: String) {
-        let selected = selectedFeed.asObservable()
+    init(rssDataService: DataService, rssService: NetworkService, url: String, delegate: FeedViewModelDelegeate) {
+        self.delegate = delegate
         
         let refresh = updateFeed
             .flatMap { _ in rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]()) }
@@ -39,9 +47,28 @@ class FeedViewModelImplementation: FeedViewModel {
             .asObservable()
             .concat(refresh)
             .materialize()
-            .map { $0.element?.map { feedItem in FeedItemViewModel(feedItem, selected) } ?? [FeedItemViewModel]() }
+            .map { $0.element?.map { feedItem in FeedItemViewModel(feedItem) } ?? [FeedItemViewModel]() }
             .share(replay: 1, scope: .whileConnected)
         
         isBusy = content.map { _ in false }
+        
+        setBinding()
+    }
+}
+
+extension FeedViewModelImplementation {
+    
+    func setBinding() {
+        selectedFeed
+            .subscribe { [weak self] event in
+                guard let self = self,
+                    let feed = event.element else { return }
+                self.showFeed(feed)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func showFeed(_ feed: FeedItemViewModel) {
+        delegate?.userDidSelectFeed(feed)
     }
 }

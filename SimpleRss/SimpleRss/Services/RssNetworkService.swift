@@ -83,7 +83,7 @@ private extension FeedModel {
             case TagConstants.pubDate:
                 current?.pubDate = tryParsingStringValue(value)
             case TagConstants.mediaDict:
-                current?.picLink = tryParsingImageLinkValue(value)
+                current?.picLinks.append(tryParsingImageLinkValue(value) ?? "")
             case TagConstants.description:
                 current?.description = tryParsingDescriptionValue(value)
             default:

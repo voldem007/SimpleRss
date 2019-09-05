@@ -14,27 +14,21 @@ import RxCocoa
 class FeedItemViewModel {
     
     let guid: String
-    let title: BehaviorRelay<String?>
-    let isExpanded: Observable<Bool>
-    let pubDate: BehaviorRelay<String?>
-    let description: BehaviorRelay<String?>
-    let picUrl: BehaviorRelay<URL?>
+    let title: BehaviorRelay<String>
+    let isExpanded: BehaviorRelay<Bool>
+    let pubDate: BehaviorRelay<String>
+    let description: BehaviorRelay<String>
+    let picUrls: BehaviorRelay<[URL]>
     
     private let disposeBag: DisposeBag = DisposeBag()
     
-    init(_ feedModel: FeedModel, _ selectedFeed: Observable<FeedItemViewModel>) {
+    init(_ feedModel: FeedModel) {
         guid = feedModel.guid
-        title = BehaviorRelay(value: feedModel.title)
-        pubDate = BehaviorRelay(value: feedModel.pubDate)
-        description = BehaviorRelay(value: feedModel.description)
-        picUrl = BehaviorRelay(value: URL(string: feedModel.picLink ?? ""))
-        
-        var expanded = false
-        isExpanded = selectedFeed
-            .filter { $0.guid == feedModel.guid }
-            .do(onNext: { _ in expanded.toggle() })
-            .map { _ in expanded }
-            .share(replay: 1, scope: .forever)
+        title = BehaviorRelay(value: feedModel.title ?? "")
+        pubDate = BehaviorRelay(value: feedModel.pubDate ?? "")
+        description = BehaviorRelay(value: feedModel.description ?? "")
+        picUrls = BehaviorRelay(value: feedModel.picLinks.compactMap { $0.isEmpty ? UIImageView.urlToImagePlaceholder : URL(string: $0)! })
+        isExpanded = BehaviorRelay(value: false)
     }
 }
 

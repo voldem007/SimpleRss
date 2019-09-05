@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2100F465231D443A00A7C2F3 /* DetailViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2100F464231D443A00A7C2F3 /* DetailViewCell.xib */; };
+		2100F467231D448100A7C2F3 /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2100F466231D448100A7C2F3 /* DetailViewCell.swift */; };
 		2102EB2222BFFCB90034ECBD /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102EB2122BFFCB90034ECBD /* ViewModel.swift */; };
 		2102EB3B22C3B0A80034ECBD /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3622C3B0A80034ECBD /* RxCocoa.framework */; };
 		2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105F0B921DFFA2500E5485F /* DownloadImageManager.swift */; };
@@ -35,6 +37,9 @@
 		215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36421F5C13A001E8926 /* DownloadOp.m */; };
 		215DD36821F5D70E001E8926 /* Cacher.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36721F5D70E001E8926 /* Cacher.m */; };
 		215FBABB21B523560092785B /* FeedItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215FBABA21B523560092785B /* FeedItemViewModel.swift */; };
+		2196B91C2312A3BE004FF972 /* FeedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */; };
+		2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */; };
+		2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */; };
 		2199666921C1A0BF00FE7AAD /* RssNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199666821C1A0BF00FE7AAD /* RssNetworkService.swift */; };
 		21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF870321A32EBB00C00970 /* FeedViewCell.swift */; };
 		21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21AF870421A32EBB00C00970 /* FeedViewCell.xib */; };
@@ -51,6 +56,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2100F464231D443A00A7C2F3 /* DetailViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailViewCell.xib; sourceTree = "<group>"; };
+		2100F466231D448100A7C2F3 /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		2102EB2122BFFCB90034ECBD /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		2102EB3622C3B0A80034ECBD /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		2102EB3722C3B0A80034ECBD /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
@@ -93,6 +100,9 @@
 		215DD36721F5D70E001E8926 /* Cacher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cacher.m; sourceTree = "<group>"; };
 		215DD36921F5D728001E8926 /* Cacher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cacher.h; sourceTree = "<group>"; };
 		215FBABA21B523560092785B /* FeedItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewModel.swift; sourceTree = "<group>"; };
+		2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewController.swift; sourceTree = "<group>"; };
+		2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewModel.swift; sourceTree = "<group>"; };
+		2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FeedDetail.storyboard; sourceTree = "<group>"; };
 		2199666821C1A0BF00FE7AAD /* RssNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssNetworkService.swift; sourceTree = "<group>"; };
 		21AF870321A32EBB00C00970 /* FeedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCell.swift; sourceTree = "<group>"; };
 		21AF870421A32EBB00C00970 /* FeedViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedViewCell.xib; sourceTree = "<group>"; };
@@ -230,6 +240,8 @@
 			children = (
 				213BC6E1219C61F000E7694B /* HomeViewController.swift */,
 				21575147219CC2A20066D7D0 /* FeedViewController.swift */,
+				2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */,
+				2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -270,6 +282,8 @@
 				21EEFC2421A0A06100A97F33 /* TopicViewCell.xib */,
 				21AF870321A32EBB00C00970 /* FeedViewCell.swift */,
 				21AF870421A32EBB00C00970 /* FeedViewCell.xib */,
+				2100F464231D443A00A7C2F3 /* DetailViewCell.xib */,
+				2100F466231D448100A7C2F3 /* DetailViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -288,6 +302,7 @@
 			children = (
 				21C0BCB522B7DA2C0035D033 /* FeedViewModel.swift */,
 				21C0BCB722B7DA490035D033 /* HomeViewModel.swift */,
+				2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -362,8 +377,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				21EEFC2621A0A06100A97F33 /* TopicViewCell.xib in Resources */,
+				2100F465231D443A00A7C2F3 /* DetailViewCell.xib in Resources */,
 				21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */,
 				21575144219C6DD70066D7D0 /* Main.storyboard in Resources */,
+				2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */,
 				213BC6EA219C61F200E7694B /* LaunchScreen.storyboard in Resources */,
 				213BC6E7219C61F200E7694B /* Assets.xcassets in Resources */,
 			);
@@ -405,8 +422,10 @@
 				215DD36821F5D70E001E8926 /* Cacher.m in Sources */,
 				21C0BCB822B7DA490035D033 /* HomeViewModel.swift in Sources */,
 				212C4EFB21DBEB8B004B4D86 /* ImageDownloadOrchestrator.swift in Sources */,
+				2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */,
 				2105F0BE21E775CE00E5485F /* ImageCacheManager.swift in Sources */,
 				2102EB2222BFFCB90034ECBD /* ViewModel.swift in Sources */,
+				2196B91C2312A3BE004FF972 /* FeedDetailViewController.swift in Sources */,
 				21EEFC2521A0A06100A97F33 /* TopicViewCell.swift in Sources */,
 				213D3F7B21A6088600E2E937 /* FeedModel.swift in Sources */,
 				21C0BCB622B7DA2C0035D033 /* FeedViewModel.swift in Sources */,
@@ -415,6 +434,7 @@
 				212C4EF721DBEA26004B4D86 /* GetImageOperation.swift in Sources */,
 				2107B8E2221AB3010015171A /* RssDataService.swift in Sources */,
 				21293C1C21F890F900EE4C44 /* GetOp.m in Sources */,
+				2100F467231D448100A7C2F3 /* DetailViewCell.swift in Sources */,
 				2107B8DB2219FF620015171A /* rss.xcdatamodeld in Sources */,
 				215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */,
 				2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */,
