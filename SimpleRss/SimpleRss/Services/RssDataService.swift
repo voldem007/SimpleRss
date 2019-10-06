@@ -12,12 +12,13 @@ import RxSwift
 
 class RssDataService: DataService {
     
-    private lazy var persistentContainer = {
-        return appDelegate.persistentContainer
-    }()
+    private var persistentContainer: NSPersistentContainer {
+        dataStore.preloadDataIfFirstLaunch()
+        return dataStore.persistentContainer
+    }
     
-    private lazy var appDelegate = {
-        return UIApplication.shared.delegate as! AppDelegate
+    private lazy var dataStore = {
+        return DataStore()
     }()
     
     func getTopics() -> Single<[TopicModel]> {
