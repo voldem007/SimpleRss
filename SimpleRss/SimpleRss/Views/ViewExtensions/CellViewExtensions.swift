@@ -67,3 +67,24 @@ extension UIStoryboard {
         self.init(name: name, bundle: Bundle(for: T.self))
     }
 }
+
+extension UIView {
+    
+    func zoomingBoundAnimate() {
+        self.transform =
+            CGAffineTransform.identity.scaledBy(x: 0.001, y: 0.001)
+        
+        UIView.animate(withDuration: 0.3 / 1.5, animations: {
+            self.transform =
+                CGAffineTransform.identity.scaledBy(x: 1.1, y: 1.1)
+        }) { finished in
+            UIView.animate(withDuration: 0.3 / 2, animations: {
+                self.transform = CGAffineTransform.identity.scaledBy(x: 0.9, y: 0.9)
+            }) { finished in
+                UIView.animate(withDuration: 0.3 / 2, animations: {
+                    self.transform = CGAffineTransform.identity
+                })
+            }
+        }
+    }
+}
