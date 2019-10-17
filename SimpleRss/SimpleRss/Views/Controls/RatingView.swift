@@ -24,6 +24,12 @@ import CoreGraphics
         stackView.addGestureRecognizer(panGestureRecognizer)
         stackView.addGestureRecognizer(tapGestureRecognizer)
         addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        stackView.topAnchor.constraint(equalTo: topAnchor),
+        stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        stackView.centerXAnchor.constraint(equalTo: centerXAnchor)])
         return stackView
     }()
     
@@ -32,6 +38,12 @@ import CoreGraphics
         stackView.distribution = .fillEqually
         stackView.spacing = 12
         addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        stackView.topAnchor.constraint(equalTo: topAnchor),
+        stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        stackView.centerXAnchor.constraint(equalTo: centerXAnchor)])
         return stackView
     }()
     
@@ -53,17 +65,17 @@ import CoreGraphics
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        setupView()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setup()
+        setupView()
     }
     
     override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
-        setup()
+        setupView()
     }
     
     @objc private func gestureRecognizerChanged(_ recognizer: UIGestureRecognizer) {
@@ -79,30 +91,9 @@ import CoreGraphics
         rating = ((recognizer as? UITapGestureRecognizer) != nil) ? count.rounded(.awayFromZero) : count
     }
     
-    private func setup() {
-        backgroungStackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            backgroungStackView.topAnchor.constraint(equalTo: topAnchor),
-            backgroungStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            backgroungStackView.centerXAnchor.constraint(equalTo: centerXAnchor)
-            ])
-        
-        setupView()
-    }
-    
     private func setupView() {
-        for view in backgroungStackView.arrangedSubviews {
-            backgroungStackView.removeArrangedSubview(view)
-        }
-
-        for view in stackView.arrangedSubviews {
-            stackView.removeArrangedSubview(view)
-        }
+        backgroungStackView.removeAll()
+        stackView.removeAll()
         
         for _ in 0 ..< count {
             let backgroundStar = StarView()
@@ -150,26 +141,6 @@ public class StarView: UIView {
         }
     }
     
-    private var halfHeight: CGFloat {
-        return height / 2.0
-    }
-    
-    private var halfWidth: CGFloat {
-        return width / 2.0
-    }
-    
-    private var width: CGFloat {
-        return min(bounds.width, bounds.height)
-    }
-    
-    private var height: CGFloat {
-        return min(bounds.width, bounds.height)
-    }
-    
-    private var quarterWidth: CGFloat {
-        return width / 4.0
-    }
-    
     public override var intrinsicContentSize: CGSize {
         return CGSize(width: 30, height: 30)
     }
@@ -185,16 +156,19 @@ public class StarView: UIView {
     }
     
     public override func draw(_ rect: CGRect) {
+        let height = min(bounds.width, bounds.height)
+        let width = height
+        
         let path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: width * percentage, height: height))
 
         let starPath = UIBezierPath()
 
-        starPath.move(to: CGPoint(x: halfWidth, y: 0.0))
-        starPath.addLine(to: CGPoint(x: quarterWidth * 3.0, y: height))
-        starPath.addLine(to: CGPoint(x: 0, y: halfHeight))
-        starPath.addLine(to: CGPoint(x: width, y: halfHeight))
-        starPath.addLine(to: CGPoint(x: quarterWidth, y: height))
-        starPath.addLine(to: CGPoint(x: halfWidth, y: 0))
+        starPath.move(to: CGPoint(x: width / 2.0, y: 0.0))
+        starPath.addLine(to: CGPoint(x: width / 4.0 * 3.0, y: height))
+        starPath.addLine(to: CGPoint(x: 0, y: height / 2.0))
+        starPath.addLine(to: CGPoint(x: width, y: height / 2.0))
+        starPath.addLine(to: CGPoint(x: width / 4.0, y: height))
+        starPath.addLine(to: CGPoint(x: width / 2.0, y: 0))
         starPath.close()
         
         color.setFill()

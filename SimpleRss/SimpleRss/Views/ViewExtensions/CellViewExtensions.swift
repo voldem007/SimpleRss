@@ -74,17 +74,20 @@ extension UIView {
         self.transform =
             CGAffineTransform.identity.scaledBy(x: 0.001, y: 0.001)
         
-        UIView.animate(withDuration: 0.3 / 1.5, animations: {
+        let animator = UIViewPropertyAnimator(duration: 1, dampingRatio: 0.5 ) {
             self.transform =
-                CGAffineTransform.identity.scaledBy(x: 1.1, y: 1.1)
-        }) { finished in
-            UIView.animate(withDuration: 0.3 / 2, animations: {
-                self.transform = CGAffineTransform.identity.scaledBy(x: 0.9, y: 0.9)
-            }) { finished in
-                UIView.animate(withDuration: 0.3 / 2, animations: {
-                    self.transform = CGAffineTransform.identity
-                })
-            }
+                CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
+        }
+        
+        animator.startAnimation()
+    }
+}
+
+extension UIStackView {
+    
+    func removeAll() {
+        for view in self.arrangedSubviews {
+            self.removeArrangedSubview(view)
         }
     }
 }
