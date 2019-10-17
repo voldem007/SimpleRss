@@ -88,7 +88,12 @@ import CoreGraphics
 
         guard index >= 0 else { return }
 
-        rating = ((recognizer as? UITapGestureRecognizer) != nil) ? count.rounded(.awayFromZero) : count
+        switch recognizer {
+        case is UITapGestureRecognizer:
+            rating = count.rounded(.awayFromZero)
+        default:
+            rating = count
+        }
     }
     
     private func setupView() {
