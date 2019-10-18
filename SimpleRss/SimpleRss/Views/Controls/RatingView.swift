@@ -11,39 +11,20 @@ import CoreGraphics
 
 @IBDesignable class RatingView: UIView {
     
-    private var panGestureRecognizer: UIPanGestureRecognizer!
-    private var tapGestureRecognizer: UITapGestureRecognizer!
+    private lazy var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gestureRecognizerChanged))
+    private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(gestureRecognizerChanged))
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .fillEqually
-        stackView.spacing = 12
-        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gestureRecognizerChanged))
-        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(gestureRecognizerChanged))
-        
+        let stackView = setupStackView()
         stackView.addGestureRecognizer(panGestureRecognizer)
         stackView.addGestureRecognizer(tapGestureRecognizer)
-        addSubview(stackView)
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-        stackView.topAnchor.constraint(equalTo: topAnchor),
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        stackView.centerXAnchor.constraint(equalTo: centerXAnchor)])
+        setupConstaints(stackView)
         return stackView
     }()
     
     private lazy var backgroungStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .fillEqually
-        stackView.spacing = 12
-        addSubview(stackView)
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-        stackView.topAnchor.constraint(equalTo: topAnchor),
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        stackView.centerXAnchor.constraint(equalTo: centerXAnchor)])
+        let stackView = setupStackView()
+        setupConstaints(stackView)
         return stackView
     }()
     
@@ -94,6 +75,22 @@ import CoreGraphics
         default:
             rating = count
         }
+    }
+    
+    private func setupStackView() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.spacing = 12
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stackView)
+        return stackView
+    }
+    
+    private func setupConstaints(_ stackView: UIStackView) {
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor)])
     }
     
     private func setupView() {
