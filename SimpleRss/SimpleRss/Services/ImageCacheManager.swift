@@ -54,7 +54,7 @@ class ImageCacheManager: CacheManager {
     
     private func findExpiredURLs(_ urls: [URL]?) -> [URL]? {
         return urls?.filter({ url in
-            var values = try? url.resourceValues(forKeys: [.creationDateKey])
+            let values = try? url.resourceValues(forKeys: [.creationDateKey])
             if let date = values?.creationDate {
                 guard let threeDaysInterval = Calendar.current.date(byAdding: .day, value: -(expiredDays), to: Date()) else { return false }
                 let days3Interval = threeDaysInterval.timeIntervalSinceNow

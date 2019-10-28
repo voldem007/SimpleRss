@@ -68,7 +68,6 @@ class RssDataService: DataService {
             let predicate = NSPredicate(format: "feedUrl = %@", argumentArray: [url])
             fetch.predicate = predicate
             let topic = try? fetch.execute().first
-            let _topic = topic as? Topic
             
             feedList.forEach { feedModel in
                 let feed = Feed(context: context)
@@ -76,7 +75,7 @@ class RssDataService: DataService {
                 feed.pubDate = feedModel.pubDate
                 feed.picLinks = feedModel.picLinks 
                 feed.title = feedModel.title
-                _topic?.addToFeed(feed)
+                topic?.addToFeed(feed)
             }
             
             try? context.save()

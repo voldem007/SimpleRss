@@ -18,13 +18,13 @@ import CoreGraphics
         let stackView = setupStackView()
         stackView.addGestureRecognizer(panGestureRecognizer)
         stackView.addGestureRecognizer(tapGestureRecognizer)
-        setupConstaints(stackView)
+        setupConstraints(stackView)
         return stackView
     }()
     
-    private lazy var backgroungStackView: UIStackView = {
+    private lazy var backgroundStackView: UIStackView = {
         let stackView = setupStackView()
-        setupConstaints(stackView)
+        setupConstraints(stackView)
         return stackView
     }()
     
@@ -86,7 +86,7 @@ import CoreGraphics
         return stackView
     }
     
-    private func setupConstaints(_ stackView: UIStackView) {
+    private func setupConstraints(_ stackView: UIStackView) {
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -94,13 +94,13 @@ import CoreGraphics
     }
     
     private func setupView() {
-        backgroungStackView.removeAll()
+        backgroundStackView.removeAll()
         stackView.removeAll()
         
         for _ in 0 ..< count {
             let backgroundStar = StarView()
             backgroundStar.color = .gray
-            backgroungStackView.addArrangedSubview(backgroundStar)
+            backgroundStackView.addArrangedSubview(backgroundStar)
             
             let activeStar = StarView()
             activeStar.alpha = 0
@@ -113,7 +113,7 @@ import CoreGraphics
             subView.alpha = 0
         }
         
-        for view in backgroungStackView.subviews {
+        for view in backgroundStackView.subviews {
             view.zoomingBoundAnimate()
         }
         
