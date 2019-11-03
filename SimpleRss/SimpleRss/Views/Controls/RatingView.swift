@@ -120,7 +120,7 @@ import CoreGraphics
         }
         
         if animated {
-            for view in backgroungStackView.subviews {
+            for view in backgroundStackView.subviews {
                 view.zoomingBoundAnimate()
             }
         }
