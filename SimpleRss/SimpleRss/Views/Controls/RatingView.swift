@@ -44,6 +44,12 @@ import CoreGraphics
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setupView()
+        updateView(animated: false)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -108,13 +114,15 @@ import CoreGraphics
         }
     }
     
-    private func updateView() {
+    private func updateView(animated: Bool = true) {
         for subView in stackView.arrangedSubviews {
             subView.alpha = 0
         }
         
-        for view in backgroundStackView.subviews {
-            view.zoomingBoundAnimate()
+        if animated {
+            for view in backgroungStackView.subviews {
+                view.zoomingBoundAnimate()
+            }
         }
         
         for index in 0 ..< Int(rating.rounded(.awayFromZero)) {
@@ -122,7 +130,9 @@ import CoreGraphics
             view.alpha = 1
             let percentage = rating - CGFloat(integerLiteral: index)
             view.percentage = percentage < 1.0 ? percentage : 1
-            view.zoomingBoundAnimate()
+            if animated {
+                view.zoomingBoundAnimate()
+            }
         }
     }
     
