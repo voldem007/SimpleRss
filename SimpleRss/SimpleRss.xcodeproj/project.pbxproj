@@ -37,6 +37,7 @@
 		215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36421F5C13A001E8926 /* DownloadOp.m */; };
 		215DD36821F5D70E001E8926 /* Cacher.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36721F5D70E001E8926 /* Cacher.m */; };
 		215FBABB21B523560092785B /* FeedItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215FBABA21B523560092785B /* FeedItemViewModel.swift */; };
+		2167A9462375A9B600457AF1 /* ModalTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167A9452375A9B600457AF1 /* ModalTransition.swift */; };
 		2196B91C2312A3BE004FF972 /* FeedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */; };
 		2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */; };
 		2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */; };
@@ -102,6 +103,7 @@
 		215DD36721F5D70E001E8926 /* Cacher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cacher.m; sourceTree = "<group>"; };
 		215DD36921F5D728001E8926 /* Cacher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cacher.h; sourceTree = "<group>"; };
 		215FBABA21B523560092785B /* FeedItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewModel.swift; sourceTree = "<group>"; };
+		2167A9452375A9B600457AF1 /* ModalTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalTransition.swift; sourceTree = "<group>"; };
 		2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewController.swift; sourceTree = "<group>"; };
 		2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewModel.swift; sourceTree = "<group>"; };
 		2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FeedDetail.storyboard; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		213BC6DE219C61F000E7694B /* SimpleRss */ = {
 			isa = PBXGroup;
 			children = (
+				2167A9442375A8F700457AF1 /* Transitions */,
 				21C0BCB422B7DA0F0035D033 /* ViewModels */,
 				21C0BCAD22B799FC0035D033 /* Coordinators */,
 				215DD36321F5C0F6001E8926 /* Objective */,
@@ -275,6 +278,14 @@
 				215FBABA21B523560092785B /* FeedItemViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2167A9442375A8F700457AF1 /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				2167A9452375A9B600457AF1 /* ModalTransition.swift */,
+			);
+			path = Transitions;
 			sourceTree = "<group>";
 		};
 		21AF870721A3576000C00970 /* Views */ = {
@@ -453,6 +464,7 @@
 				2100F467231D448100A7C2F3 /* DetailViewCell.swift in Sources */,
 				2107B8DB2219FF620015171A /* rss.xcdatamodeld in Sources */,
 				215DD36521F5C13A001E8926 /* DownloadOp.m in Sources */,
+				2167A9462375A9B600457AF1 /* ModalTransition.swift in Sources */,
 				2105F0BA21DFFA2500E5485F /* DownloadImageManager.swift in Sources */,
 				2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */,
 				212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */,

@@ -91,3 +91,24 @@ extension UIStackView {
         }
     }
 }
+
+extension UIView {
+    
+    func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.isUserInteractionEnabled = false
+        blurEffectView.frame = self.bounds
+        blurEffectView.layer.zPosition = -1
+
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(blurEffectView)
+    }
+    
+    func removeBlurEffect() {
+        let blurredEffectViews = self.subviews.filter{ $0 is UIVisualEffectView }
+        blurredEffectViews.forEach { blurView in
+            blurView.removeFromSuperview()
+        }
+    }
+}
