@@ -29,8 +29,15 @@ final class HomeCoordinator: NavigationCoordinator {
     
     private func showDetail(_ feed: FeedItemViewModel) {
         let controller: FeedDetailViewController = .instantiateFromStoryboard()
-        controller.viewModel = FeedDetailViewModelImplementation(feed: feed)
+        controller.viewModel = FeedDetailViewModelImplementation(feed: feed, delegate: self)
         navigationController.pushViewController(controller, animated: true)
+    }
+    
+    private func showRating(_ feed: FeedItemViewModel) {
+        let controller: RatingViewController = .instantiateFromStoryboard()
+        controller.viewModel = RatingViewModelImplementation(feed: feed)
+        controller.modalPresentationStyle = .custom
+        navigationController.present(controller, animated: true)
     }
 }
 
@@ -47,3 +54,11 @@ extension HomeCoordinator: FeedViewModelDelegeate {
         showDetail(feed)
     }
 }
+
+extension HomeCoordinator: FeedDetailViewModelDelegeate {
+    
+    func requestRating(_ feed: FeedItemViewModel) {
+        showRating(feed)
+    }
+}
+

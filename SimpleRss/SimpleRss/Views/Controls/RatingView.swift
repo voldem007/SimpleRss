@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-@IBDesignable class RatingView: UIView {
+@IBDesignable class RatingView: UIControl {
     
     private lazy var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(gestureRecognizerChanged))
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(gestureRecognizerChanged))
@@ -30,14 +30,15 @@ import CoreGraphics
     
     @IBInspectable var count: Int = 5
     
-    @IBInspectable var rating: CGFloat = 0 {
+    public var rating: CGFloat = 0 {
         didSet {
-            rating = min(CGFloat(integerLiteral: count), rating)
-            
-            if rating.rounded(.down) != oldValue.rounded(.down) {
-                updateView()
-            } else {
-                if oldValue != rating {
+            if oldValue != rating {
+                rating = min(CGFloat(integerLiteral: count), rating)
+                sendActions(for: .valueChanged)
+                
+                if rating.rounded(.down) != oldValue.rounded(.down) {
+                    updateView()
+                } else if oldValue != rating {
                     updateLastView()
                 }
             }

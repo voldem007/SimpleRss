@@ -38,6 +38,9 @@
 		215DD36821F5D70E001E8926 /* Cacher.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36721F5D70E001E8926 /* Cacher.m */; };
 		215FBABB21B523560092785B /* FeedItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215FBABA21B523560092785B /* FeedItemViewModel.swift */; };
 		2167A9462375A9B600457AF1 /* ModalTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167A9452375A9B600457AF1 /* ModalTransition.swift */; };
+		2167A9482376013300457AF1 /* Rating.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2167A9472376013300457AF1 /* Rating.storyboard */; };
+		2167A94A2376019D00457AF1 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167A9492376019D00457AF1 /* RatingViewController.swift */; };
+		2167A94C23774BE100457AF1 /* RatingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167A94B23774BE100457AF1 /* RatingViewModel.swift */; };
 		2196B91C2312A3BE004FF972 /* FeedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */; };
 		2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */; };
 		2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */; };
@@ -104,6 +107,9 @@
 		215DD36921F5D728001E8926 /* Cacher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cacher.h; sourceTree = "<group>"; };
 		215FBABA21B523560092785B /* FeedItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewModel.swift; sourceTree = "<group>"; };
 		2167A9452375A9B600457AF1 /* ModalTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalTransition.swift; sourceTree = "<group>"; };
+		2167A9472376013300457AF1 /* Rating.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Rating.storyboard; sourceTree = "<group>"; };
+		2167A9492376019D00457AF1 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
+		2167A94B23774BE100457AF1 /* RatingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewModel.swift; sourceTree = "<group>"; };
 		2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewController.swift; sourceTree = "<group>"; };
 		2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewModel.swift; sourceTree = "<group>"; };
 		2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FeedDetail.storyboard; sourceTree = "<group>"; };
@@ -250,6 +256,8 @@
 				21575147219CC2A20066D7D0 /* FeedViewController.swift */,
 				2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */,
 				2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */,
+				2167A9472376013300457AF1 /* Rating.storyboard */,
+				2167A9492376019D00457AF1 /* RatingViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -328,6 +336,7 @@
 				21C0BCB522B7DA2C0035D033 /* FeedViewModel.swift */,
 				21C0BCB722B7DA490035D033 /* HomeViewModel.swift */,
 				2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */,
+				2167A94B23774BE100457AF1 /* RatingViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -406,6 +415,7 @@
 				21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */,
 				21575144219C6DD70066D7D0 /* Main.storyboard in Resources */,
 				2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */,
+				2167A9482376013300457AF1 /* Rating.storyboard in Resources */,
 				213BC6EA219C61F200E7694B /* LaunchScreen.storyboard in Resources */,
 				213BC6E7219C61F200E7694B /* Assets.xcassets in Resources */,
 			);
@@ -469,6 +479,7 @@
 				2105F0C521EBB3CB00E5485F /* DownloadOrchestrator.swift in Sources */,
 				212C4EF521DBE97F004B4D86 /* AsyncOperation.swift in Sources */,
 				21C0BCB322B7B0150035D033 /* HomeCoordinator.swift in Sources */,
+				2167A94A2376019D00457AF1 /* RatingViewController.swift in Sources */,
 				21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */,
 				21EEFC1D21A0825100A97F33 /* TopicModel.swift in Sources */,
 				21C0BCBA22BA3BD40035D033 /* NetworkService.swift in Sources */,
@@ -479,6 +490,7 @@
 				213BC6E0219C61F000E7694B /* AppDelegate.swift in Sources */,
 				2105F0C321EBAB7800E5485F /* DownloadManager.swift in Sources */,
 				212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */,
+				2167A94C23774BE100457AF1 /* RatingViewModel.swift in Sources */,
 				2105F0C121EBA93800E5485F /* CacheManager.swift in Sources */,
 				2199666921C1A0BF00FE7AAD /* RssNetworkService.swift in Sources */,
 				213D3F7921A5A8DD00E2E937 /* RssParser.swift in Sources */,

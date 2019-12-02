@@ -19,6 +19,7 @@ class FeedItemViewModel {
     let pubDate: BehaviorRelay<String>
     let description: BehaviorRelay<String>
     let picUrls: BehaviorRelay<[URL]>
+    let rating: BehaviorRelay<Double>
     
     private let disposeBag: DisposeBag = DisposeBag()
     
@@ -29,6 +30,8 @@ class FeedItemViewModel {
         description = BehaviorRelay(value: feedModel.description ?? "")
         picUrls = BehaviorRelay(value: feedModel.picLinks.compactMap { $0.isEmpty ? UIImageView.urlToImagePlaceholder : URL(string: $0)! })
         isExpanded = BehaviorRelay(value: false)
+        //TODO Add field in database
+        rating = BehaviorRelay(value: 3.0)
     }
 }
 

@@ -19,12 +19,28 @@ class FeedDetailViewController: UIViewController {
     
     public var viewModel: FeedDetailViewModel?
     private let disposeBag = DisposeBag()
+    private let transition = ModalTransition(height: 380)
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.transitioningDelegate = transition
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.transitioningDelegate = transition
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
         setupBinding()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        //TODO add binding 
+        viewModel?.showRating.accept(Void())
     }
     
     fileprivate func setupUI() {
