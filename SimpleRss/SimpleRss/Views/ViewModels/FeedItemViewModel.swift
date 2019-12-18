@@ -30,8 +30,7 @@ class FeedItemViewModel {
         description = BehaviorRelay(value: feedModel.description ?? "")
         picUrls = BehaviorRelay(value: feedModel.picLinks.compactMap { $0.isEmpty ? UIImageView.urlToImagePlaceholder : URL(string: $0)! })
         isExpanded = BehaviorRelay(value: false)
-        //TODO Add field in database
-        rating = BehaviorRelay(value: 3.0)
+        rating = BehaviorRelay(value: feedModel.rating ?? 0.0)
     }
 }
 

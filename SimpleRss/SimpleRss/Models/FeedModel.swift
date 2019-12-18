@@ -14,4 +14,5 @@ struct FeedModel {
     var pubDate: String?
     var picLinks: [String] = []
     var description: String?
+    var rating: Double?
 }

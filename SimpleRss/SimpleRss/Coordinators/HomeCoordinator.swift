@@ -61,4 +61,3 @@ extension HomeCoordinator: FeedDetailViewModelDelegeate {
         showRating(feed)
     }
 }
-
