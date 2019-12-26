@@ -10,13 +10,11 @@ import Foundation
 import RxSwift
 import RxRelay
 
-protocol FeedDetailViewModelDelegeate: AnyObject {
-    
+protocol FeedDetailViewModelDelegeate: class {
     func requestRating(_ feed: FeedItemViewModel)
 }
 
 protocol FeedDetailViewModel {
-    
     var title: Observable<String> { get }
     var description: Observable<String> { get }
     var pubDate: Observable<String> { get }
@@ -26,8 +24,8 @@ protocol FeedDetailViewModel {
 }
 
 public class FeedDetailViewModelImplementation: FeedDetailViewModel {
-    //TODO rename delegate
-    private weak var delegate: FeedDetailViewModelDelegeate?
+    
+    private weak var coordinator: FeedDetailViewModelDelegeate?
     private let disposeBag = DisposeBag()
     
     let title: Observable<String>
@@ -40,8 +38,8 @@ public class FeedDetailViewModelImplementation: FeedDetailViewModel {
     
     var showRating = PublishRelay<Void>()
     
-    init(feed: FeedItemViewModel, delegate: FeedDetailViewModelDelegeate) {
-        self.delegate = delegate
+    init(feed: FeedItemViewModel, coordinator: FeedDetailViewModelDelegeate) {
+        self.coordinator = coordinator
         self.title = feed.title.asObservable()
         self.description = feed.description.asObservable()
         self.picUrls = feed.picUrls.asObservable()
@@ -66,6 +64,6 @@ extension FeedDetailViewModelImplementation {
     }
     
     func requestRating() {
-        delegate?.requestRating(feed)
+        coordinator?.requestRating(feed)
     }
 }

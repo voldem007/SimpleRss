@@ -15,6 +15,7 @@ class RatingViewController: UIViewController {
     
     @IBOutlet var textField: UITextField!
     @IBOutlet var ratingView: RatingView!
+    @IBOutlet var sendButton: UIButton!
     
     public var viewModel: RatingViewModel?
     private let disposeBag = DisposeBag()
@@ -37,8 +38,11 @@ class RatingViewController: UIViewController {
     }
     
     fileprivate func setupBinding() {
+        guard let viewModel = viewModel else {
+            return
+        }
         
-        viewModel?
+        viewModel
             .rating
             .map { CGFloat($0) }
             .bind(to: ratingView.rx.rating)
@@ -47,7 +51,12 @@ class RatingViewController: UIViewController {
         ratingView.rx
             .rating
             .map { Double($0) }
-            .bind(to: viewModel!.rating)
+            .bind(to: viewModel.rating)
+            .disposed(by: disposeBag)
+        
+        sendButton.rx
+            .tap
+            .bind(to: viewModel.sendRating)
             .disposed(by: disposeBag)
     }
 }

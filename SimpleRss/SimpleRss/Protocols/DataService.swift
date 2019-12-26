@@ -14,4 +14,5 @@ protocol DataService {
     func getTopics() -> Single<[TopicModel]>
     func getFeed(by feedUrl: String) -> Maybe<[FeedModel]>
     func saveFeed(feedList: [FeedModel], for url: String)
+    func updateRating(feedId: String, rating: Double)
 }

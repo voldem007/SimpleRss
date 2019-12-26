@@ -11,7 +11,7 @@ import CoreData
 import RxSwift
 
 class RssDataService: DataService {
-    
+
     private var persistentContainer: NSPersistentContainer {
         dataStore.preloadDataIfFirstLaunch()
         return dataStore.persistentContainer
@@ -68,17 +68,17 @@ class RssDataService: DataService {
     }
     
     func saveFeed(feedList: [FeedModel], for url: String) {
-        persistentContainer.performBackgroundTask() { [weak self] (context) in
+        persistentContainer.performBackgroundTask() { [weak self] context in
             self?.deleteFeed(by: url, with: context)
             let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-            let predicate = NSPredicate(format: "feedUrl = %@",
+            fetch.predicate = NSPredicate(format: "feedUrl = %@",
                                         argumentArray: [url])
-            fetch.predicate = predicate
             let topic = try? fetch.execute().first
             
             feedList.forEach { feedModel in
                 let feed = Feed(context: context)
                 feed.text = feedModel.description
+                feed.guid = feedModel.guid
                 feed.pubDate = feedModel.pubDate
                 feed.picLinks = feedModel.picLinks 
                 feed.title = feedModel.title
@@ -91,12 +91,22 @@ class RssDataService: DataService {
     
     //TODO merge instead of delete
     private func deleteFeed(by feedUrl: String, with context: NSManagedObjectContext) {
-        let fetchForDelete:NSFetchRequest<NSFetchRequestResult> = Feed.fetchRequest()
+        let fetchForDelete: NSFetchRequest<NSFetchRequestResult> = Feed.fetchRequest()
         fetchForDelete.predicate = NSPredicate(format: "topic.feedUrl = %@", argumentArray : [feedUrl])
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchForDelete)
         
         _ = try? context.execute(deleteRequest)
         
         context.reset()
+    }
+    
+    func updateRating(feedId: String, rating: Double) {
+        persistentContainer.performBackgroundTask() { context in
+            let fetch: NSFetchRequest<Feed> = Feed.fetchRequest()
+            fetch.predicate = NSPredicate(format: "guid = %@", argumentArray : [feedId])
+            let feed = try? fetch.execute().first
+            feed?.rating = rating
+            try? context.save()
+        }
     }
 }

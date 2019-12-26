@@ -11,13 +11,11 @@ import RxSwift
 import RxRelay
 import RxCocoa
 
-protocol FeedViewModelDelegeate: AnyObject {
-    
+protocol FeedViewModelDelegeate: class {
     func userDidSelectFeed(_ feed: FeedItemViewModel)
 }
 
 protocol FeedViewModel: ViewModel {
-    
     var content: Observable<[FeedItemViewModel]> { get }
     var updateFeed: PublishRelay<Void> { get }
     var selectedFeed: PublishRelay<FeedItemViewModel> { get }
@@ -26,15 +24,19 @@ protocol FeedViewModel: ViewModel {
 class FeedViewModelImplementation: FeedViewModel {
     
     private let disposeBag = DisposeBag()
-    private weak var delegate: FeedViewModelDelegeate?
+    private weak var coordinator: FeedViewModelDelegeate?
     
     let content: Observable<[FeedItemViewModel]>
     let selectedFeed = PublishRelay<FeedItemViewModel>()
     let isBusy: Observable<Bool>
     let updateFeed = PublishRelay<Void>()
     
-    init(rssDataService: DataService, rssService: NetworkService, url: String, delegate: FeedViewModelDelegeate) {
-        self.delegate = delegate
+    init(rssDataService: DataService,
+         rssService: NetworkService,
+         url: String,
+         coordinator: FeedViewModelDelegeate
+    ) {
+        self.coordinator = coordinator
         
         let refresh = updateFeed
             .flatMap { _ in rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]()) }
@@ -69,6 +71,6 @@ extension FeedViewModelImplementation {
     }
     
     func showFeed(_ feed: FeedItemViewModel) {
-        delegate?.userDidSelectFeed(feed)
+        coordinator?.userDidSelectFeed(feed)
     }
 }

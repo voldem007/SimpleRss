@@ -10,27 +10,25 @@ import Foundation
 import RxSwift
 import RxRelay
 
-protocol HomeViewModelDelegeate: AnyObject {
-    
+protocol HomeViewModelDelegeate: class {
     func userDidSelectTopic(url: String)
 }
 
 protocol HomeViewModel {
-
     var content: Observable<[TopicModel]> { get }
     var selectedTopic: PublishRelay<TopicModel> { get }
 }
 
 class HomeViewModelImplementation: HomeViewModel {
 
-    private weak var delegate: HomeViewModelDelegeate?
+    private weak var coordinator: HomeViewModelDelegeate?
     private let disposeBag = DisposeBag()
     
     var content: Observable<[TopicModel]>
     var selectedTopic = PublishRelay<TopicModel>()
     
-    init(rssDataService: DataService, delegate: HomeViewModelDelegeate) {
-        self.delegate = delegate
+    init(rssDataService: DataService, coordinator: HomeViewModelDelegeate) {
+        self.coordinator = coordinator
         self.content = rssDataService.getTopics().asObservable()
         
         setBinding()
@@ -50,6 +48,6 @@ extension HomeViewModelImplementation {
     }    
     
     func showFeed(url: String) {
-        delegate?.userDidSelectTopic(url: url)
+        coordinator?.userDidSelectTopic(url: url)
     }
 }
