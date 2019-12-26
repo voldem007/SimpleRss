@@ -19,6 +19,7 @@ protocol FeedDetailViewModel {
     var description: Observable<String> { get }
     var pubDate: Observable<String> { get }
     var picUrls: Observable<[URL]> { get }
+    var rating: Observable<Double> { get }
     
     var showRating: PublishRelay<Void> { get }
 }

@@ -12,10 +12,11 @@ import RxCocoa
 
 class FeedDetailViewController: UIViewController {
     
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var pubDateLabel: UILabel!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var descriptionTextView: UITextView!
+    @IBOutlet var pubDateLabel: UILabel!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var ratingView: RatingView!
     
     public var viewModel: FeedDetailViewModel?
     private let disposeBag = DisposeBag()
@@ -38,37 +39,42 @@ class FeedDetailViewController: UIViewController {
         setupBinding()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        //TODO add binding 
-        viewModel?.showRating.accept(Void())
-    }
-    
-    fileprivate func setupUI() {
+    private func setupUI() {
         let nib = UINib(nibName: DetailViewCell.cellIdentifier, bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: DetailViewCell.cellIdentifier)
     }
     
-    fileprivate func setupBinding() {
-        viewModel?.title
+    private func setupBinding() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.title
             .asDriver(onErrorJustReturn: "")
             .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel?.description
+        viewModel.description
             .asDriver(onErrorJustReturn: "")
             .drive(descriptionTextView.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel?.pubDate
+        viewModel.pubDate
             .asDriver(onErrorJustReturn: "")
             .drive(pubDateLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel?.picUrls
+        viewModel.picUrls
             .bind(to: collectionView.rx.items(cellIdentifier: DetailViewCell.cellIdentifier)) { row, url, cell in
                 guard let cell = cell as? DetailViewCell else { return }
                 cell.setup(pictureUrl: url)
             }.disposed(by: disposeBag)
+        
+        viewModel
+            .rating
+            .map { CGFloat($0) }
+            .bind(to: ratingView.rx.rating)
+            .disposed(by: disposeBag)
+        
+        rx.viewWillDisappear.bind(to: viewModel.showRating)
         
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
     }
@@ -89,5 +95,13 @@ extension FeedDetailViewController:  UICollectionViewDelegateFlowLayout {
         let width = collectionView.bounds.width
         let height = collectionView.bounds.height
         return CGSize(width: width, height: height)
+    }
+}
+
+extension Reactive where Base: UIViewController {
+    
+    public var viewWillDisappear: ControlEvent<()> {
+        let source = self.methodInvoked(#selector(Base.viewWillDisappear)).map { _ in () }
+        return ControlEvent(events: source)
     }
 }
