@@ -28,7 +28,7 @@ final class ModalTransition: NSObject, UIViewControllerTransitioningDelegate {
 }
 
 extension ModalTransition {
-
+    // TODO: detect keyboard
     final class Context: NSObject, UIGestureRecognizerDelegate {
 
         var height: CGFloat
