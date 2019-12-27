@@ -38,7 +38,8 @@ private extension FeedModel {
     private struct TagConstants {
         static let item = "item"
         static let guid = "guid"
-        static let link = "url"
+        static let url = "url"
+        static let link = "link"
         static let title = "title"
         static let pubDate = "pubDate"
         static let description = "description"
@@ -53,9 +54,9 @@ private extension FeedModel {
             return value.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         
-        func tryParsingImageLinkValue(_ value: Any) -> String? {
+        func tryParsingImageURLValue(_ value: Any) -> String? {
             guard let mediaDict = value as? [String : String] else { return nil }
-            return mediaDict[TagConstants.link]
+            return mediaDict[TagConstants.url]
         }
         
         func tryParsingDescriptionValue(_ value: Any) -> String? {
@@ -78,12 +79,12 @@ private extension FeedModel {
                 }
             case TagConstants.title:
                 current?.title = tryParsingStringValue(value)
-            case TagConstants.guid:
-                current?.guid = tryParsingStringValue(value, defaultValue: UUID().uuidString)!
+            case TagConstants.link:
+                current?.id = String((value as? String).hashValue)
             case TagConstants.pubDate:
                 current?.pubDate = tryParsingStringValue(value)
             case TagConstants.mediaDict:
-                current?.picLinks.append(tryParsingImageLinkValue(value) ?? "")
+                current?.picLinks.append(tryParsingImageURLValue(value) ?? "")
             case TagConstants.description:
                 current?.description = tryParsingDescriptionValue(value)
             default:

@@ -9,10 +9,11 @@
 import Foundation
 
 struct FeedModel {
-    var guid = UUID().uuidString
+    var id = ""
     var title: String?
     var pubDate: String?
     var picLinks: [String] = []
     var description: String?
     var rating: Double?
+    var comment: String?
 }

@@ -19,7 +19,7 @@ class RatingViewController: UIViewController {
     
     public var viewModel: RatingViewModel?
     private let disposeBag = DisposeBag()
-    private let transition = ModalTransition(height: 380)
+    private let transition = ModalTransition(height: 200)
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -57,6 +57,18 @@ class RatingViewController: UIViewController {
         sendButton.rx
             .tap
             .bind(to: viewModel.sendRating)
+            .disposed(by: disposeBag)
+        
+        viewModel
+            .comment
+            .bind(to: textField.rx.text)
+            .disposed(by: disposeBag)
+        
+        textField.rx
+            .text
+            .orEmpty
+            .skip(1)
+            .bind(to: viewModel.comment)
             .disposed(by: disposeBag)
     }
 }

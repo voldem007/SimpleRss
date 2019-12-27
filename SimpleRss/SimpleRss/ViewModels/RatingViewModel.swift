@@ -39,11 +39,11 @@ public class RatingViewModelImplementation: RatingViewModel {
          coordinator: RatingViewModelDelegeate
     ) {
         self.rating = feed.rating
-        self.id = feed.guid
+        self.id = feed.id
+        self.comment = feed.comment
+
         self.rssDataService = rssDataService
         self.coordinator = coordinator
-        //TODO add comment field in db
-        self.comment = BehaviorRelay(value: "asd")
         
         setBinding()
     }
@@ -55,7 +55,9 @@ extension RatingViewModelImplementation {
         sendRating
             .subscribe { [weak self] _ in
                 guard let self = self else { return }
-                self.rssDataService.updateRating(feedId: self.id, rating: self.rating.value)
+                self.rssDataService.addComment(feedId: self.id,
+                                               rating: self.rating.value,
+                                               comment: self.comment.value)
                 self.coordinator?.dismiss()
             }
         .disposed(by: disposeBag)
