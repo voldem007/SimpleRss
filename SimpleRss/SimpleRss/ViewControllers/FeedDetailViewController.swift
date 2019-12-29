@@ -20,17 +20,6 @@ class FeedDetailViewController: UIViewController {
     
     public var viewModel: FeedDetailViewModel?
     private let disposeBag = DisposeBag()
-    private let transition = ModalTransition(height: 380)
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.transitioningDelegate = transition
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.transitioningDelegate = transition
-    }
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,9 +63,13 @@ class FeedDetailViewController: UIViewController {
             .bind(to: ratingView.rx.rating)
             .disposed(by: disposeBag)
         
-        rx.viewWillDisappear.bind(to: viewModel.showRating)
+        self.rx.viewWillDisappear
+            .bind(to: viewModel.showRating)
+            .disposed(by: disposeBag)
         
-        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        collectionView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

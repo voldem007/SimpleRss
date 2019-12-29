@@ -24,10 +24,12 @@ class HomeViewModelImplementation: HomeViewModel {
     private weak var coordinator: HomeViewModelDelegeate?
     private let disposeBag = DisposeBag()
     
-    var content: Observable<[TopicModel]>
-    var selectedTopic = PublishRelay<TopicModel>()
+    let content: Observable<[TopicModel]>
+    let selectedTopic = PublishRelay<TopicModel>()
     
-    init(rssDataService: DataService, coordinator: HomeViewModelDelegeate) {
+    init(rssDataService: DataService,
+         coordinator: HomeViewModelDelegeate
+    ) {
         self.coordinator = coordinator
         self.content = rssDataService.getTopics().asObservable()
         

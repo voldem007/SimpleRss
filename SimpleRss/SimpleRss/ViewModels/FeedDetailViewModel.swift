@@ -37,9 +37,11 @@ public class FeedDetailViewModelImplementation: FeedDetailViewModel {
     
     let feed: FeedItemViewModel
     
-    var showRating = PublishRelay<Void>()
+    let showRating = PublishRelay<Void>()
     
-    init(feed: FeedItemViewModel, coordinator: FeedDetailViewModelDelegeate) {
+    init(feed: FeedItemViewModel,
+         coordinator: FeedDetailViewModelDelegeate
+    ) {
         self.coordinator = coordinator
         self.title = feed.title.asObservable()
         self.description = feed.description.asObservable()

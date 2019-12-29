@@ -13,20 +13,20 @@
             <objects>
                 <viewController id="pxG-Z8-JqZ" customClass="RatingViewController" customModule="SimpleRss" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="c6Q-P9-gCe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="RZQ-TI-tqG">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="RZQ-TI-tqG">
+                                <rect key="frame" x="8" y="52" width="398" height="340"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate this article!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7pl-SA-vQ9">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate this article!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7pl-SA-vQ9">
+                                        <rect key="frame" x="0.0" y="0.0" width="398" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Zr-zW-jv1" customClass="RatingView" customModule="SimpleRss" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="36.5" width="414" height="44"/>
+                                        <rect key="frame" x="0.0" y="28.5" width="398" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="wEE-9V-ufa"/>
@@ -40,33 +40,52 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <textField opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TdJ-d4-tXG">
-                                        <rect key="frame" x="0.0" y="96.5" width="414" height="671.5"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="249" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="i73-TM-uub">
+                                        <rect key="frame" x="0.0" y="80.5" width="398" height="217.5"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
-                                    </textField>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVX-mJ-ZaW" userLabel="Send">
-                                        <rect key="frame" x="0.0" y="784" width="414" height="34"/>
+                                        <rect key="frame" x="0.0" y="306" width="398" height="34"/>
                                         <state key="normal" title="Send">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="RZQ-TI-tqG" firstAttribute="leading" secondItem="Mtv-OS-KhB" secondAttribute="leading" id="05Z-c5-cO2"/>
-                            <constraint firstItem="RZQ-TI-tqG" firstAttribute="bottom" secondItem="Mtv-OS-KhB" secondAttribute="bottom" id="GFx-aL-tkC"/>
-                            <constraint firstItem="RZQ-TI-tqG" firstAttribute="top" secondItem="Mtv-OS-KhB" secondAttribute="top" id="OFi-Sj-QGt"/>
-                            <constraint firstItem="Mtv-OS-KhB" firstAttribute="trailing" secondItem="RZQ-TI-tqG" secondAttribute="trailing" id="tHn-sd-UgP"/>
+                            <constraint firstItem="RZQ-TI-tqG" firstAttribute="leading" secondItem="Mtv-OS-KhB" secondAttribute="leading" constant="8" id="05Z-c5-cO2"/>
+                            <constraint firstItem="RZQ-TI-tqG" firstAttribute="top" secondItem="Mtv-OS-KhB" secondAttribute="top" constant="8" id="OFi-Sj-QGt"/>
+                            <constraint firstItem="Mtv-OS-KhB" firstAttribute="bottom" secondItem="RZQ-TI-tqG" secondAttribute="bottom" constant="8" id="oYr-zC-HA7"/>
+                            <constraint firstItem="Mtv-OS-KhB" firstAttribute="trailing" secondItem="RZQ-TI-tqG" secondAttribute="trailing" constant="8" id="tHn-sd-UgP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Mtv-OS-KhB"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="414" height="400"/>
                     <connections>
+                        <outlet property="commentTextView" destination="i73-TM-uub" id="cIb-om-HGz"/>
                         <outlet property="ratingView" destination="0Zr-zW-jv1" id="gPe-dv-rIv"/>
                         <outlet property="sendButton" destination="HVX-mJ-ZaW" id="OLt-Jl-ZQl"/>
-                        <outlet property="textField" destination="TdJ-d4-tXG" id="SJz-kN-yjO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qco-Xe-zPN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

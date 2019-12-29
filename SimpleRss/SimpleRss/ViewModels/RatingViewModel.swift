@@ -24,11 +24,10 @@ protocol RatingViewModel {
 public class RatingViewModelImplementation: RatingViewModel {
     
     let rating: BehaviorRelay<Double>
-    var comment: BehaviorRelay<String>
+    let comment: BehaviorRelay<String>
     let sendRating = PublishRelay<Void>()
      
     private let id: String
-    
     private let rssDataService: DataService
     private let disposeBag = DisposeBag()
     

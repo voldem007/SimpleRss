@@ -28,9 +28,11 @@ final class ModalTransition: NSObject, UIViewControllerTransitioningDelegate {
 }
 
 extension ModalTransition {
-    //TODO: detect keyboard
+    
     final class Context: NSObject, UIGestureRecognizerDelegate {
 
+        private var keyboardOffset: CGFloat?
+        
         var height: CGFloat
         let duration: TimeInterval = 0.4
         let hIndent: CGFloat = 30
@@ -41,6 +43,43 @@ extension ModalTransition {
         init(height: CGFloat) {
             self.height = height
             super.init()
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        }
+        
+        deinit {
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        }
+        
+        @objc
+        private func keyboardWillShow(notification: NSNotification) {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                
+                guard let containerView = containerView,
+                    let presentedController = presentedController else {
+                    return
+                }
+                
+                let keyboardHeight = keyboardSize.height
+                let availableTopHeight = containerView.frame.height - keyboardHeight
+                let heightOfPopUp = presentedController.view.frame.origin.y + presentedController.view.frame.height
+                keyboardOffset = heightOfPopUp - availableTopHeight
+                if let keyboardOffset = keyboardOffset,
+                    keyboardOffset > 0 {
+                    presentedController.view.frame.origin.y = presentedController.view.frame.origin.y - keyboardOffset
+                }
+            }
+        }
+        
+        @objc
+        private func keyboardWillHide(notification: NSNotification) {
+            guard let presentedController = presentedController,
+                let keyboardOffset = keyboardOffset,
+                keyboardOffset > 0 else { return }
+            
+            presentedController.view.frame.origin.y = presentedController.view.frame.origin.y + keyboardOffset
         }
 
         func getWidth(_ screenWidth: CGFloat) -> CGFloat {
@@ -68,10 +107,11 @@ extension ModalTransition {
             containerView.addGestureRecognizer(tapGesture)
         }
 
-        @objc func close() {
+        @objc
+        func close() {
             presentedController?.dismiss(animated: true, completion: nil)
         }
-
+        
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
             return touch.view == containerView
         }
