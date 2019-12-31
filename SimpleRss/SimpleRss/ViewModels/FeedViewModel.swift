@@ -38,15 +38,31 @@ class FeedViewModelImplementation: FeedViewModel {
     ) {
         self.coordinator = coordinator
         
-        //TODO fix empty state for init launch
         let refresh = updateFeed
-            .flatMap { _ in rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]()) }
+            .flatMap { _ in
+                rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]())
+            }
             .do(onNext: {
                 guard !$0.isEmpty else { return }
                 rssDataService.saveFeed(feedList: $0, for: url)
             })
         //TODO fix merge
+        
+        var isEmpty = false
         content = rssDataService.getFeed(by: url)
+            .flatMap { items in
+                if items.isEmpty {
+                    isEmpty = true
+                    return rssService.getFeed(for: URL(string: url)!).asMaybe()
+                } else {
+                    return Maybe<[FeedModel]>.just(items)
+                }
+            }
+            .do(onNext: { items in
+                if isEmpty {
+                    rssDataService.saveFeed(feedList: items, for: url)
+                }
+            })
             .asObservable()
             .concat(refresh)
             .materialize()
