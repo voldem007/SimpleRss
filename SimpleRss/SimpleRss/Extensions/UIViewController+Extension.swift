@@ -29,3 +29,10 @@ extension UIViewController {
         return instantiateFromStoryboard()
     }
 }
+
+extension UIViewController {
+    
+    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+}

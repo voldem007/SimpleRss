@@ -35,6 +35,8 @@ class RatingViewController: UIViewController {
         super.viewDidLoad()
         
         sendButton.layer.borderColor = UIColor.gray.cgColor
+        commentTextView.layer.borderColor = UIColor.gray.cgColor
+
         setupBinding()
     }
     
