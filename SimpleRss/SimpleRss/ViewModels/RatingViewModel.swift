@@ -51,14 +51,17 @@ public class RatingViewModelImplementation: RatingViewModel {
 extension RatingViewModelImplementation {
     
     func setBinding() {
+        
         sendRating
             .subscribe { [weak self] _ in
                 guard let self = self else { return }
-                self.rssDataService.addComment(feedId: self.id,
-                                               rating: self.rating.value,
-                                               comment: self.comment.value)
-                self.coordinator?.dismiss()
-            }
+                
+                self.rssDataService
+                    .addComment(feedId: self.id, rating: self.rating.value, comment: self.comment.value)
+                    .observeOn(MainScheduler.instance)
+                    .subscribe(onSuccess: { self.coordinator?.dismiss() }, onError: nil)
+                    .disposed(by: self.disposeBag)
+        }
         .disposed(by: disposeBag)
     }
 }

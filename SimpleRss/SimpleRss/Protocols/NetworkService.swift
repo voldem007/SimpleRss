@@ -9,7 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol NetworkService {
-    
+protocol NetworkService {    
     func getFeed(for url: URL) -> Single<[FeedModel]>
 }

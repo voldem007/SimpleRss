@@ -38,35 +38,24 @@ class FeedViewModelImplementation: FeedViewModel {
     ) {
         self.coordinator = coordinator
         
-        let refresh = updateFeed
-            .flatMap { _ in
-                rssService.getFeed(for: URL(string: url)!).catchErrorJustReturn([FeedModel]())
+        let refresh = rssService.getFeed(for: URL(string: url)!).flatMap { items in
+            rssDataService.saveFeed(feedList: items, for: url).flatMap { _ in
+                rssDataService.getFeed(by: url).asObservable().asSingle()
             }
-            .do(onNext: {
-                guard !$0.isEmpty else { return }
-                rssDataService.saveFeed(feedList: $0, for: url)
-            })
-        //TODO fix merge
+        }
         
-        var isEmpty = false
         content = rssDataService.getFeed(by: url)
             .flatMap { items in
                 if items.isEmpty {
-                    isEmpty = true
-                    return rssService.getFeed(for: URL(string: url)!).asMaybe()
+                    return refresh.asMaybe()
                 } else {
                     return Maybe<[FeedModel]>.just(items)
                 }
             }
-            .do(onNext: { items in
-                if isEmpty {
-                    rssDataService.saveFeed(feedList: items, for: url)
-                }
-            })
             .asObservable()
-            .concat(refresh)
+            .concat(updateFeed.flatMap { _ in refresh })
             .materialize()
-            .map { $0.element?.map { feedItem in FeedItemViewModel(feedItem) } ?? [FeedItemViewModel]() }
+            .map { $0.element?.map { FeedItemViewModel($0) } ?? [FeedItemViewModel]() }
             .share(replay: 1, scope: .whileConnected)
         
         isBusy = content.map { _ in false }

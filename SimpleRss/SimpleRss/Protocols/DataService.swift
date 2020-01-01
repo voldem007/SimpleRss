@@ -10,9 +10,8 @@ import Foundation
 import RxSwift
 
 protocol DataService {
-    
     func getTopics() -> Single<[TopicModel]>
     func getFeed(by feedUrl: String) -> Maybe<[FeedModel]>
-    func saveFeed(feedList: [FeedModel], for url: String)
-    func addComment(feedId: String, rating: Double, comment: String)
+    func saveFeed(feedList: [FeedModel], for url: String) -> Single<Void>
+    func addComment(feedId: String, rating: Double, comment: String) -> Single<Void>
 }

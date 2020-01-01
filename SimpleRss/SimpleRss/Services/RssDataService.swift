@@ -67,29 +67,37 @@ class RssDataService: DataService {
         }
     }
     
-    func saveFeed(feedList: [FeedModel], for url: String) {
-        persistentContainer.performBackgroundTask() { [weak self] context in
-            self?.deleteFeed(by: url, with: context)
-            let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-            fetch.predicate = NSPredicate(format: "feedUrl = %@",
-                                        argumentArray: [url])
-            let topic = try? fetch.execute().first
-            let feed = topic?.feed?.map { $0 as? Feed }
-
-            feedList.forEach { feedModel in
-                guard !(feed?.contains { $0?.id == feedModel.id } ?? false) else {
-                    return
+    func saveFeed(feedList: [FeedModel], for url: String) -> Single<Void> {
+        return Single.create { [persistentContainer] single in
+            persistentContainer.performBackgroundTask() { [weak self] context in
+                self?.deleteFeed(by: url, with: context)
+                let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
+                fetch.predicate = NSPredicate(format: "feedUrl = %@",
+                                              argumentArray: [url])
+                let topic = try? fetch.execute().first
+                let feed = topic?.feed?.map { $0 as? Feed }
+                
+                feedList.forEach { feedModel in
+                    guard !(feed?.contains { $0?.id == feedModel.id } ?? false) else {
+                        return
+                    }
+                    let feed = Feed(context: context)
+                    feed.text = feedModel.description
+                    feed.id = feedModel.id
+                    feed.pubDate = feedModel.pubDate
+                    feed.picLinks = feedModel.picLinks
+                    feed.title = feedModel.title
+                    topic?.addToFeed(feed)
                 }
-                let feed = Feed(context: context)
-                feed.text = feedModel.description
-                feed.id = feedModel.id
-                feed.pubDate = feedModel.pubDate
-                feed.picLinks = feedModel.picLinks 
-                feed.title = feedModel.title
-                topic?.addToFeed(feed)
+                
+                do {
+                    try context.save()
+                    single(.success(Void()))
+                } catch let error {
+                    single(.error(error))
+                }
             }
-            
-            try? context.save()
+            return Disposables.create()
         }
     }
     
@@ -103,14 +111,23 @@ class RssDataService: DataService {
         context.reset()
     }
     
-    func addComment(feedId: String, rating: Double, comment: String) {
-        persistentContainer.performBackgroundTask() { context in
-            let fetch: NSFetchRequest<Feed> = Feed.fetchRequest()
-            fetch.predicate = NSPredicate(format: "id = %@", argumentArray : [feedId])
-            let feed = try? fetch.execute().first
-            feed?.rating = rating
-            feed?.comment = comment
-            try? context.save()
+    func addComment(feedId: String, rating: Double, comment: String) -> Single<Void> {
+        return Single.create { [persistentContainer] single in
+            persistentContainer.performBackgroundTask() { context in
+                let fetch: NSFetchRequest<Feed> = Feed.fetchRequest()
+                fetch.predicate = NSPredicate(format: "id = %@", argumentArray : [feedId])
+                let feed = try? fetch.execute().first
+                feed?.rating = rating
+                feed?.comment = comment
+                
+                do {
+                    try context.save()
+                    single(.success(Void()))
+                } catch let error {
+                    single(.error(error))
+                }
+            }
+            return Disposables.create()
         }
     }
 }

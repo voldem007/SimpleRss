@@ -9,11 +9,9 @@
 import Foundation
 
 protocol Coordinator {
-    
     func start()
 }
 
-protocol NavigationCoordinator: Coordinator {
-    
+protocol NavigationCoordinator: Coordinator {    
     var navigationController: UINavigationController { get }
 }
