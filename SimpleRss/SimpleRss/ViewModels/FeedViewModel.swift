@@ -58,7 +58,7 @@ class FeedViewModelImplementation: FeedViewModel {
             .map { $0.element?.map { FeedItemViewModel($0) } ?? [FeedItemViewModel]() }
             .share(replay: 1, scope: .whileConnected)
         
-        isBusy = content.map { _ in false }
+        isBusy = Observable.just(true).concat(content.map { _ in false })
         
         setBinding()
     }
