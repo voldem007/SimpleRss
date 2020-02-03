@@ -19,18 +19,28 @@ final class HomeCoordinator: NavigationCoordinator {
     }
     
     func start() {
-        let home = HomeViewController(viewModel: HomeViewModelImplementation(rssDataService: rssDataService, delegate: self))
+        let home = HomeViewController(viewModel: HomeViewModelImplementation(rssDataService: rssDataService,
+                                                                             coordinator: self))
         navigationController.pushViewController(home, animated: true)
     }
     
     private func showFeed(url: String) {
-        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModelImplementation(rssDataService: rssDataService, rssService: rssService, url: url, delegate: self)), animated: true)
+        navigationController.pushViewController(FeedViewController(viewModel: FeedViewModelImplementation(rssDataService: rssDataService, rssService: rssService, url: url, coordinator: self)), animated: true)
     }
     
     private func showDetail(_ feed: FeedItemViewModel) {
         let controller: FeedDetailViewController = .instantiateFromStoryboard()
-        controller.viewModel = FeedDetailViewModelImplementation(feed: feed)
+        controller.viewModel = FeedDetailViewModelImplementation(feed: feed, coordinator: self)
         navigationController.pushViewController(controller, animated: true)
+    }
+    
+    private func showRating(_ feed: FeedItemViewModel) {
+        let controller: RatingViewController = .instantiateFromStoryboard()
+        controller.viewModel = RatingViewModelImplementation(feed: feed,
+                                                             rssDataService: rssDataService,
+                                                             coordinator: self)
+        controller.modalPresentationStyle = .custom
+        navigationController.present(controller, animated: true)
     }
 }
 
@@ -45,5 +55,19 @@ extension HomeCoordinator: FeedViewModelDelegeate {
     
     func userDidSelectFeed(_ feed: FeedItemViewModel) {
         showDetail(feed)
+    }
+}
+
+extension HomeCoordinator: FeedDetailViewModelDelegeate {
+    
+    func requestRating(_ feed: FeedItemViewModel) {
+        showRating(feed)
+    }
+}
+
+extension HomeCoordinator: RatingViewModelDelegeate {
+    
+    func dismiss() {
+        navigationController.dismiss(animated: true)
     }
 }

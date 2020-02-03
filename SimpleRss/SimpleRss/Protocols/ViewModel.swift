@@ -10,6 +10,5 @@ import Foundation
 import RxSwift
 
 protocol ViewModel: AnyObject {
-    
     var isBusy: Observable<Bool> { get }
 }

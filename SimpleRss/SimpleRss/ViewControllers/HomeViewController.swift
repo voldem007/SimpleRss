@@ -37,7 +37,7 @@ class HomeViewController: UITableViewController {
         let nib = UINib(nibName: TopicViewCell.cellIdentifier, bundle: nil) 
         tableView.register(nib, forCellReuseIdentifier: TopicViewCell.cellIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        tableView.separatorStyle = .none
     }
     
     fileprivate func setupBinding() {
