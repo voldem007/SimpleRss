@@ -21,8 +21,7 @@ jobs:
     - name: Install Dependencies
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        brew uninstall carthage
-        make install
+        carthage bootstrap --platform ios
           
     - name: Build
       run: swift build -v
