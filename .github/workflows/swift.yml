@@ -9,6 +9,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      
+    - uses: actions/cache@v1
+      with:
+        path: Carthage
+        key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-carthage-
+          
     - name: Build
       run: swift build -v
     - name: Run tests
