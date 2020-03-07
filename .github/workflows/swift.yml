@@ -22,7 +22,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
         cd SimpleRss/
-        carthage bootstrap --platform ios
+        carthage bootstrap --platform ios --cache-builds
           
     - name: Build
       run: swift build -v
