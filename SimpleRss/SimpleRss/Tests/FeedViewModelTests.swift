@@ -10,9 +10,9 @@ final class FeedViewModelTests: XCTestCase {
     var disposeBag: DisposeBag!
     var sut: FeedViewModelImplementation!
     
-    var mockRssDataService: DataService!
-    var mockNetworkService: NetworkService!
-    var mockFeedViewModelDelegeate: FeedViewModelDelegeate!
+    var mockRssDataService: DefaultDataServiceMock!
+    var mockNetworkService: DefaultNetworkServiceMock!
+    var mockFeedViewModelDelegeate: DeafaultFeedViewModelDelegeateMock!
 
     override func setUp() {
         scheduler = TestScheduler(initialClock: 0)
@@ -22,9 +22,24 @@ final class FeedViewModelTests: XCTestCase {
         mockNetworkService = DefaultNetworkServiceMock()
         mockFeedViewModelDelegeate = DeafaultFeedViewModelDelegeateMock()
         
+        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.create { single in
+            single(.success([FeedModel]()))
+            return Disposables.create()
+        }
+        
+        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
+            maybe(.success([FeedModel]()))
+            return Disposables.create()
+        }
+        
+        mockRssDataService.stubbedSaveFeedResult = Single.create { single in
+            single(.success(Void()))
+            return Disposables.create()
+        }
+        
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
-                                          url: "",
+                                          url: "https://github.com/ReactiveX/RxSwift/issues/2072",
                                           coordinator: mockFeedViewModelDelegeate)
     }
 

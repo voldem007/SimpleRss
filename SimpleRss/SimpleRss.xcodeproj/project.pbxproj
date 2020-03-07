@@ -22,11 +22,6 @@
 		211061F32413C919005B4B14 /* DefaultDataServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211061F22413C919005B4B14 /* DefaultDataServiceMock.swift */; };
 		211061F62413CB00005B4B14 /* DefaultNetworkServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211061F52413CB00005B4B14 /* DefaultNetworkServiceMock.swift */; };
 		211061F82413D03B005B4B14 /* DefaultFeedViewModelDelegeateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211061F72413D03B005B4B14 /* DefaultFeedViewModelDelegeateMock.swift */; };
-		2110620D24140428005B4B14 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3722C3B0A80034ECBD /* RxBlocking.framework */; };
-		2110620E24140428005B4B14 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3622C3B0A80034ECBD /* RxCocoa.framework */; };
-		2110620F24140428005B4B14 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3A22C3B0A80034ECBD /* RxRelay.framework */; };
-		2110621024140428005B4B14 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3922C3B0A80034ECBD /* RxSwift.framework */; };
-		2110621124140428005B4B14 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3822C3B0A80034ECBD /* RxTest.framework */; };
 		211C750F21FA026400BB2234 /* Orchestrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 211C750E21FA026400BB2234 /* Orchestrator.m */; };
 		21293C1C21F890F900EE4C44 /* GetOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 21293C1B21F890F900EE4C44 /* GetOp.m */; };
 		212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C4EF221DBE91C004B4D86 /* DownloadImageOperation.swift */; };
@@ -50,6 +45,9 @@
 		2167A9482376013300457AF1 /* Rating.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2167A9472376013300457AF1 /* Rating.storyboard */; };
 		2167A94A2376019D00457AF1 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167A9492376019D00457AF1 /* RatingViewController.swift */; };
 		2167A94C23774BE100457AF1 /* RatingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167A94B23774BE100457AF1 /* RatingViewModel.swift */; };
+		216B0BE224145A61003CA598 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3922C3B0A80034ECBD /* RxSwift.framework */; };
+		216B0BE324145A73003CA598 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3722C3B0A80034ECBD /* RxBlocking.framework */; };
+		216B0BE424145A83003CA598 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2102EB3822C3B0A80034ECBD /* RxTest.framework */; };
 		2196B91C2312A3BE004FF972 /* FeedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91B2312A3BE004FF972 /* FeedDetailViewController.swift */; };
 		2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */; };
 		2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */; };
@@ -109,9 +107,6 @@
 		211061F22413C919005B4B14 /* DefaultDataServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDataServiceMock.swift; sourceTree = "<group>"; };
 		211061F52413CB00005B4B14 /* DefaultNetworkServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNetworkServiceMock.swift; sourceTree = "<group>"; };
 		211061F72413D03B005B4B14 /* DefaultFeedViewModelDelegeateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFeedViewModelDelegeateMock.swift; sourceTree = "<group>"; };
-		21106205241402B1005B4B14 /* project.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; name = project.xcworkspace; path = SimpleRss.xcodeproj/project.xcworkspace; sourceTree = "<group>"; };
-		21106207241402D9005B4B14 /* project.pbxproj */ = {isa = PBXFileReference; lastKnownFileType = text.pbxproject; name = project.pbxproj; path = SimpleRss.xcodeproj/project.pbxproj; sourceTree = "<group>"; };
-		2110620924140319005B4B14 /* SimpleRss.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SimpleRss.xcodeproj; sourceTree = "<group>"; };
 		211C750D21FA024700BB2234 /* Orchestrator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Orchestrator.h; sourceTree = "<group>"; };
 		211C750E21FA026400BB2234 /* Orchestrator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Orchestrator.m; sourceTree = "<group>"; };
 		21293C1A21F890DF00EE4C44 /* GetOp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetOp.h; sourceTree = "<group>"; };
@@ -173,11 +168,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2110620D24140428005B4B14 /* RxBlocking.framework in Frameworks */,
-				2110620E24140428005B4B14 /* RxCocoa.framework in Frameworks */,
-				2110620F24140428005B4B14 /* RxRelay.framework in Frameworks */,
-				2110621024140428005B4B14 /* RxSwift.framework in Frameworks */,
-				2110621124140428005B4B14 /* RxTest.framework in Frameworks */,
+				216B0BE324145A73003CA598 /* RxBlocking.framework in Frameworks */,
+				216B0BE424145A83003CA598 /* RxTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2102EB3B22C3B0A80034ECBD /* RxCocoa.framework in Frameworks */,
+				216B0BE224145A61003CA598 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,9 +188,6 @@
 		2102EB3522C3B0A70034ECBD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2110620924140319005B4B14 /* SimpleRss.xcodeproj */,
-				21106207241402D9005B4B14 /* project.pbxproj */,
-				21106205241402B1005B4B14 /* project.xcworkspace */,
 				2102EB3722C3B0A80034ECBD /* RxBlocking.framework */,
 				2102EB3622C3B0A80034ECBD /* RxCocoa.framework */,
 				2102EB3A22C3B0A80034ECBD /* RxRelay.framework */,
@@ -255,11 +245,6 @@
 				211061F72413D03B005B4B14 /* DefaultFeedViewModelDelegeateMock.swift */,
 			);
 			path = Mocks;
-			sourceTree = "<group>";
-		};
-		2110620A24140319005B4B14 /* Products */ = {
-			isa = PBXGroup;
-			name = Products;
 			sourceTree = "<group>";
 		};
 		212C4EF121DBE8F0004B4D86 /* Operations */ = {
@@ -453,6 +438,7 @@
 				211061E02413B8DE005B4B14 /* Sources */,
 				211061E12413B8DE005B4B14 /* Frameworks */,
 				211061E22413B8DE005B4B14 /* Resources */,
+				216B0BE524145AB8003CA598 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -513,12 +499,6 @@
 			mainGroup = 213BC6D3219C61F000E7694B;
 			productRefGroup = 213BC6DD219C61F000E7694B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 2110620A24140319005B4B14 /* Products */;
-					ProjectRef = 2110620924140319005B4B14 /* SimpleRss.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				213BC6DB219C61F000E7694B /* SimpleRss */,
@@ -565,6 +545,25 @@
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxBlocking.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+		216B0BE524145AB8003CA598 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxBlocking.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxTest.framework",
 			);
 			outputFileListPaths = (
 			);
