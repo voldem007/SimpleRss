@@ -32,4 +32,4 @@ jobs:
         xcodebuild test \
             -project SimpleRss.xcodeproj \
             -scheme SimpleRss \
-            -destination 'platform=iOS Simulator,name=iPhone SE,OS=13.3'
+            -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3'
