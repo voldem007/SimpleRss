@@ -10,6 +10,7 @@ final class FeedViewModelTests: XCTestCase {
     var disposeBag: DisposeBag!
     var sut: FeedViewModelImplementation!
     
+    let url = "https://github.com/ReactiveX/RxSwift/issues/2072"
     var mockRssDataService: DefaultDataServiceMock!
     var mockNetworkService: DefaultNetworkServiceMock!
     var mockFeedViewModelDelegeate: DeafaultFeedViewModelDelegeateMock!
@@ -21,60 +22,244 @@ final class FeedViewModelTests: XCTestCase {
         mockRssDataService = DefaultDataServiceMock()
         mockNetworkService = DefaultNetworkServiceMock()
         mockFeedViewModelDelegeate = DeafaultFeedViewModelDelegeateMock()
+    }
+    
+    func testContentShouldBeTakenFromNetworkAfterPullToRefresh() {
+        // Given
+        let content = scheduler.createObserver([FeedItemViewModel].self)
+        let expectedItem = FeedItemViewModel(FeedModel())
         
-        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.create { single in
-            single(.success([FeedModel]()))
-            return Disposables.create()
-        }
+        let expectedItemFromLocalStore = [FeedModel(), FeedModel(), FeedModel()]
+        let expectedItemFromNetwork = [FeedModel(), FeedModel()]
         
-        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
-            maybe(.success([FeedModel]()))
-            return Disposables.create()
-        }
+        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.just(expectedItemFromNetwork)
+        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.just(expectedItemFromLocalStore)
         
-        mockRssDataService.stubbedSaveFeedResult = Single.create { single in
+        mockRssDataService.stubbedSaveFeedResult = Single.create { [weak self] single in
+            guard let self = self else { return Disposables.create()}
+            self.mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
+                maybe(.success(expectedItemFromNetwork))
+                return Disposables.create()
+            }
+            
             single(.success(Void()))
             return Disposables.create()
         }
         
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
-                                          url: "https://github.com/ReactiveX/RxSwift/issues/2072",
+                                          url: url,
                                           coordinator: mockFeedViewModelDelegeate)
-    }
 
-    func testContentStream() {
+        // When
+        sut.content
+            .asDriver(onErrorJustReturn: [FeedItemViewModel]())
+            .drive(content)
+            .disposed(by: disposeBag)
+
+        scheduler.createColdObservable([.next(100, ()),
+                                        .next(200, ()),
+                                        .next(300, ())])
+            .bind(to: sut.updateFeed)
+            .disposed(by: disposeBag)
+        
+        scheduler.start()
+
+        // Then
+        XCTAssertEqual(content.events, [
+            .next(0, [expectedItem, expectedItem, expectedItem]),
+            .next(100, [expectedItem, expectedItem]),
+            .next(200, [expectedItem, expectedItem]),
+            .next(300, [expectedItem, expectedItem])
+        ])
+    }
+    
+    func testContentShouldBeTakenFromNetworkIfLocalIsEmpty() {
         // Given
         let content = scheduler.createObserver([FeedItemViewModel].self)
+        let expectedItem = FeedItemViewModel(FeedModel())
+        
+        let expectedItemFromLocalStore: [FeedModel] = []
+        let expectedItemFromNetwork = [FeedModel(), FeedModel()]
+        
+        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.just(expectedItemFromNetwork)
+        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.just(expectedItemFromLocalStore)
+        
+        mockRssDataService.stubbedSaveFeedResult = Single.create { [weak self] single in
+            guard let self = self else { return Disposables.create()}
+            self.mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
+                maybe(.success(expectedItemFromNetwork))
+                return Disposables.create()
+            }
+            
+            single(.success(Void()))
+            return Disposables.create()
+        }
+        
+        sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
+                                          rssService: mockNetworkService,
+                                          url: url,
+                                          coordinator: mockFeedViewModelDelegeate)
+
+        // When
+        sut.content
+            .asDriver(onErrorJustReturn: [FeedItemViewModel]())
+            .drive(content)
+            .disposed(by: disposeBag)
+
+        // Then
+        XCTAssertEqual(content.events, [
+            .next(0, [expectedItem, expectedItem])
+        ])
+    }
+    
+    func testContentShouldBeTakenFromLocalIfNotEmpty() {
+        // Given
+        let content = scheduler.createObserver([FeedItemViewModel].self)
+        let expectedItem = FeedItemViewModel(FeedModel())
+        
+        let expectedItemFromLocalStore: [FeedModel] = [FeedModel(), FeedModel(), FeedModel(), FeedModel()]
+        let expectedItemFromNetwork = [FeedModel(), FeedModel()]
+        
+        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.just(expectedItemFromNetwork)
+        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.just(expectedItemFromLocalStore)
+        
+        mockRssDataService.stubbedSaveFeedResult = Single.create { [weak self] single in
+            guard let self = self else { return Disposables.create()}
+            self.mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
+                maybe(.success(expectedItemFromNetwork))
+                return Disposables.create()
+            }
+            
+            single(.success(Void()))
+            return Disposables.create()
+        }
+        
+        sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
+                                          rssService: mockNetworkService,
+                                          url: url,
+                                          coordinator: mockFeedViewModelDelegeate)
+
+        // When
+        sut.content
+            .asDriver(onErrorJustReturn: [FeedItemViewModel]())
+            .drive(content)
+            .disposed(by: disposeBag)
+
+        // Then
+        XCTAssertEqual(content.events, [
+            .next(0, [expectedItem, expectedItem, expectedItem, expectedItem])
+        ])
+    }
+    
+    func testIsBusyShouldChangStateDependOnContent() {
+        // Given
+        let content = scheduler.createObserver([FeedItemViewModel].self)
+        let isBusy = scheduler.createObserver(Bool.self)
+
+        let expectedItem = FeedItemViewModel(FeedModel())
+
+        let expectedItemFromLocalStore: [FeedModel] = []
+        let expectedItemFromNetwork = [FeedModel(), FeedModel()]
+        
+        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.just(expectedItemFromNetwork)
+        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.just(expectedItemFromLocalStore)
+        
+        mockRssDataService.stubbedSaveFeedResult = Single.create { [weak self] single in
+            guard let self = self else { return Disposables.create()}
+            self.mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
+                maybe(.success(expectedItemFromNetwork))
+                return Disposables.create()
+            }
+            self.scheduler.sleep(100)
+            single(.success(Void()))
+            return Disposables.create()
+        }
+        
+        sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
+                                          rssService: mockNetworkService,
+                                          url: url,
+                                          coordinator: mockFeedViewModelDelegeate)
+
+        // When
+        sut.isBusy
+            .asDriver(onErrorJustReturn: false)
+            .drive(isBusy)
+            .disposed(by: disposeBag)
         
         sut.content
             .asDriver(onErrorJustReturn: [FeedItemViewModel]())
             .drive(content)
             .disposed(by: disposeBag)
 
-        scheduler.createColdObservable([.next(10, ()),
-                                        .next(20, ()),
-                                        .next(30, ())])
-            .bind(to: sut.updateFeed)
-            .disposed(by: disposeBag)
+        // Then
+        XCTAssertEqual(content.events, [
+            .next(100, [expectedItem, expectedItem])
+        ])
+        
+        XCTAssertEqual(isBusy.events, [
+            .next(0, true),
+            .next(100, false)
+        ])
+    }
+    
+    func testSelectedFeedShouldBeInvokedAfterTap() {
+        // Given
+        let content = scheduler.createObserver([FeedItemViewModel].self)
+        let selectedFeed = scheduler.createObserver(FeedItemViewModel.self)
+        
+        let expectedItem0 = FeedItemViewModel(FeedModel(id: "0", picLinks: [String]()))
+        let expectedItem1 = FeedItemViewModel(FeedModel(id: "1", picLinks: [String]()))
+        let expectedItem2 = FeedItemViewModel(FeedModel(id: "2", picLinks: [String]()))
+        
+        let expectedItemFromLocalStore = [FeedModel(), FeedModel(), FeedModel()]
+        let expectedItemFromNetwork = [FeedModel(), FeedModel()]
+        
+        mockNetworkService.stubbedGetFeedResult = Single<[FeedModel]>.just(expectedItemFromNetwork)
+        mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.just(expectedItemFromLocalStore)
+        
+        mockRssDataService.stubbedSaveFeedResult = Single.create { [weak self] single in
+            guard let self = self else { return Disposables.create()}
+            self.mockRssDataService.stubbedGetFeedResult = Maybe<[FeedModel]>.create { maybe in
+                maybe(.success(expectedItemFromNetwork))
+                return Disposables.create()
+            }
+            
+            single(.success(Void()))
+            return Disposables.create()
+        }
+        
+        sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
+                                          rssService: mockNetworkService,
+                                          url: url,
+                                          coordinator: mockFeedViewModelDelegeate)
 
         // When
+        sut.content
+            .asDriver(onErrorJustReturn: [FeedItemViewModel]())
+            .drive(content)
+            .disposed(by: disposeBag)
+        
+        sut.selectedFeed
+            .asDriver(onErrorJustReturn: FeedItemViewModel(FeedModel()))
+            .drive(selectedFeed)
+            .disposed(by: disposeBag)
+
+        scheduler.createColdObservable([.next(100, expectedItem0),
+                                        .next(200, expectedItem1),
+                                        .next(300, expectedItem2)])
+            .bind(to: sut.selectedFeed)
+            .disposed(by: disposeBag)
+        
         scheduler.start()
 
         // Then
-        XCTAssertEqual(content.events, [
-            .next(0, [FeedItemViewModel]()),
-            .next(10, [FeedItemViewModel]()),
-            .next(20, [FeedItemViewModel]()),
-            .next(30, [FeedItemViewModel]())
+        XCTAssertEqual(selectedFeed.events, [
+            .next(100, expectedItem0),
+            .next(200, expectedItem1),
+            .next(300, expectedItem2)
         ])
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
+        
+        XCTAssertEqual(mockFeedViewModelDelegeate.invokedUserDidSelectFeedCount, 3)
     }
 }
-
