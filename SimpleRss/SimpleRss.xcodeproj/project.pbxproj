@@ -54,6 +54,11 @@
 		2199666921C1A0BF00FE7AAD /* RssNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199666821C1A0BF00FE7AAD /* RssNetworkService.swift */; };
 		21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF870321A32EBB00C00970 /* FeedViewCell.swift */; };
 		21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21AF870421A32EBB00C00970 /* FeedViewCell.xib */; };
+		21B3F60C241D6BD70038DABA /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3F60B241D6BD70038DABA /* Networking.swift */; };
+		21B3F60E241D6FF20038DABA /* DefaultNetworkingMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3F60D241D6FF20038DABA /* DefaultNetworkingMock.swift */; };
+		21B3F610241D76E90038DABA /* RssParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3F60F241D76E90038DABA /* RssParserTests.swift */; };
+		21B3F613241D8AC20038DABA /* Data85Rows in Resources */ = {isa = PBXBuildFile; fileRef = 21B3F612241D8AC20038DABA /* Data85Rows */; };
+		21B3F614241D8C100038DABA /* Data85Rows in Resources */ = {isa = PBXBuildFile; fileRef = 21B3F612241D8AC20038DABA /* Data85Rows */; };
 		21B42A11234A1B8000871511 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B42A10234A1B8000871511 /* DataStore.swift */; };
 		21B42A14234B1C3700871511 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B42A13234B1C3700871511 /* RatingView.swift */; };
 		21C0BCAF22B79ACB0035D033 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C0BCAE22B79ACB0035D033 /* AppCoordinator.swift */; };
@@ -144,6 +149,10 @@
 		2199666821C1A0BF00FE7AAD /* RssNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssNetworkService.swift; sourceTree = "<group>"; };
 		21AF870321A32EBB00C00970 /* FeedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCell.swift; sourceTree = "<group>"; };
 		21AF870421A32EBB00C00970 /* FeedViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedViewCell.xib; sourceTree = "<group>"; };
+		21B3F60B241D6BD70038DABA /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		21B3F60D241D6FF20038DABA /* DefaultNetworkingMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNetworkingMock.swift; sourceTree = "<group>"; };
+		21B3F60F241D76E90038DABA /* RssParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssParserTests.swift; sourceTree = "<group>"; };
+		21B3F612241D8AC20038DABA /* Data85Rows */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Data85Rows; sourceTree = "<group>"; };
 		21B42A10234A1B8000871511 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		21B42A13234B1C3700871511 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		21C0BCAE22B79ACB0035D033 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -223,6 +232,7 @@
 		211061E52413B8DF005B4B14 /* SimpleRssTests */ = {
 			isa = PBXGroup;
 			children = (
+				21B3F612241D8AC20038DABA /* Data85Rows */,
 				211061E82413B8DF005B4B14 /* Info.plist */,
 			);
 			path = SimpleRssTests;
@@ -232,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				211061EF2413BAE4005B4B14 /* FeedViewModelTests.swift */,
+				21B3F60F241D76E90038DABA /* RssParserTests.swift */,
 				211061F12413C888005B4B14 /* Mocks */,
 			);
 			path = Tests;
@@ -243,6 +254,7 @@
 				211061F22413C919005B4B14 /* DefaultDataServiceMock.swift */,
 				211061F52413CB00005B4B14 /* DefaultNetworkServiceMock.swift */,
 				211061F72413D03B005B4B14 /* DefaultFeedViewModelDelegeateMock.swift */,
+				21B3F60D241D6FF20038DABA /* DefaultNetworkingMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -311,6 +323,7 @@
 				2105F0BD21E775CE00E5485F /* ImageCacheManager.swift */,
 				2107B8E1221AB3010015171A /* RssDataService.swift */,
 				21B42A10234A1B8000871511 /* DataStore.swift */,
+				21B3F60B241D6BD70038DABA /* Networking.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -512,6 +525,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21B3F613241D8AC20038DABA /* Data85Rows in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +541,7 @@
 				2167A9482376013300457AF1 /* Rating.storyboard in Resources */,
 				213BC6EA219C61F200E7694B /* LaunchScreen.storyboard in Resources */,
 				213BC6E7219C61F200E7694B /* Assets.xcassets in Resources */,
+				21B3F614241D8C100038DABA /* Data85Rows in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,9 +596,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				211061F62413CB00005B4B14 /* DefaultNetworkServiceMock.swift in Sources */,
+				21B3F610241D76E90038DABA /* RssParserTests.swift in Sources */,
 				211061F82413D03B005B4B14 /* DefaultFeedViewModelDelegeateMock.swift in Sources */,
 				211061F02413BAE4005B4B14 /* FeedViewModelTests.swift in Sources */,
 				211061F32413C919005B4B14 /* DefaultDataServiceMock.swift in Sources */,
+				21B3F60E241D6FF20038DABA /* DefaultNetworkingMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,6 +649,7 @@
 				21C0BCAF22B79ACB0035D033 /* AppCoordinator.swift in Sources */,
 				21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */,
 				213BC6E0219C61F000E7694B /* AppDelegate.swift in Sources */,
+				21B3F60C241D6BD70038DABA /* Networking.swift in Sources */,
 				2105F0C321EBAB7800E5485F /* DownloadManager.swift in Sources */,
 				212C4EF321DBE91C004B4D86 /* DownloadImageOperation.swift in Sources */,
 				2167A94C23774BE100457AF1 /* RatingViewModel.swift in Sources */,

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>HLTV.org - The home of competitive Counter-Strike</title>
+    <description>HLTV.org is the leading csgo site in the world, featuring news, demos, pictures, statistics, on-site coverage and much much more!</description>
+    <link>https://www.hltv.org/</link>
+    <language>en</language>
+    <ttl>60</ttl>
+    <image>
+      <url>https://www.hltv.org/img/static/openGraphHltvLogo.png</url>
+      <title>HLTV.org - The home of competitive Counter-Strike</title>
+      <link>https://www.hltv.org/</link>
+    </image>
+    <link xmlns="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="https://www.hltv.org/rss/news"></link>
+    <item>
+      <title>Spirit added to ESL Pro League team list as BOOM withdraw</title>
+      <description>Spirit have been called up as a last-minute replacement for ESL Pro League Season 11 Europe following BOOM's withdrawal, it has been announced.</description>
+      <link>https://www.hltv.org/news/29261/spirit-added-to-esl-pro-league-team-list-as-boom-withdraw</link>
+      <guid isPermaLink="false">hltvnews29261</guid>
+      <pubDate>Sat, 14 Mar 2020 18:12:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>ESL Pro League S11 Group A &amp; B Fantasy games go live with prizes</title>
+      <description>Due to changes in the EPL S11 format, each group will have a separate Fantasy game with cash prizes provided by our partner 1xBet.</description>
+      <link>https://www.hltv.org/news/29259/esl-pro-league-s11-group-a-b-fantasy-games-go-live-with-prizes</link>
+      <guid isPermaLink="false">hltvnews29259</guid>
+      <pubDate>Sat, 14 Mar 2020 17:03:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Heretics complete lineup with Nivera signing</title>
+      <description>Heretics have completed their lineup with the signing of former Legends member and the brother of Adil &quot;ScreaM&quot; Benrlitom, Nabil &quot;Nivera&quot; Benrlitom, the organization has announced.</description>
+      <link>https://www.hltv.org/news/29260/heretics-complete-lineup-with-nivera-signing</link>
+      <guid isPermaLink="false">hltvnews29260</guid>
+      <pubDate>Sat, 14 Mar 2020 16:06:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>AdreN takes over as Virtus.pro captain</title>
+      <description>Dauren &quot;AdreN&quot; Kystaubayev has moved into the in-game leader role ahead of ESL Pro League Season 11 Europe, Virtus.pro CEO Sergey Glamazda has confirmed.</description>
+      <link>https://www.hltv.org/news/29258/adren-takes-over-as-virtuspro-captain</link>
+      <guid isPermaLink="false">hltvnews29258</guid>
+      <pubDate>Sat, 14 Mar 2020 13:16:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>c0ntact beat Copenhagen Flames in Los Angeles</title>
+      <description>c0ntact have joined HAVU in Group A's upper bracket final at Flashpoint after beating Copenhagen Flames on two maps (Nuke 19-16, Mirage 16-5).</description>
+      <link>https://www.hltv.org/news/29257/c0ntact-beat-copenhagen-flames-in-los-angeles</link>
+      <guid isPermaLink="false">hltvnews29257</guid>
+      <pubDate>Fri, 13 Mar 2020 23:30:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Heretics part ways with jeyN</title>
+      <description>Jérémy &quot;jeyN&quot; Nguyen's contract has been terminated with immediate effect,  Heretics have announced.</description>
+      <link>https://www.hltv.org/news/29255/heretics-part-ways-with-jeyn</link>
+      <guid isPermaLink="false">hltvnews29255</guid>
+      <pubDate>Fri, 13 Mar 2020 22:06:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Chaos confirm SicK signing</title>
+      <description>Chaos have announced that they have completed the signing of former TSM and Complexity member Hunter &quot;SicK&quot; Mims.</description>
+      <link>https://www.hltv.org/news/29256/chaos-confirm-sick-signing</link>
+      <guid isPermaLink="false">hltvnews29256</guid>
+      <pubDate>Fri, 13 Mar 2020 21:54:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>HAVU surprise MAD Lions in Flashpoint opener</title>
+      <description>HAVU have taken MAD Lions by surprise at Flashpoint 1, grabbing a 2-1 victory in the Danes' debut with Asger &quot;AcilioN&quot; Larsen.</description>
+      <link>https://www.hltv.org/news/29254/havu-surprise-mad-lions-in-flashpoint-opener</link>
+      <guid isPermaLink="false">hltvnews29254</guid>
+      <pubDate>Fri, 13 Mar 2020 20:31:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>ESL Pro League S11 split into regional groups, three teams withdraw</title>
+      <description>ESL has announced that the upcoming Pro League season will be played regionally with three European groups and one North American group. Meanwhile, Renegades and Sharks withdrew from the competition and Heroic were unable to field a lineup.</description>
+      <link>https://www.hltv.org/news/29253/esl-pro-league-s11-split-into-regional-groups-three-teams-withdraw</link>
+      <guid isPermaLink="false">hltvnews29253</guid>
+      <pubDate>Fri, 13 Mar 2020 17:32:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Key storylines of Flashpoint 1</title>
+      <description>As the inaugural edition of Flashpoint nears, HLTV.org has compiled a list of the most exciting storylines heading into the event.</description>
+      <link>https://www.hltv.org/news/29242/key-storylines-of-flashpoint-1</link>
+      <guid isPermaLink="false">hltvnews29242</guid>
+      <pubDate>Fri, 13 Mar 2020 15:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

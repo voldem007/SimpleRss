@@ -8,28 +8,37 @@
 
 import Foundation
 
-final class RssParser: NSObject {
+protocol Parser {
+    func parse(_ url: URL, completion: @escaping([(String, Any)]?, Error?) -> Void)
+}
+
+final class RssParser: NSObject, Parser {
+    private var attributeValue = ""
+    private var attributeDict: [String : String]?
+    private var prevElementName = ""
+    private var wasElementClosed = true
+    private var rssDictionary = [(String, Any)]()
+    private var completionHandler: (([(String, Any)]?, Error?) -> Void)?
     
-    var attributeValue = ""
-    var attributeDict: [String : String]?
-    var prevElementName = ""
-    var wasElementClosed = true
-    var rssDictionary = [(String, Any)]()
-    var completionHandler:(([(String, Any)]?, Error?) -> Void)!
+    private let network: Network
     
-    func parse(_ url: URL, withCallback completionHandler: @escaping(_ result: [(String, Any)]?, _ error: Error?) -> Void) {
+    init(network: Network = Networking()) {
+        self.network = network
+    }
+    
+    func parse(_ url: URL, completion: @escaping([(String, Any)]?, Error?) -> Void) {
         rssDictionary = [(String, Any)]()
-        self.completionHandler = completionHandler
-        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let self = self else { completionHandler(nil, error)
+        completionHandler = completion
+        network.dataTask(with: url) { [weak self] (data, response, error) in
+            guard let self = self else { completion(nil, error)
                 return
             }
             if error != nil {
-                completionHandler(nil, error)
+                completion(nil, error)
                 return
             }
             
-            guard let data = data else { completionHandler(nil, nil)
+            guard let data = data else { completion(nil, nil)
                 return }
             
             let parser = XMLParser(data: data)
@@ -66,6 +75,6 @@ extension RssParser: XMLParserDelegate {
     }
     
     func parserDidEndDocument(_ parser: XMLParser) {
-        completionHandler(rssDictionary, parser.parserError)
+        completionHandler?(rssDictionary, parser.parserError)
     }
 }
