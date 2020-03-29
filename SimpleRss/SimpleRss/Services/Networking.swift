@@ -14,6 +14,8 @@ protocol Network {
 
 class Networking: Network {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return URLSession.shared.dataTask(with: url)
+        return URLSession.shared.dataTask(with: url) { (data, response, error) in
+            completionHandler(data, response, error)
+        }
     }
 }
