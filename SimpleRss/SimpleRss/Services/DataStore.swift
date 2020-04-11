@@ -13,7 +13,7 @@ class DataStore {
     
     /// The URL of the sqlite file.
     private var sqliteURL: URL {
-        return storageURL.appendingPathComponent("rss").appendingPathExtension("sqlite")
+        storageURL.appendingPathComponent("rss").appendingPathExtension("sqlite")
     }
     
     /// The directory in which the store files will be saved
@@ -21,7 +21,6 @@ class DataStore {
         guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             fatalError("The user's document directory does not exist.")
         }
-        
         return documentsURL
     }
     
@@ -36,7 +35,10 @@ class DataStore {
         let container = NSPersistentContainer(name: "rss")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             guard let loadError = error else {
-                // success
+                let description = NSPersistentStoreDescription()
+                description.shouldMigrateStoreAutomatically = false
+                description.shouldInferMappingModelAutomatically = true
+                container.persistentStoreDescriptions = [description]
                 return
             }
             

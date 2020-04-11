@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Feed" representedClassName="Feed" syncable="YES" codeGenerationType="class">
+    <entity name="Comment" representedClassName="Comment" syncable="YES" codeGenerationType="class">
         <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="feed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Feed" inverseName="comment" inverseEntity="Feed"/>
+    </entity>
+    <entity name="Feed" representedClassName="Feed" syncable="YES" codeGenerationType="class">
         <attribute name="id" attributeType="String"/>
         <attribute name="picLinks" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
         <attribute name="pubDate" optional="YES" attributeType="String"/>
-        <attribute name="rating" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="text" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="comment" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Comment" inverseName="feed" inverseEntity="Comment"/>
         <relationship name="topic" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Topic" inverseName="feed" inverseEntity="Topic"/>
     </entity>
     <entity name="Topic" representedClassName="Topic" syncable="YES" codeGenerationType="class">
@@ -17,7 +22,8 @@
         <relationship name="feed" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Feed" inverseName="topic" inverseEntity="Feed"/>
     </entity>
     <elements>
-        <element name="Feed" positionX="-9" positionY="36" width="128" height="163"/>
+        <element name="Comment" positionX="0" positionY="108" width="128" height="103"/>
+        <element name="Feed" positionX="-9" positionY="36" width="128" height="148"/>
         <element name="Topic" positionX="-9" positionY="36" width="128" height="103"/>
     </elements>
 </model>

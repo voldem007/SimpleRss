@@ -35,6 +35,7 @@
 		213D3F7921A5A8DD00E2E937 /* RssParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7821A5A8DD00E2E937 /* RssParser.swift */; };
 		213D3F7B21A6088600E2E937 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7A21A6088600E2E937 /* FeedModel.swift */; };
 		213D3F7F21A6F97500E2E937 /* UICellView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213D3F7E21A6F97500E2E937 /* UICellView+Extension.swift */; };
+		214AE3B42441CDF30043A2FA /* Model.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 214AE3B32441CDF30043A2FA /* Model.xcmappingmodel */; };
 		21575144219C6DD70066D7D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21575142219C6DD70066D7D0 /* Main.storyboard */; };
 		21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21575147219CC2A20066D7D0 /* FeedViewController.swift */; };
 		215DD36121F502EC001E8926 /* Downloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 215DD36021F502EC001E8926 /* Downloader.m */; };
@@ -52,6 +53,7 @@
 		2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */; };
 		2196B9202312A4AB004FF972 /* FeedDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */; };
 		2199666921C1A0BF00FE7AAD /* RssNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199666821C1A0BF00FE7AAD /* RssNetworkService.swift */; };
+		2199AF15242FE94D0059ECD5 /* FeedToCommentPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199AF14242FE94D0059ECD5 /* FeedToCommentPolicy.swift */; };
 		21AF870521A32EBB00C00970 /* FeedViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF870321A32EBB00C00970 /* FeedViewCell.swift */; };
 		21AF870621A32EBB00C00970 /* FeedViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21AF870421A32EBB00C00970 /* FeedViewCell.xib */; };
 		21B3F60C241D6BD70038DABA /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3F60B241D6BD70038DABA /* Networking.swift */; };
@@ -129,6 +131,7 @@
 		213D3F7821A5A8DD00E2E937 /* RssParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssParser.swift; sourceTree = "<group>"; };
 		213D3F7A21A6088600E2E937 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		213D3F7E21A6F97500E2E937 /* UICellView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICellView+Extension.swift"; sourceTree = "<group>"; };
+		214AE3B32441CDF30043A2FA /* Model.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model.xcmappingmodel; sourceTree = "<group>"; };
 		21575143219C6DD70066D7D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21575147219CC2A20066D7D0 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		215DD35F21F502EC001E8926 /* SimpleRss-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimpleRss-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -147,6 +150,8 @@
 		2196B91D2312A3E8004FF972 /* FeedDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewModel.swift; sourceTree = "<group>"; };
 		2196B91F2312A4AB004FF972 /* FeedDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FeedDetail.storyboard; sourceTree = "<group>"; };
 		2199666821C1A0BF00FE7AAD /* RssNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssNetworkService.swift; sourceTree = "<group>"; };
+		2199AF11242FBD150059ECD5 /* rss 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "rss 2.xcdatamodel"; sourceTree = "<group>"; };
+		2199AF14242FE94D0059ECD5 /* FeedToCommentPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedToCommentPolicy.swift; sourceTree = "<group>"; };
 		21AF870321A32EBB00C00970 /* FeedViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCell.swift; sourceTree = "<group>"; };
 		21AF870421A32EBB00C00970 /* FeedViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedViewCell.xib; sourceTree = "<group>"; };
 		21B3F60B241D6BD70038DABA /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
@@ -309,6 +314,8 @@
 				213BC6E8219C61F200E7694B /* LaunchScreen.storyboard */,
 				213BC6EB219C61F200E7694B /* Info.plist */,
 				2107B8D92219FF620015171A /* rss.xcdatamodeld */,
+				2199AF14242FE94D0059ECD5 /* FeedToCommentPolicy.swift */,
+				214AE3B32441CDF30043A2FA /* Model.xcmappingmodel */,
 			);
 			path = SimpleRss;
 			sourceTree = "<group>";
@@ -618,6 +625,7 @@
 				2196B91E2312A3E8004FF972 /* FeedDetailViewModel.swift in Sources */,
 				2105F0BE21E775CE00E5485F /* ImageCacheManager.swift in Sources */,
 				2102EB2222BFFCB90034ECBD /* ViewModel.swift in Sources */,
+				2199AF15242FE94D0059ECD5 /* FeedToCommentPolicy.swift in Sources */,
 				21FF649D23B54202007F3370 /* UIViewController+Extension.swift in Sources */,
 				2196B91C2312A3BE004FF972 /* FeedDetailViewController.swift in Sources */,
 				21EEFC2521A0A06100A97F33 /* TopicViewCell.swift in Sources */,
@@ -648,6 +656,7 @@
 				21FF64A623B543D0007F3370 /* UIStackView+Extension.swift in Sources */,
 				21C0BCAF22B79ACB0035D033 /* AppCoordinator.swift in Sources */,
 				21575148219CC2A20066D7D0 /* FeedViewController.swift in Sources */,
+				214AE3B42441CDF30043A2FA /* Model.xcmappingmodel in Sources */,
 				213BC6E0219C61F000E7694B /* AppDelegate.swift in Sources */,
 				21B3F60C241D6BD70038DABA /* Networking.swift in Sources */,
 				2105F0C321EBAB7800E5485F /* DownloadManager.swift in Sources */,
@@ -953,6 +962,7 @@
 		2107B8D92219FF620015171A /* rss.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2199AF11242FBD150059ECD5 /* rss 2.xcdatamodel */,
 				2107B8DA2219FF620015171A /* rss.xcdatamodel */,
 			);
 			currentVersion = 2107B8DA2219FF620015171A /* rss.xcdatamodel */;
