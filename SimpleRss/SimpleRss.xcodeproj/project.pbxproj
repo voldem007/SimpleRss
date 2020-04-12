@@ -965,7 +965,7 @@
 				2199AF11242FBD150059ECD5 /* rss 2.xcdatamodel */,
 				2107B8DA2219FF620015171A /* rss.xcdatamodel */,
 			);
-			currentVersion = 2107B8DA2219FF620015171A /* rss.xcdatamodel */;
+			currentVersion = 2199AF11242FBD150059ECD5 /* rss 2.xcdatamodel */;
 			path = rss.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
