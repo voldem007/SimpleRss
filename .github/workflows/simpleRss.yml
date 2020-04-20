@@ -22,9 +22,14 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
         cd SimpleRss/
-        carthage bootstrap --platform ios
+        carthage bootstrap --platform ios --cache-builds
           
     - name: Build
       run: swift build -v
     - name: Run tests
-      run: swift test -v    
+      run: |
+        cd SimpleRss/
+        xcodebuild test \
+            -project SimpleRss.xcodeproj \
+            -scheme SimpleRss \
+            -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3'

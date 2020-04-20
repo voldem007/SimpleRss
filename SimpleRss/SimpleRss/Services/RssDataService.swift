@@ -25,10 +25,9 @@ class RssDataService: DataService {
                 let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
                 do {
                     let topics = try fetch.execute()
-                    single(.success(topics.map { topic in
-                        return TopicModel(title: topic.title ?? "",
-                                          picUrl: topic.picLink ?? "",
-                                          feedUrl: topic.feedUrl ?? "")
+                    single(.success(topics.map { TopicModel(title: $0.title ?? "",
+                                                            picUrl: $0.picLink ?? "",
+                                                            feedUrl: $0.feedUrl ?? "")
                     }))
                 } catch let error {
                     single(.error(error))
@@ -42,21 +41,20 @@ class RssDataService: DataService {
     func getFeed(by feedUrl: String) -> Maybe<[FeedModel]> {
         return Maybe<[FeedModel]>.create { [persistentContainer] maybe -> Disposable in
             persistentContainer.performBackgroundTask() { context in
-                let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-                fetch.predicate = NSPredicate(format: "feedUrl = %@",
-                                            argumentArray : [feedUrl])
+                let fetch: NSFetchRequest<Feed> = Feed.fetchRequest()
+                fetch.predicate = NSPredicate(format: "topic.feedUrl = %@", feedUrl)
                 do {
-                    let topic = try fetch.execute().first ?? Topic()
-                    guard let feed = topic.feed else { return maybe(.completed) }
+                    let feed = try fetch.execute()
+                    guard !feed.isEmpty else { return maybe(.completed) }
                     maybe(.success(feed.map { element in
-                        let element = element as? Feed
-                        return FeedModel(id: element?.id ?? UUID().uuidString,
-                                         title: element?.title,
-                                         pubDate: element?.pubDate,
-                                         picLinks: element?.picLinks ?? [],
-                                         description: element?.text,
-                                         rating: element?.rating,
-                                         comment: element?.comment)
+                        let comment = element.comment?.lastObject as? Comment
+                        return FeedModel(id: element.id ?? UUID().uuidString,
+                                         title: element.title,
+                                         pubDate: element.pubDate,
+                                         picLinks: element.picLinks ?? [],
+                                         description: element.text,
+                                         rating: comment?.rating,
+                                         comment: comment?.comment)
                     }))
                 } catch let error {
                     maybe(.error(error))
@@ -72,8 +70,7 @@ class RssDataService: DataService {
             persistentContainer.performBackgroundTask() { [weak self] context in
                 self?.deleteFeed(by: url, with: context)
                 let fetch: NSFetchRequest<Topic> = Topic.fetchRequest()
-                fetch.predicate = NSPredicate(format: "feedUrl = %@",
-                                              argumentArray: [url])
+                fetch.predicate = NSPredicate(format: "feedUrl = %@", url)
                 let topic = try? fetch.execute().first
                 let feed = topic?.feed?.map { $0 as? Feed }
                 
@@ -102,8 +99,13 @@ class RssDataService: DataService {
     }
     
     private func deleteFeed(by feedUrl: String, with context: NSManagedObjectContext) {
+        let fetch: NSFetchRequest<Comment> = Comment.fetchRequest()
+        let comments = try? fetch.execute()
+        let feedIds = comments?.compactMap { $0.feed?.id } ?? []
+        let ids = Array(Set(feedIds))
+        
         let fetchForDelete: NSFetchRequest<NSFetchRequestResult> = Feed.fetchRequest()
-        fetchForDelete.predicate = NSPredicate(format: "topic.feedUrl = %@ AND comment = NIL AND rating = NIL", argumentArray : [feedUrl])
+        fetchForDelete.predicate = NSPredicate(format: "(topic.feedUrl = %@) AND !(id IN %@)", argumentArray : [feedUrl, ids])
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchForDelete)
         
         _ = try? context.execute(deleteRequest)
@@ -115,11 +117,14 @@ class RssDataService: DataService {
         return Single.create { [persistentContainer] single in
             persistentContainer.performBackgroundTask() { context in
                 let fetch: NSFetchRequest<Feed> = Feed.fetchRequest()
-                fetch.predicate = NSPredicate(format: "id = %@", argumentArray : [feedId])
+                fetch.predicate = NSPredicate(format: "id = %@", feedId)
                 let feed = try? fetch.execute().first
-                feed?.rating = rating
-                feed?.comment = comment
                 
+                let commentEntity = Comment(context: context)
+                commentEntity.comment = comment
+                commentEntity.id = UUID().uuidString
+                commentEntity.rating = rating
+                feed?.addToComment(commentEntity)
                 do {
                     try context.save()
                     single(.success(Void()))

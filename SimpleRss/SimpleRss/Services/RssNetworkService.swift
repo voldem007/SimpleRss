@@ -10,13 +10,16 @@ import Foundation
 import RxSwift
 
 final class RssNetworkService: NetworkService {
+    private let parser: Parser
     
     private enum RssError: Error {
         case noData
     }
     
-    lazy var parser: RssParser = RssParser()
-    
+    init(parser: Parser = RssParser()) {
+        self.parser = parser
+    }
+        
     func getFeed(for url: URL) -> Single<[FeedModel]> {
         return Single<[FeedModel]>.create { [parser] single in
             parser.parse(url) { (result, error) in
@@ -30,7 +33,6 @@ final class RssNetworkService: NetworkService {
             return Disposables.create()
         }
     }
-    
 }
 
 private extension FeedModel {
