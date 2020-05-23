@@ -5,7 +5,7 @@ import RxBlocking
 import RxCocoa
 @testable import SimpleRss
 
-final class DeafaultFeedViewModelDelegeateMock: FeedViewModelDelegeate {
+final class DefaultFeedViewModelDelegateMock: FeedViewModelDelegate {
     var invokedUserDidSelectFeed = false
     var invokedUserDidSelectFeedCount = 0
     var invokedUserDidSelectFeedParameters: (feed: FeedItemViewModel, Void)?

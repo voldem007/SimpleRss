@@ -44,28 +44,28 @@ final class HomeCoordinator: NavigationCoordinator {
     }
 }
 
-extension HomeCoordinator: HomeViewModelDelegeate {
+extension HomeCoordinator: HomeViewModelDelegate {
     
     func userDidSelectTopic(url: String) {
         showFeed(url: url)
     }
 }
 
-extension HomeCoordinator: FeedViewModelDelegeate {
+extension HomeCoordinator: FeedViewModelDelegate {
     
     func userDidSelectFeed(_ feed: FeedItemViewModel) {
         showDetail(feed)
     }
 }
 
-extension HomeCoordinator: FeedDetailViewModelDelegeate {
+extension HomeCoordinator: FeedDetailViewModelDelegate {
     
     func requestRating(_ feed: FeedItemViewModel) {
         showRating(feed)
     }
 }
 
-extension HomeCoordinator: RatingViewModelDelegeate {
+extension HomeCoordinator: RatingViewModelDelegate {
     
     func dismiss() {
         navigationController.dismiss(animated: true)

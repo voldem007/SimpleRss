@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxRelay
 
-protocol RatingViewModelDelegeate: class {
+protocol RatingViewModelDelegate: class {
     func dismiss()
 }
 
@@ -31,11 +31,11 @@ public class RatingViewModelImplementation: RatingViewModel {
     private let rssDataService: DataService
     private let disposeBag = DisposeBag()
     
-    private weak var coordinator: RatingViewModelDelegeate?
+    private weak var coordinator: RatingViewModelDelegate?
 
     init(feed: FeedItemViewModel,
          rssDataService: DataService,
-         coordinator: RatingViewModelDelegeate
+         coordinator: RatingViewModelDelegate
     ) {
         self.rating = feed.rating
         self.id = feed.id

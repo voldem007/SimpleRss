@@ -45,7 +45,7 @@ class RssDataService: DataService {
                 fetch.predicate = NSPredicate(format: "topic.feedUrl = %@", feedUrl)
                 do {
                     let feed = try fetch.execute()
-                    guard !feed.isEmpty else { return maybe(.completed) }
+                    guard !feed.isEmpty else { return maybe(.success([])) }
                     maybe(.success(feed.map { element in
                         let comment = element.comment?.lastObject as? Comment
                         return FeedModel(id: element.id ?? UUID().uuidString,

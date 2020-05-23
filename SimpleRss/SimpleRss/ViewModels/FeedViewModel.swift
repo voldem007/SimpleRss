@@ -11,7 +11,7 @@ import RxSwift
 import RxRelay
 import RxCocoa
 
-protocol FeedViewModelDelegeate: class {
+protocol FeedViewModelDelegate: class {
     func userDidSelectFeed(_ feed: FeedItemViewModel)
 }
 
@@ -24,7 +24,7 @@ protocol FeedViewModel: ViewModel {
 class FeedViewModelImplementation: FeedViewModel {
     
     private let disposeBag = DisposeBag()
-    private weak var coordinator: FeedViewModelDelegeate?
+    private weak var coordinator: FeedViewModelDelegate?
     
     let content: Observable<[FeedItemViewModel]>
     let selectedFeed = PublishRelay<FeedItemViewModel>()
@@ -34,7 +34,7 @@ class FeedViewModelImplementation: FeedViewModel {
     init(rssDataService: DataService,
          rssService: NetworkService,
          url: String,
-         coordinator: FeedViewModelDelegeate
+         coordinator: FeedViewModelDelegate
     ) {
         self.coordinator = coordinator
         

@@ -13,7 +13,7 @@ final class FeedViewModelTests: XCTestCase {
     let url = "https://github.com/ReactiveX/RxSwift/issues/2072"
     var mockRssDataService: DefaultDataServiceMock!
     var mockNetworkService: DefaultNetworkServiceMock!
-    var mockFeedViewModelDelegeate: DeafaultFeedViewModelDelegeateMock!
+    var mockFeedViewModelDelegate: DefaultFeedViewModelDelegateMock!
 
     override func setUp() {
         scheduler = TestScheduler(initialClock: 0)
@@ -21,7 +21,7 @@ final class FeedViewModelTests: XCTestCase {
         
         mockRssDataService = DefaultDataServiceMock()
         mockNetworkService = DefaultNetworkServiceMock()
-        mockFeedViewModelDelegeate = DeafaultFeedViewModelDelegeateMock()
+        mockFeedViewModelDelegate = DefaultFeedViewModelDelegateMock()
     }
     
     func testContentShouldBeTakenFromNetworkAfterPullToRefresh() {
@@ -49,7 +49,7 @@ final class FeedViewModelTests: XCTestCase {
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
                                           url: url,
-                                          coordinator: mockFeedViewModelDelegeate)
+                                          coordinator: mockFeedViewModelDelegate)
 
         // When
         sut.content
@@ -99,7 +99,7 @@ final class FeedViewModelTests: XCTestCase {
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
                                           url: url,
-                                          coordinator: mockFeedViewModelDelegeate)
+                                          coordinator: mockFeedViewModelDelegate)
 
         // When
         sut.content
@@ -138,7 +138,7 @@ final class FeedViewModelTests: XCTestCase {
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
                                           url: url,
-                                          coordinator: mockFeedViewModelDelegeate)
+                                          coordinator: mockFeedViewModelDelegate)
 
         // When
         sut.content
@@ -179,7 +179,7 @@ final class FeedViewModelTests: XCTestCase {
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
                                           url: url,
-                                          coordinator: mockFeedViewModelDelegeate)
+                                          coordinator: mockFeedViewModelDelegate)
 
         // When
         sut.isBusy
@@ -232,7 +232,7 @@ final class FeedViewModelTests: XCTestCase {
         sut = FeedViewModelImplementation(rssDataService: mockRssDataService,
                                           rssService: mockNetworkService,
                                           url: url,
-                                          coordinator: mockFeedViewModelDelegeate)
+                                          coordinator: mockFeedViewModelDelegate)
 
         // When
         sut.content
@@ -260,6 +260,6 @@ final class FeedViewModelTests: XCTestCase {
             .next(300, expectedItem2)
         ])
         
-        XCTAssertEqual(mockFeedViewModelDelegeate.invokedUserDidSelectFeedCount, 3)
+        XCTAssertEqual(mockFeedViewModelDelegate.invokedUserDidSelectFeedCount, 3)
     }
 }
