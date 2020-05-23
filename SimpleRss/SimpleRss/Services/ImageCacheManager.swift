@@ -43,8 +43,8 @@ class ImageCacheManager: CacheManager {
     }
     
     private func deleteInnerExpiredFiles() {
-        let urls = getContents(by: imagesDirectoryURL)
-        let urlsForDelete = findExpiredURLs(urls)
+        guard let urls = getContents(by: imagesDirectoryURL) else { return }
+        guard let urlsForDelete = findExpired(urls) else { return }
         deleteExpiredFiles(urlsForDelete)
     }
     
@@ -52,8 +52,8 @@ class ImageCacheManager: CacheManager {
         return try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [URLResourceKey.creationDateKey], options: [FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants])
     }
     
-    private func findExpiredURLs(_ urls: [URL]?) -> [URL]? {
-        return urls?.filter({ url in
+    private func findExpired(_ urls: [URL]) -> [URL]? {
+        return urls.filter { url in
             let values = try? url.resourceValues(forKeys: [.creationDateKey])
             if let date = values?.creationDate {
                 guard let threeDaysInterval = Calendar.current.date(byAdding: .day, value: -(expiredDays), to: Date()) else { return false }
@@ -62,11 +62,11 @@ class ImageCacheManager: CacheManager {
                 return days3Interval > intervalSinceCreate
             }
             return false
-        })
+        }
     }
     
-    private func deleteExpiredFiles(_ urlsForDelete: [URL]?) {
-        urlsForDelete?.forEach({ url in
+    private func deleteExpiredFiles(_ urlsForDelete: [URL]) {
+        urlsForDelete.forEach { url in
             if FileManager.default.fileExists(atPath: url.path) {
                 let blockOperation = BlockOperation()
                 blockOperation.qualityOfService = .background
@@ -76,7 +76,7 @@ class ImageCacheManager: CacheManager {
                 }
                 operationQueue.addOperation(blockOperation)
             }
-        })
+        }
     }
     
     private func createIfEmptyCacheImageDirectory() {

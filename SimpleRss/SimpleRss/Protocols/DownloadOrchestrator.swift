@@ -12,6 +12,5 @@ protocol DownloadOrchestrator {
     
     init(cacheManager: CacheManager, downloadManager: DownloadManager)
     
-    func download(url: URL, _ completion: @escaping(_ image: UIImage?) -> Void) -> GetImageOperation
-    func cancel(_ op: AsyncOperation?)
+    func download(url: URL, completion: @escaping(UIImage?) -> Void) -> GetImageOperation
 }

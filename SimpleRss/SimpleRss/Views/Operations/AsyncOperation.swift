@@ -67,9 +67,9 @@ extension AsyncOperation {
     override open func cancel() {
         super.cancel()
         
+        dependencies.forEach { op in op.cancel() }
         if state == .executing {
             state = .finished
         }
     }
 }
-

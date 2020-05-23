@@ -13,7 +13,7 @@ class TopicViewCell: UITableViewCell {
     @IBOutlet private weak var previewImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     
-    private var getOperation: GetImageOperation!
+    private var getOperation: GetImageOperation?
     
     var imageUrl: URL? {
         didSet {
@@ -33,6 +33,6 @@ class TopicViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         previewImageView.image = nil
-        ImageDownloadOrchestrator.shared.cancel(getOperation)
+        getOperation?.cancel()
     }
 }

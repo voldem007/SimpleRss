@@ -22,32 +22,24 @@ class ImageDownloadOrchestrator: DownloadOrchestrator {
         self.downloadManager = downloadManager
     }
     
-    func download(url: URL, _ completion: @escaping(_ image: UIImage?) -> Void) -> GetImageOperation {
+    func download(url: URL, completion: @escaping(UIImage?) -> Void) -> GetImageOperation {
         let getOp = cacheManager.get(url: url)
         getOp.completionBlock = { [weak self] in
             guard let self = self else { return }
             guard !getOp.isCancelled else { return }
             
             completion(getOp.result)
-            if getOp.result == nil {
-                let downloadOperation = self.downloadManager.download(url: url)
-                getOp.addDependency(downloadOperation)
-                downloadOperation.completionBlock = { [weak self] in
-                    guard let self = self else { return }
-                    if !downloadOperation.isCancelled {
-                        completion(downloadOperation.result)
-                        if let result = downloadOperation.result {
-                            self.cacheManager.save(url: downloadOperation.url, image: result)
-                        }
-                    }
-                }
+            guard getOp.result == nil else { return }
+            
+            let downloadOperation = self.downloadManager.download(url: url)
+            getOp.addDependency(downloadOperation)
+            downloadOperation.completionBlock = { [weak self] in
+                guard !downloadOperation.isCancelled else { return }
+                completion(downloadOperation.result)
+                guard let result = downloadOperation.result else { return }
+                self?.cacheManager.save(url: downloadOperation.url, image: result)
             }
         }
         return getOp
-    }
-    
-    func cancel(_ op: AsyncOperation?) {
-        op?.cancel()
-        op?.dependencies.forEach({ op in op.cancel() })
     }
 }

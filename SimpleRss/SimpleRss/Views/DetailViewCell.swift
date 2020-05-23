@@ -11,7 +11,7 @@ import Foundation
 class DetailViewCell: UICollectionViewCell {
     @IBOutlet private weak var pictureImageView: UIImageView!
     
-    private var getOperation: GetImageOperation!
+    private var getOperation: GetImageOperation?
     
     private var imageUrl: URL? {
         didSet {
@@ -30,6 +30,6 @@ class DetailViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         pictureImageView.image = nil
-        ImageDownloadOrchestrator.shared.cancel(getOperation)
+        getOperation?.cancel()
     }
 }

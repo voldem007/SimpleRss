@@ -20,7 +20,7 @@ class FeedViewCell: UITableViewCell {
     @IBOutlet private weak var buttonTopConstaint: NSLayoutConstraint!
     @IBOutlet private weak var buttonFirstBaselineConstraint: NSLayoutConstraint!
     
-    private var getOperation: GetImageOperation!
+    private var getOperation: GetImageOperation?
     private var disposeBag: DisposeBag? = DisposeBag()
     private weak var delegate: FeedCellDelegate?
     
@@ -80,7 +80,7 @@ class FeedViewCell: UITableViewCell {
         disposeBag = DisposeBag()
         
         previewImageView.image = nil
-        ImageDownloadOrchestrator.shared.cancel(getOperation)
+        getOperation?.cancel()
         expanding(isExpanded: false)
     }
     

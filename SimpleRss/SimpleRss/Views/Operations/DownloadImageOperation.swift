@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DownloadImageOperation : AsyncOperation {
+final class DownloadImageOperation: AsyncOperation {
     
     let url: URL
     var result: UIImage?
