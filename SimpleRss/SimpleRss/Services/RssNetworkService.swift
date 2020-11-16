@@ -24,7 +24,7 @@ final class RssNetworkService: NetworkService {
         return Single<[FeedModel]>.create { [parser] single in
             parser.parse(url) { (result, error) in
                 guard let rawXml = result else {
-                    single(.error(error ?? RssError.noData))
+                    single(.failure(error ?? RssError.noData))
                     return
                 }
                 single(.success(FeedModel.from(rawXml)))

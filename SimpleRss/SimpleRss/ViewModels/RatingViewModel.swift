@@ -58,8 +58,8 @@ extension RatingViewModelImplementation {
                 
                 self.rssDataService
                     .addComment(feedId: self.id, rating: self.rating.value, comment: self.comment.value)
-                    .observeOn(MainScheduler.instance)
-                    .subscribe(onSuccess: { self.coordinator?.dismiss() }, onError: nil)
+                    .observe(on: MainScheduler.instance)
+                    .subscribe(onSuccess: { self.coordinator?.dismiss() }, onFailure: nil)
                     .disposed(by: self.disposeBag)
         }
         .disposed(by: disposeBag)

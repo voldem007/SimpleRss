@@ -30,7 +30,7 @@ class RssDataService: DataService {
                                                             feedUrl: $0.feedUrl ?? "")
                     }))
                 } catch let error {
-                    single(.error(error))
+                    single(.failure(error))
                 }
             }
             
@@ -91,7 +91,7 @@ class RssDataService: DataService {
                     try context.save()
                     single(.success(Void()))
                 } catch let error {
-                    single(.error(error))
+                    single(.failure(error))
                 }
             }
             return Disposables.create()
@@ -129,7 +129,7 @@ class RssDataService: DataService {
                     try context.save()
                     single(.success(Void()))
                 } catch let error {
-                    single(.error(error))
+                    single(.failure(error))
                 }
             }
             return Disposables.create()

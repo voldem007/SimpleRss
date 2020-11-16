@@ -11,7 +11,7 @@ import Foundation
 extension UIStackView {
     
     func removeAll() {
-        for view in self.arrangedSubviews {
+        for view in arrangedSubviews {
             view.removeFromSuperview()
         }
     }
